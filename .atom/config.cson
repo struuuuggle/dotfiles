@@ -1,0 +1,57 @@
+"*":
+  "activate-power-mode":
+    plugins:
+      playAudio: true
+      screenShake: true
+  "atom-beautify":
+    c:
+      beautify_on_save: true
+    cpp:
+      beautify_on_save: true
+    general:
+      _analyticsUserId: "83972ada-33ae-4a79-8df0-1d11425ff49c"
+    html:
+      beautify_on_save: true
+    python:
+      beautify_on_save: true
+  core:
+    audioBeep: false
+    closeDeletedFileTabs: true
+    disabledPackages: [
+      "japanese-menu"
+    ]
+    telemetryConsent: "no"
+    themes: [
+      "atom-dark-ui"
+      "monokai"
+    ]
+  editor:
+    fontFamily: "Ricty Diminished"
+    fontSize: 13
+    invisibles: {}
+    lineHeight: 1.4
+    scrollPastEnd: true
+    scrollSensitivity: 100
+    showIndentGuide: true
+    softTabs: false
+    tabType: "hard"
+  "exception-reporting":
+    userId: "c5d0e1ed-0583-091a-6f81-5ce74c6b3272"
+  "file-icons": {}
+  "platformio-ide-terminal":
+    style:
+      theme: "pro"
+  processing:
+    "processing-executable": '''
+      /usr/local/bin/processing-java
+      
+    '''
+  term3: {}
+  "terminal-plus":
+    core: {}
+    style: {}
+  "tree-view":
+    hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
+  welcome:
+    showOnStartup: false

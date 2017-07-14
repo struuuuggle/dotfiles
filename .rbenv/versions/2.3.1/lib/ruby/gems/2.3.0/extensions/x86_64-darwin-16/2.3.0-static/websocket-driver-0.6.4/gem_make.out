@@ -1,0 +1,15 @@
+current directory: /Users/Polaris/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/websocket-driver-0.6.4/ext/websocket-driver
+/Users/Polaris/.rbenv/versions/2.3.1/bin/ruby -r ./siteconf20161025-76114-8hiuqo.rb extconf.rb
+creating Makefile
+
+current directory: /Users/Polaris/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/websocket-driver-0.6.4/ext/websocket-driver
+make "DESTDIR=" clean
+
+current directory: /Users/Polaris/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/websocket-driver-0.6.4/ext/websocket-driver
+make "DESTDIR="
+compiling websocket_mask.c
+linking shared-object websocket_mask.bundle
+
+current directory: /Users/Polaris/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/websocket-driver-0.6.4/ext/websocket-driver
+make "DESTDIR=" install
+/usr/local/bin/ginstall -c -m 0755 websocket_mask.bundle ./.gem.20161025-76114-s7os67
