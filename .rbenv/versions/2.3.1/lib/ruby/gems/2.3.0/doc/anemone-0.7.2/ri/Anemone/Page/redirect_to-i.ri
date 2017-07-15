@@ -1,2 +1,0 @@
-U:RDoc::Attr[iI"redirect_to:ETI"Anemone::Page#redirect_to;TI"R;T:publico:RDoc::Markup::Document:@parts[o:RDoc::Markup::Paragraph;	[I"3URL of the page this one redirected to, if any;T:
-@fileI"lib/anemone/page.rb;T:0@omit_headings_from_table_of_contents_below0F@I"Anemone::Page;TcRDoc::NormalClass0
