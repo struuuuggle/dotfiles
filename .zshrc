@@ -191,8 +191,8 @@ eval "$(rbenv init - zsh)"
 
 # nodebrew(20170409)
 export export PATH=$PATH:/Users/Polaris/.nodebrew/current/bin
+
+# pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-export PATH="/usr/local/sbin:$PATH"
-export PATH=/usr/local/Cellar/openssl/1.0.2l/bin:/usr/local/sbin:/Users/Polaris/.pyenv/shims:/Users/Polaris/.pyenv/bin:/Users/Polaris/.rbenv/shims:/Users/Polaris/.rbenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/TeX/texbin:/Users/Polaris/.nodebrew/current/bin
