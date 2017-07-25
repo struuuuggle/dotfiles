@@ -13,5 +13,4 @@ ln -sf ~/dotfiles/.vagrant.d ~/.vagrant.d
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.pyenv ~/.pyenv
 ln -sf ~/dotfiles/.rbenv ~/.rbenv
-ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
 
