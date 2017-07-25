@@ -1,9 +1,0 @@
-[filter "lfs"]
-	clean = git lfs clean %f
-	smudge = git lfs smudge %f
-	required = true
-[user]
-	name = Struuuuggle
-	email = s15ti032@gmail.com
-[http]
-	postBuffer = 524288000

@@ -8,7 +8,7 @@
  * If you are unfamiliar with Less, you can read more about it here:
  * http://lesscss.org
  */
-//
+
 //背景画像 : なんども使うので変数としてセット
 @backgournd-image: url('/Users/Polaris/.atom/img/DSC_0073.jpg') no-repeat; // style the background color of the tree view
 
@@ -30,36 +30,35 @@ background: rgba(10, 10, 10, 0.8) !important; //背景色
 }
 
 atom-text-editor.editor {
-	background: @backgournd-image;
+	//background: @backgournd-image;
 	//背景 : 画像を表示するにはopacityを下げる
 	background-color: rgba(0, 0, 0, 0.2) !important;
 	//コメント
 	.syntax--comment {
 		color: rgba(170, 170, 170, 1.0);
 	}
-	//選択範囲の背景色を見やすく変更する
-	//http://blog.nocorica.jp/2015/06/atom-selection-color/
+	// 選択範囲の背景色を見やすく変更する
+	// http://blog.nocorica.jp/2015/06/atom-selection-color/
 	.gutter .cursor-line {
-		//行番号のハイライト
+		// 行番号のハイライト
 		background-color: fade(cyan, 40%);
 	}
 
 	.highlights {
-		//選択部分のハイライト
+		// 選択部分のハイライト
 		.selection .region {
-			background: fade(cyan, 20%);
+			background: fade(cyan, 30%);
 		}
 
 		.find-result .region {
 			border: 1px solid fade(cyan, 80%);
 		}
-		//ここまで
 	}
 }
 //http://qiita.com/Ted-HM/items/afe9eddaefc0247859a8
 
 atom-workspace-axis {
-	background: @backgournd-image;
+	//background: @backgournd-image;
 
 	.pane {
 		opacity: 0.7;
@@ -89,14 +88,13 @@ html {
 }
 
 .platformio-ide-terminal .xterm .terminal-plus{
-	background: @backgournd-image;
+	//background: @backgournd-image;
 	background-color: rgba(30, 30, 30, 0.4);
-	color: rgba(200, 200, 200, 0.8);
+	color: rgba(0, 200, 200, 0.8);
 
 	::selection {
 		background-color: green;
 	}
 	.terminal-cursor {
-		background-color: ;
 	}
 }
