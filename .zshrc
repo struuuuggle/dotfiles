@@ -148,7 +148,8 @@ elif which putclip >/dev/null 2>&1 ; then
     alias -g C='| putclip'
 fi
 
-
+#emacs
+alias e='emacs -nw'
 
 ########################################
 # OS 別の設定

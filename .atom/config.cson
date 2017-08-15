@@ -35,6 +35,7 @@
     showIndentGuide: true
     softTabs: false
     softWrap: true
+    tabType: "soft"
   "exception-reporting":
     userId: "c5d0e1ed-0583-091a-6f81-5ce74c6b3272"
   "file-icons": {}

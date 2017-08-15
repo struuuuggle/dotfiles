@@ -75,7 +75,7 @@
  )
 
 ;;for flycheck
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(global-flycheck-mode)
 
 ;;for atom-one-dark-theme
 (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/atom-one-dark-theme-20170117.1905/atom-one-dark-theme")
@@ -91,6 +91,8 @@
 ;; http://ap-www.cf.ocha.ac.jp/hito/index.php?emacs.el%A4%CE%C0%DF%C4%EA
 (setq visible-bell t)
 
+
+;;ウィンドウサイズ
 (setq default-frame-alist
       (append (list
 	'(width . 207)
@@ -128,9 +130,9 @@
                                      ;;(powerline-vc)
                                      (powerline-raw " ]")
                                      ))
-                          (rhs (list (powerline-raw "%4l" 'l)
-                                     (powerline-raw ":" 'l)
-                                     (powerline-raw "%2c" 'l)
+                          (rhs (list ;;(powerline-raw "%4l" 'l)
+                                     ;;(powerline-raw ":" 'l)
+                                     (powerline-raw "ch=%2c" 'l)
                                      (powerline-raw " | ")
                                      (powerline-raw "%6p" )
                                      (powerline-raw " ")

@@ -449,7 +449,7 @@ current buffer.  Otherwise return nil."
   (let* ((error (nth (1- n) flycheck-current-errors))
          (mode flycheck-highlighting-mode)
          (region (flycheck-error-region-for-mode error mode)))
-    (and (member error (flycheck-overlay-errors-at (point)))
+p    (and (member error (flycheck-overlay-errors-at (point)))
          (= (point) (car region)))))
 
 (defun flycheck-ert-explain--at-nth-error (n)
