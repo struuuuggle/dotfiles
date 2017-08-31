@@ -151,7 +151,8 @@ fi
 #emacs
 alias e='emacs -nw'
 
-
+#git.sh
+alias gg='~/git.sh'
 
 
 ########################################
