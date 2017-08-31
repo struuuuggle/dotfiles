@@ -151,6 +151,9 @@ fi
 #emacs
 alias e='emacs -nw'
 
+#git status
+alias gs='git status'
+
 ########################################
 # OS 別の設定
 case ${OSTYPE} in
