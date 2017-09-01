@@ -201,3 +201,6 @@ export export PATH=$PATH:/Users/Polaris/.nodebrew/current/bin
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# added by Anaconda3 4.4.0 installer
+export PATH="/Users/Polaris/anaconda/bin:$PATH"
