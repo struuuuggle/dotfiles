@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.23
+
+- I added some user settings for Native UI. Go to `Settings` → `Themes` and click on the `Settings` button next to the theme selection.
+  - You can choose between tabs that are either fixed-width or flexible.
+  - You can turn of the transparency effect for the sidebar, if you don’t like the effect.
+- Dock titles now look more similar to tabs again.
+- Code clean-up.
+
+## 0.22.1
+
+- Fixed [#74](https://github.com/fv0/native-ui/issues/74)
+- Small design adjustments to Atoms notifications to resemble the appearance of macOS notifications.
+
+## 0.22.0
+
+- Implemented [#72](https://github.com/fv0/native-ui/issues/72): Supported by Atom 1.19 I added macOS transparency for file and directory list. Thanks to [Guillaume](https://github.com/the0neyouseek) for mentioning and helping with this.
+- The Git status in the bottom bar is now back to its old look with a dark background.
+- Cosmetic adjustments here and there.
+- Some design adjustments to the “Project Find Results”.
+- Added testimonials and new screenshots to `README.md`.
+
 ## 0.21.0
 
 - Fixed [#69](https://github.com/fv0/native-ui/issues/69): Styled the new “Docks” feature in Atom.

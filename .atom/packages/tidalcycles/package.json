@@ -2,39 +2,39 @@
   "_args": [
     [
       {
-        "raw": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
+        "raw": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
         "scope": null,
         "escapedName": null,
         "name": null,
-        "rawSpec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
-        "spec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
+        "rawSpec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
+        "spec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
         "type": "local"
       },
-      "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/apm-install-dir-117612-17314-5dpoia.dugglxflxr"
+      "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/apm-install-dir-11783-17402-1j4s0e6.xvhtrqw7b9"
     ]
   ],
-  "_from": "../d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
-  "_id": "tidalcycles@0.9.1",
+  "_from": "../d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
+  "_id": "tidalcycles@0.9.2",
   "_inCache": true,
   "_location": "/tidalcycles",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
+    "raw": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
     "scope": null,
     "escapedName": null,
     "name": null,
-    "rawSpec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
-    "spec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
+    "rawSpec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
+    "spec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
     "type": "local"
   },
   "_requiredBy": [
     "#USER"
   ],
-  "_resolved": "file:../d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
-  "_shasum": "cd403158531dd43c2543852885963e350d321df0",
+  "_resolved": "file:../d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
+  "_shasum": "1b750b7ba9f5e4e563d762c0e84d6042d6afa9a6",
   "_shrinkwrap": null,
-  "_spec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-117612-17314-134ox7a.o4mowghkt9/package.tgz",
-  "_where": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/apm-install-dir-117612-17314-5dpoia.dugglxflxr",
+  "_spec": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/d-11783-17402-5sbe09.pw53c5l8fr/package.tgz",
+  "_where": "/private/var/folders/vf/frr7fkj13c14v4jyf98wr70h0000gn/T/apm-install-dir-11783-17402-1j4s0e6.xvhtrqw7b9",
   "activationCommands": {
     "atom-text-editor": [
       "tidalcycles:eval",
@@ -64,7 +64,7 @@
     "type": "git",
     "url": "git+https://github.com/tidalcycles/atom-tidalcycles.git"
   },
-  "version": "0.9.1",
+  "version": "0.9.2",
   "_atomModuleCache": {
     "version": 1,
     "dependencies": [
@@ -85,7 +85,7 @@
       },
       {
         "name": "es5-ext",
-        "version": "0.10.24",
+        "version": "0.10.30",
         "path": "node_modules/es5-ext/index.js"
       },
       {
@@ -228,6 +228,7 @@
         "node_modules/es5-ext/array/#/indexes-of.js",
         "node_modules/es5-ext/array/#/intersection.js",
         "node_modules/es5-ext/array/#/is-copy.js",
+        "node_modules/es5-ext/array/#/is-empty.js",
         "node_modules/es5-ext/array/#/is-uniq.js",
         "node_modules/es5-ext/array/#/keys/implement.js",
         "node_modules/es5-ext/array/#/keys/index.js",
@@ -451,6 +452,8 @@
         "node_modules/es5-ext/object/copy.js",
         "node_modules/es5-ext/object/count.js",
         "node_modules/es5-ext/object/create.js",
+        "node_modules/es5-ext/object/ensure-array.js",
+        "node_modules/es5-ext/object/ensure-finite-number.js",
         "node_modules/es5-ext/object/ensure-natural-number-value.js",
         "node_modules/es5-ext/object/ensure-natural-number.js",
         "node_modules/es5-ext/object/ensure-promise.js",
@@ -469,6 +472,7 @@
         "node_modules/es5-ext/object/is-copy-deep.js",
         "node_modules/es5-ext/object/is-copy.js",
         "node_modules/es5-ext/object/is-empty.js",
+        "node_modules/es5-ext/object/is-finite-number.js",
         "node_modules/es5-ext/object/is-number-value.js",
         "node_modules/es5-ext/object/is-object.js",
         "node_modules/es5-ext/object/is-plain-object.js",
@@ -502,6 +506,7 @@
         "node_modules/es5-ext/object/validate-array-like.js",
         "node_modules/es5-ext/object/validate-stringifiable-value.js",
         "node_modules/es5-ext/object/validate-stringifiable.js",
+        "node_modules/es5-ext/optional-chaining.js",
         "node_modules/es5-ext/reg-exp/#/index.js",
         "node_modules/es5-ext/reg-exp/#/is-sticky.js",
         "node_modules/es5-ext/reg-exp/#/is-unicode.js",
@@ -584,6 +589,7 @@
         "node_modules/es5-ext/string/raw/index.js",
         "node_modules/es5-ext/string/raw/is-implemented.js",
         "node_modules/es5-ext/string/raw/shim.js",
+        "node_modules/es5-ext/to-short-string-representation.js",
         "node_modules/es6-iterator/#/chain.js",
         "node_modules/es6-iterator/array.js",
         "node_modules/es6-iterator/for-of.js",

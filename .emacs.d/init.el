@@ -95,8 +95,8 @@
 ;;ウィンドウサイズ
 (setq default-frame-alist
       (append (list
-	'(width . 207)
-	'(height . 38)
+	'(width . 52)
+	'(height . 80)
 	)
 	default-frame-alist))
 
