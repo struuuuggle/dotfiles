@@ -21,7 +21,7 @@ SAVEHIST=1000
 
 # プロンプト
 # 1行表示
-PROMPT="%F{yellow}[STRUUUUGGLE@%C]%f %% "
+PROMPT="%F{yellow}[@%C]%f %% "
 # 2行表示
 #PROMPT="%{${fg[green]}%}[%n@%m]%{${reset_color}%} %~%# "
 
@@ -178,8 +178,6 @@ alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
 #alias firefox='open -a firefox'
 #alias safari='open -a safari'
 alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
-#alias texshop='open -a TexShop'
-alias gimp='open -a GIMP.app'
 
 #lsコマンドをglsコマンドに置き換え
 alias ls='gls --color=auto'
