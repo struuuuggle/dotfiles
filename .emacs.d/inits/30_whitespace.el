@@ -1,5 +1,8 @@
-;; Show white space, tab, and so on.
-;; ref. http://openlab.dino.co.jp/2008/07/15/233005294.html
+
+;;; Commentary:
+;;; Show white space, tab, and so on.
+;;; ref. http://openlab.dino.co.jp/2008/07/15/233005294.html
+;;; Code:
 
 ;;(defface my-face-r-1 '((t (:background "gray15"))) nil)
 (defface my-face-b-1 '((t (:background "gray"))) nil) ; color of zenkaku-space
@@ -26,3 +29,6 @@
              (progn
                (font-lock-mode t)
                (font-lock-fontify-buffer))))
+
+(provide '30_whitespace)
+;;; 30_whitespace.el ends here

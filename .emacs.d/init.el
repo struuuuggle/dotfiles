@@ -1,10 +1,13 @@
 
+;;; Commentary:
+;;; Code:
+
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-
 (package-initialize)
+(init-loader-load)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
         ("melpa" . "http://melpa.org/packages/")
@@ -48,12 +51,6 @@
                )
               default-frame-alist))
 
-;;行番号を常に表示する
-(global-linum-mode t)
-
-;;行番号をあらかじめ3桁分確保
-(setq linum-format "%3d ")
-
 ;; *.~ とかのバックアップファイルを作らない
 (setq make-backup-files nil)
 
@@ -93,15 +90,6 @@
 
 ;; ツールバーを非表示にする
 (tool-bar-mode 0)
-
-;; メニューを非表示にする
-(menu-bar-mode 0)
-
-;; タブ幅をスペース2つ分にする
-(setq-default tab-width 2)
-
-;; タブ文字ではなくスペースを使う
-(setq-default indent-tabs-mode nil)
 
 ;; 改行コードを表示する
 (setq eol-mnemonic-dos "(CRLF)")

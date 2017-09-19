@@ -107,7 +107,7 @@ With prefix argument NO-FETCH, do not call `package-refresh-contents'."
 
 With prefix argument NO-FETCH, do not call `package-refresh-contents'."
   (interactive
-   (progn
+p   (progn
      (unless current-prefix-arg
        (package-refresh-contents))
      (list (package-utils-read-upgradable-package)
