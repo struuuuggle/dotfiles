@@ -20,7 +20,7 @@
   (list
   (expand-file-name "~/.emacs.d/elpa/")
   (expand-file-name "~/.emacs.d/lisp/")
-  (expand-file-name "~/.emacs.d/init-loader/")
+;;  (expand-file-name "~/.emacs.d/init-loader/")
   )
   load-path))
 
@@ -40,9 +40,22 @@
  '(tab-always-indent t)
  '(tab-width 4))
 
+
+;; テーマ
+(load-theme 'manoj-dark t)
+;;for atom-one-dark-theme
+(if window-system (progn
+										(add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/atom-one-dark-theme-20170117.1905/atom-one-dark-theme")
+										(load-theme 'atom-one-dark t)
+										))
+
 ;;行番号を常に表示する
 (global-linum-mode t)
- 
+
+;;行番号をあらかじめ3桁分確保
+;;http://lisphack.blog137.fc2.com/blog-entry-14.html
+(setq linum-format "%2d ")
+
 ;; *.~ とかのバックアップファイルを作らない
 (setq make-backup-files nil)
 
@@ -50,11 +63,7 @@
 (setq scroll-step 1)
 
 ;;テーマの読み込み
-(load-theme 'manoj-dark t)
-
-;;行番号をあらかじめ3桁分確保
-;;http://lisphack.blog137.fc2.com/blog-entry-14.html
-(setq linum-format "%2d ")
+;;(load-theme 'manoj-dark t)
 
 ;; カーソル行をハイライトする
 (global-hl-line-mode t)
@@ -77,12 +86,8 @@
 ;;for flycheck
 (global-flycheck-mode)
 
-;;for atom-one-dark-theme
-(add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/atom-one-dark-theme-20170117.1905/atom-one-dark-theme")
-;;(load-theme 'atom-one-dark t)
-
 ;;透明度
-(set-frame-parameter nil 'alpha 75)
+(set-frame-parameter nil 'alpha 95)
 
 ;; 自動セーブの中止
 (setq auto-save-default nil)
@@ -91,6 +96,14 @@
 ;; http://ap-www.cf.ocha.ac.jp/hito/index.php?emacs.el%A4%CE%C0%DF%C4%EA
 (setq visible-bell t)
 
+;; ツールバーを非表示にする
+(tool-bar-mode 0)
+
+;; メニューを非表示にする
+(menu-bar-mode 0)
+
+;; タブ幅をスペース2つ分にする
+(setq-default tab-width 2)
 
 ;;ウィンドウサイズ
 (setq default-frame-alist
@@ -116,7 +129,7 @@
                           (face2 (if active 'mode-line-1-arrow 'mode-line-2-arrow))
                           (separator-left (intern (format "powerline-%s-%s"
                                                           (powerline-current-separator)
-                                                          (car powerline-default-separator-dir))))
+                                                          (car powerline-default-separator-dir))p))
                           (lhs (list (powerline-raw " " face1)
                                      (powerline-major-mode face1)
                                      (powerline-raw " " face1)
@@ -157,3 +170,6 @@
 (setq eol-mnemonic-dos "(CRLF)")
 (setq eol-mnemonic-mac "(CR)")
 (setq eol-mnemonic-unix "(LF)")
+
+(provide 'init)
+;;; init.el ends here
