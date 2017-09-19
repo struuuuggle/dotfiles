@@ -30,7 +30,8 @@
     ("atom-one-dark-cyan"     . "#56B6C2")
     ("atom-one-dark-blue"     . "#61AFEF")
     ("atom-one-dark-purple"   . "#C678DD")
-    ("atom-one-dark-green"    . "#98C379")
+    ("atom-one-dark-green"    . "#98FF79")
+    ("atom-one-dark-green-0"  . "#00FF00");; add
     ("atom-one-dark-red-1"    . "#E06C75")
     ("atom-one-dark-red-2"    . "#BE5046")
     ("atom-one-dark-orange-1" . "#D19A66")
@@ -59,9 +60,9 @@
    `(error ((t (:foreground ,atom-one-dark-red-1 :weight bold))))
    `(link ((t (:foreground ,atom-one-dark-blue :underline t :weight bold))))
    `(link-visited ((t (:foreground ,atom-one-dark-blue :underline t :weight normal))))
-   `(cursor ((t (:background ,atom-one-dark-accent))))
+   `(cursor ((t (:background ,atom-one-dark-green-0))))
    `(fringe ((t (:background ,atom-one-dark-bg))))
-   `(region ((t (:background ,atom-one-dark-gray))))
+   `(region ((t (:background ,atom-one-dark-mono-3))))
    `(highlight ((t (:background ,atom-one-dark-gray))))
    `(hl-line ((t (:background ,atom-one-dark-bg-hl))))
    `(vertical-border ((t (:foreground ,atom-one-dark-mono-3))))
@@ -70,7 +71,7 @@
    `(minibuffer-prompt ((t (:foreground ,atom-one-dark-silver))))
 
    `(font-lock-builtin-face ((t (:foreground ,atom-one-dark-cyan))))
-   `(font-lock-comment-face ((t (:foreground ,atom-one-dark-mono-3))))
+   `(font-lock-comment-face ((t (:foreground ,atom-one-dark-orange-1))))
    `(font-lock-comment-delimiter-face ((default (:inherit (font-lock-comment-face)))))
    `(font-lock-doc-face ((t (:inherit (font-lock-string-face)))))
    `(font-lock-function-name-face ((t (:foreground ,atom-one-dark-blue))))
@@ -299,7 +300,7 @@
    `(term-color-yellow ((t (:foreground ,atom-one-dark-orange-1))))
 
    ;; linum
-   `(linum ((t (:foreground ,atom-one-dark-gutter :background ,atom-one-dark-bg))))
+   `(linum ((t (:foreground ,atom-one-dark-silver :background ,atom-one-dark-bg))))
    ;; hlinum
    `(linum-highlight-face ((t (:foreground ,atom-one-dark-accent :background ,atom-one-dark-bg))))
 

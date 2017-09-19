@@ -30,20 +30,11 @@
  '(initial-frame-alist (quote ((top . 23) (left . 2))))
  '(package-selected-packages
    (quote
-    (init-loader powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
+    (dashboard init-loader powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
  '(tab-always-indent t)
  '(tab-width 4))
 
-;; テーマの読み込み
-;;-nwオプションをつけて起動した時としていない時でテーマを切り替える
-(load-theme 'manoj-dark t)
-(if window-system (progn
-                    ;;for atom-one-dark-theme
-                    (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/atom-one-dark-theme-20170117.1905/atom-one-dark-theme")
-                    (load-theme 'atom-one-dark t)
-                    ))
-
-;;ウィンドウサイズ
+;; ウィンドウサイズ
 (setq default-frame-alist
       (append (list
                '(width . 100)
@@ -54,7 +45,7 @@
 ;; *.~ とかのバックアップファイルを作らない
 (setq make-backup-files nil)
 
-;;; スクロールを一行ずつにする
+;; スクロールを一行ずつにする
 (setq scroll-step 1)
 
 ;; カーソル行をハイライトする
@@ -79,22 +70,21 @@
 (global-flycheck-mode)
 
 ;;透明度
-(set-frame-parameter nil 'alpha 95)
+(set-frame-parameter nil 'alpha 90)
 
 ;; 自動セーブの中止
 (setq auto-save-default nil)
 
 ;; 警告音を消す
-;; http://ap-www.cf.ocha.ac.jp/hito/index.php?emacs.el%A4%CE%C0%DF%C4%EA
 (setq visible-bell t)
 
 ;; ツールバーを非表示にする
 (tool-bar-mode 0)
 
 ;; 改行コードを表示する
-(setq eol-mnemonic-dos "(CRLF)")
-(setq eol-mnemonic-mac "(CR)")
-(setq eol-mnemonic-unix "(LF)")
+;;(setq eol-mnemonic-dos "(CRLF)")
+;;(setq eol-mnemonic-mac "(CR)")
+;;(setq eol-mnemonic-unix "(LF)")
 
 ;;for Powerline
 (require 'powerline)
@@ -118,13 +108,13 @@
                                      (powerline-raw " " face1)
                                      ;;(funcall separator-left face1 face2)
                                      (powerline-buffer-id nil )
-                                     (powerline-raw " [ ")
-                                     (powerline-raw mode-line-mule-info nil)
-                                     (powerline-raw "%*" nil)
+                                     ;;(powerline-raw " [ ")
+                                     ;;(powerline-raw mode-line-mule-info nil)
+                                     ;;(powerline-raw "%*" nil)
                                      ;;(powerline-raw " |")
                                      ;;(powerline-process nil)
                                      ;;(powerline-vc)
-                                     (powerline-raw " ]")
+                                     ;;(powerline-raw " ]")
                                      ))
                           (rhs (list ;;(powerline-raw "%4l" 'l)
                                      ;;(powerline-raw ":" 'l)
