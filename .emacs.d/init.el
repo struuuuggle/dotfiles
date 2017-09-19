@@ -1,15 +1,10 @@
-;;; Use init-loader.el
-;; ref. https://github.com/emacs-jp/init-loader
-
-;; Load downloaded init-loader.el
-;; ref. http://tatsuyano.github.io/blog/2013/03/19/emacs-el-get-init-loader/
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
-(package-initialize)
 
+(package-initialize)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
         ("melpa" . "http://melpa.org/packages/")
@@ -20,13 +15,9 @@
   (list
   (expand-file-name "~/.emacs.d/elpa/")
   (expand-file-name "~/.emacs.d/lisp/")
-;;  (expand-file-name "~/.emacs.d/init-loader/")
+  (expand-file-name "~/.emacs.d/inits/")
   )
   load-path))
-
-;; Define directory of init files.
-(require 'init-loader)
-(init-loader-load "~/.emacs.d/inits")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -36,25 +27,32 @@
  '(initial-frame-alist (quote ((top . 23) (left . 2))))
  '(package-selected-packages
    (quote
-	(powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
+    (init-loader powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
  '(tab-always-indent t)
  '(tab-width 4))
 
-
-;; テーマ
+;; テーマの読み込み
+;;-nwオプションをつけて起動した時としていない時でテーマを切り替える
 (load-theme 'manoj-dark t)
-;;for atom-one-dark-theme
 (if window-system (progn
-										(add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/atom-one-dark-theme-20170117.1905/atom-one-dark-theme")
-										(load-theme 'atom-one-dark t)
-										))
+                    ;;for atom-one-dark-theme
+                    (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/atom-one-dark-theme-20170117.1905/atom-one-dark-theme")
+                    (load-theme 'atom-one-dark t)
+                    ))
+
+;;ウィンドウサイズ
+(setq default-frame-alist
+      (append (list
+               '(width . 100)
+               '(height . 80)
+               )
+              default-frame-alist))
 
 ;;行番号を常に表示する
 (global-linum-mode t)
 
 ;;行番号をあらかじめ3桁分確保
-;;http://lisphack.blog137.fc2.com/blog-entry-14.html
-(setq linum-format "%2d ")
+(setq linum-format "%3d ")
 
 ;; *.~ とかのバックアップファイルを作らない
 (setq make-backup-files nil)
@@ -62,13 +60,10 @@
 ;;; スクロールを一行ずつにする
 (setq scroll-step 1)
 
-;;テーマの読み込み
-;;(load-theme 'manoj-dark t)
-
 ;; カーソル行をハイライトする
 (global-hl-line-mode t)
 
-;; Macのoptionをメタキーにする
+;; optionをメタキーにする
 (setq mac-option-modifier 'meta)
 
 ;; スクロールバーを非表示
@@ -105,13 +100,13 @@
 ;; タブ幅をスペース2つ分にする
 (setq-default tab-width 2)
 
-;;ウィンドウサイズ
-(setq default-frame-alist
-      (append (list
-	'(width . 100)
-	'(height . 80)
-	)
-	default-frame-alist))
+;; タブ文字ではなくスペースを使う
+(setq-default indent-tabs-mode nil)
+
+;; 改行コードを表示する
+(setq eol-mnemonic-dos "(CRLF)")
+(setq eol-mnemonic-mac "(CR)")
+(setq eol-mnemonic-unix "(LF)")
 
 ;;for Powerline
 (require 'powerline)
@@ -129,7 +124,7 @@
                           (face2 (if active 'mode-line-1-arrow 'mode-line-2-arrow))
                           (separator-left (intern (format "powerline-%s-%s"
                                                           (powerline-current-separator)
-                                                          (car powerline-default-separator-dir))p))
+                                                          (car powerline-default-separator-dir))))
                           (lhs (list (powerline-raw " " face1)
                                      (powerline-major-mode face1)
                                      (powerline-raw " " face1)
@@ -151,7 +146,7 @@
                                      (powerline-raw " ")
                                      )))
                      (concat (powerline-render lhs)
-                             (powerline-fill nil (powerline-width rhs)) 
+                             (powerline-fill nil (powerline-width rhs))
                              (powerline-render rhs)))))))
 
 (defun make/set-face (face-name fg-color bg-color weight)
@@ -165,11 +160,4 @@
 
 (powerline-my-theme)
 
-
-;; 改行コードを表示する
-(setq eol-mnemonic-dos "(CRLF)")
-(setq eol-mnemonic-mac "(CR)")
-(setq eol-mnemonic-unix "(LF)")
-
-(provide 'init)
 ;;; init.el ends here
