@@ -124,7 +124,7 @@ setopt pushd_ignore_dups
 setopt share_history
 
 # 同じコマンドをヒストリに残さない
-setopt hist_ignore_all_dups
+#setopt hist_ignore_all_dups
 
 # スペースから始まるコマンド行はヒストリに残さない
 setopt hist_ignore_space
