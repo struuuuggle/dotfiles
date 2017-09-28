@@ -33,6 +33,7 @@ zle -N _up-line-or-history-ignoring
 bindkey '^P' _up-line-or-history-ignoring
 
 #同様にfgとbgを完全に無視したC-n
+
 _down-line-or-history-ignoring() {
     zle down-line-or-history
     case "$BUFFER" in
