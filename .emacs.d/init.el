@@ -75,9 +75,6 @@
 ;; 警告音を消す
 (setq visible-bell t)
 
-;; ツールバーを非表示にする
-(tool-bar-mode 0)
-
 ;; 改行コードを表示する
 ;;(setq eol-mnemonic-dos "(CRLF)")
 ;;(setq eol-mnemonic-mac "(CR)")

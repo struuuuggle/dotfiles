@@ -8,5 +8,8 @@
 ;; スクロールバーを非表示
 (scroll-bar-mode 0)
 
+;; ツールバーを非表示にする
+(tool-bar-mode 0)
+
 (provide '01_toolbar)
 ;;; 01_toolbar.el ends here
