@@ -54,9 +54,6 @@
 ;; optionをメタキーにする
 (setq mac-option-modifier 'meta)
 
-;; スクロールバーを非表示
-(scroll-bar-mode 0)
-
 ;;for Ricty
 (add-to-list 'default-frame-alist '(font . "ricty-15"))
 (custom-set-faces
