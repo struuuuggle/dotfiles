@@ -51,9 +51,6 @@
 ;; カーソル行をハイライトする
 (global-hl-line-mode t)
 
-;; optionをメタキーにする
-(setq mac-option-modifier 'meta)
-
 ;;for Ricty
 (add-to-list 'default-frame-alist '(font . "ricty-15"))
 (custom-set-faces
