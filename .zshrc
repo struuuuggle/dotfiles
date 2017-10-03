@@ -1,8 +1,3 @@
-# 少し凝った zshrc
-# License : MIT
-# http://mollifier.mit-license.org/
-
-########################################
 # 環境変数
 export LANG=ja_JP.UTF-8
 
@@ -50,7 +45,6 @@ bindkey '^N' _down-line-or-history-ignoring
 PROMPT="%F{yellow}[@%C]%f %% "
 # 2行表示
 #PROMPT="%{${fg[green]}%}[%n@%m]%{${reset_color}%} %~%# "
-
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -112,7 +106,7 @@ setopt ignore_eof
 # '#' 以降をコメントとして扱う
 setopt interactive_comments
 
-# ディレクトリ名だけでcdする
+# ディレクトリ名だけpppでcdする
 setopt auto_cd
 
 # cd したら自動的にpushdする
@@ -125,7 +119,7 @@ setopt pushd_ignore_dups
 setopt share_history
 
 # 同じコマンドをヒストリに残さない
-#setopt hist_ignore_all_dups
+setopt hist_ignore_all_dups
 
 # スペースから始まるコマンド行はヒストリに残さない
 setopt hist_ignore_space
@@ -180,7 +174,6 @@ alias e='emacs -nw'
 #git.sh
 alias gg='~/git.sh'
 
-
 ########################################
 # OS 別の設定
 case ${OSTYPE} in
@@ -201,8 +194,6 @@ esac
 
 #以下、.bashrcからコピペ(20160525)
 alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
-#alias firefox='open -a firefox'
-#alias safari='open -a safari'
 alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
 
 #lsコマンドをglsコマンドに置き換え
@@ -228,3 +219,6 @@ eval "$(pyenv init -)"
 
 # added by Anaconda3 4.4.0 installer
 export PATH="/Users/Polaris/anaconda/bin:$PATH"
+
+# cdの後にlsを実行
+chpwd() { ls -a --color=auto }
