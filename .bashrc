@@ -1,4 +1,5 @@
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs &'
 alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
 alias gimp='open -a GIMP.app'
 
@@ -16,3 +17,6 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
   source $(brew --prefix)/etc/bash_completion
 fi
 
+
+### Added by the Bluemix CLI
+source /usr/local/Bluemix/bx/bash_autocomplete

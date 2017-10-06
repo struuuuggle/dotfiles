@@ -169,7 +169,9 @@ elif which putclip >/dev/null 2>&1 ; then
 fi
 
 #emacs
-alias e='emacs -nw'
+alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+##GUI emacs
+alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs &'
 
 #git.sh
 alias gg='~/git.sh'
@@ -222,3 +224,6 @@ export PATH="/Users/Polaris/anaconda/bin:$PATH"
 
 # cdの後にlsを実行
 chpwd() { ls -a --color=auto }
+
+### Added by the Bluemix CLI
+source /usr/local/Bluemix/bx/zsh_autocomplete
