@@ -228,21 +228,16 @@ chpwd() { ls -a --color=auto }
 ### Added by the Bluemix CLI
 source /usr/local/Bluemix/bx/zsh_autocomplete
 
-# Search shell history with peco: https://github.com/peco/peco
-# Adapted from: https://github.com/mooz/percol#zsh-history-search
-if which peco &> /dev/null; then
-  function peco_select_history() {
-    local tac
-    (which gtac &> /dev/null && tac="gtac") || \
-      (which tac &> /dev/null && tac="tac") || \
-      tac="tail -r"
-    BUFFER=$(fc -l -n 1 | eval $tac | \
-                peco --layout=bottom-up --query "$LBUFFER")
-    CURSOR=$#BUFFER # move cursor
-    zle -R -c       # refresh
-  }
-
-  zle -N peco_select_history
-  bindkey '^R' peco_select_history
-fi
-
+# コマンド履歴でpecoる
+# https://qiita.com/tmsanrinsha/items/72cebab6cd448704e366
+function peco-select-history() {
+    # historyを番号なし、逆順、最初から表示。
+    # 順番を保持して重複を削除。
+    # カーソルの左側の文字列をクエリにしてpecoを起動
+    # \nを改行に変換
+    BUFFER="$(history -nr 1 | awk '!a[$0]++' | peco --query "$LBUFFER" | sed 's/\\n/\n/')"
+    CURSOR=$#BUFFER             # カーソルを文末に移動
+    zle -R -c                   # refresh
+}
+zle -N peco-select-history
+bindkey '^R' peco-select-history
