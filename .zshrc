@@ -148,6 +148,10 @@ alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
 # ssh
 alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
 
+# git
+alias ggs='git status'
+alias ggp='git push'
+
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
 
