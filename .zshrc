@@ -1,6 +1,23 @@
 # 環境変数
 export LANG=ja_JP.UTF-8
 
+########################################
+# OS 別の設定
+case ${OSTYPE} in
+    darwin*)
+        #Mac用の設定
+        export CLICOLOR=1
+        alias ls='ls -G -F'
+        ;;
+    linux*)
+        #Linux用の設定
+        alias ls='ls -F --color=auto'
+        ;;
+esac
+
+# vim:set ft=zsh:
+
+##############################################
 
 # 色を使用出来るようにする
 autoload -Uz colors
@@ -14,37 +31,24 @@ HISTFILE=~/.zsh_history
 HISTSIZE=1000
 SAVEHIST=1000
 
-#fgとbgを完全に無視したC-p
-#https://qiita.com/aosho235/items/83e338989b901b99fe35
-_up-line-or-history-ignoring() {
-    zle up-line-or-history
-    case "$BUFFER" in
-        fg|bg)
-            zle up-line-or-history
-            ;;
-    esac
-}
-zle -N _up-line-or-history-ignoring
-bindkey '^P' _up-line-or-history-ignoring
-
-#同様にfgとbgを完全に無視したC-n
-
-_down-line-or-history-ignoring() {
-    zle down-line-or-history
-    case "$BUFFER" in
-        fg|bg)
-            zle down-line-or-history
-            ;;
-    esac
-}
-zle -N _down-line-or-history-ignoring
-bindkey '^N' _down-line-or-history-ignoring
-
 # プロンプト
 # 1行表示
 PROMPT="%F{yellow}[@%C]%f %% "
 # 2行表示
-#PROMPT="%{${fg[green]}%}[%n@%m]%{${reset_color}%} %~%# "
+#PROMPT="%{${fg[green]}%}[@%m]%{${reset_color}%} %~%# "
+
+# vcs_info
+autoload -Uz vcs_info
+autoload -Uz add-zsh-hook
+
+zstyle ':vcs_info:*' formats '%F{yellow}(%s)-[%b]%f'
+zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
+
+function _update_vcs_info_msg() {
+    LANG=en_US.UTF-8 vcs_info
+    RPROMPT="${vcs_info_msg_0_}"
+}
+add-zsh-hook precmd _update_vcs_info_msg
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -56,6 +60,7 @@ zstyle ':zle:*' word-style unspecified
 
 ########################################
 # 補完
+
 # 補完機能を有効にする
 autoload -Uz compinit
 compinit
@@ -72,22 +77,6 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
 
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
-
-
-########################################
-# vcs_info
-autoload -Uz vcs_info
-autoload -Uz add-zsh-hook
-
-zstyle ':vcs_info:*' formats '%F{green}(%s)-[%b]%f'
-zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
-
-function _update_vcs_info_msg() {
-    LANG=en_US.UTF-8 vcs_info
-    RPROMPT="${vcs_info_msg_0_}"
-}
-add-zsh-hook precmd _update_vcs_info_msg
-
 
 ########################################
 # オプション
@@ -148,6 +137,17 @@ alias mv='mv -i'
 
 alias mkdir='mkdir -p'
 
+#lsコマンドをglsコマンドに置き換え
+alias ls='gls --color=auto'
+
+# CUI Emacs
+alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+# GUI E macs
+alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
+
+# ssh
+alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
+
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
 
@@ -167,39 +167,6 @@ elif which putclip >/dev/null 2>&1 ; then
     # Cygwin
     alias -g C='| putclip'
 fi
-
-#emacs
-alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
-##GUI emacs
-alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs &'
-
-#git.sh
-alias gg='~/git.sh'
-
-########################################
-# OS 別の設定
-case ${OSTYPE} in
-    darwin*)
-        #Mac用の設定
-        export CLICOLOR=1
-        alias ls='ls -G -F'
-        ;;
-    linux*)
-        #Linux用の設定
-        alias ls='ls -F --color=auto'
-        ;;
-esac
-
-# vim:set ft=zsh:
-
-##############################################
-
-#以下、.bashrcからコピペ(20160525)
-alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs'
-alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
-
-#lsコマンドをglsコマンドに置き換え
-alias ls='gls --color=auto'
 
 #gidrcolorsコマンドでdircolors-solorizedを読み込む設定にする
 eval $(gdircolors ~/.dircolors-solarized)
@@ -227,6 +194,32 @@ chpwd() { ls -a --color=auto }
 
 ### Added by the Bluemix CLI
 source /usr/local/Bluemix/bx/zsh_autocomplete
+
+######################################################
+#fgとbgを完全に無視したC-p
+#https://qiita.com/aosho235/items/83e338989b901b99fe35
+_up-line-or-history-ignoring() {
+    zle up-line-or-history
+    case "$BUFFER" in
+        fg|bg)
+            zle up-line-or-history
+            ;;
+    esac
+}
+zle -N _up-line-or-history-ignoring
+bindkey '^P' _up-line-or-history-ignoring
+
+#同様にfgとbgを完全に無視したC-n
+_down-line-or-history-ignoring() {
+    zle down-line-or-history
+    case "$BUFFER" in
+        fg|bg)
+            zle down-line-or-history
+            ;;
+    esac
+}
+zle -N _down-line-or-history-ignoring
+bindkey '^N' _down-line-or-history-ignoring
 
 # コマンド履歴でpecoる
 # https://qiita.com/tmsanrinsha/items/72cebab6cd448704e366
