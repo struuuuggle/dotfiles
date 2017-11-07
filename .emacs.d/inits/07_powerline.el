@@ -31,7 +31,7 @@
                                      ;;(powerline-raw "%*" nil)
                                      ;;(powerline-raw " |")
                                      (powerline-process nil)
-                                     (powerline-vc)
+                                     ;;(powerline-vc)
                                      ;;(powerline-raw "]")
                                      ))
                           (rhs (list (powerline-raw "I'm @ ")
