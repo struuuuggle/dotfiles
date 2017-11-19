@@ -11,7 +11,13 @@
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
         ("melpa" . "http://melpa.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")))
+        ("org" . "http://orgmode.org/elpa/")
+        ))
+
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(package-initialize)
 
 (setq load-path
   (append
@@ -31,7 +37,7 @@
  '(initial-frame-alist (quote ((top . 23) (left . 2))))
  '(package-selected-packages
    (quote
-    (dashboard init-loader powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
+    (markdown-mode dashboard init-loader powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
  '(tab-always-indent t)
  '(tab-width 4))
 
