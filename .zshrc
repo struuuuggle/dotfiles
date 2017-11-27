@@ -33,7 +33,7 @@ SAVEHIST=1000
 
 # プロンプト
 # 1行表示
-PROMPT="%F{yellow}[@%C]%f %% "
+PROMPT="%F{yellow}[@%C]%f $ "
 # 2行表示
 #PROMPT="%{${fg[green]}%}[@%m]%{${reset_color}%} %~%# "
 
