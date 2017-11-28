@@ -41,7 +41,7 @@
                                      ;;(powerline-raw " | ")
                                      ;;(powerline-raw "%6p" )
                                      ;;(powerline-raw " ")
-                                     (powerline-raw "  char=%i")
+                                     (powerline-raw "  %i")
                                      )))
                      (concat (powerline-render lhs)
                              (powerline-fill nil (powerline-width rhs))

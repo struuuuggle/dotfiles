@@ -37,7 +37,7 @@
  '(initial-frame-alist (quote ((top . 23) (left . 2))))
  '(package-selected-packages
    (quote
-    (markdown-mode dashboard init-loader powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
+    (markdown-preview-mode markdown-mode dashboard init-loader powerline ## atom-one-dark-theme package-utils atom-dark-theme rainbow-delimiters flycheck color-theme-sanityinc-solarized)))
  '(tab-always-indent t)
  '(tab-width 4))
 
