@@ -32,10 +32,24 @@ HISTSIZE=1000
 SAVEHIST=1000
 
 # プロンプト
+# cf. https://www.slideshare.net/tetutaro/zsh-20923001
+# %B...%b     : %Bと%bの間を太字にする
+# %F{color}%f : %Fと%fの間の文字ををcolorにする
+# %K{color}%k : %Kと%kの間の背景色をcolorにする
+# %C          : カレントディレクトリ
+# %~          : カレントディクトリ(ホームディレクトリ以下全て表示)
+# %n          : ユーザー名
+# %m          : ホスト名
+local p_old="%F{yellow}[@%C]%f $ "
+local p_dir="%F{yellow}[@%C]%f"
+local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 # 1行表示
-PROMPT="%F{yellow}[@%C]%f $ "
+#PROMPT="$p_old"
+#PROMPT="$p_dir $p_mark "
 # 2行表示
-#PROMPT="%{${fg[green]}%}[@%m]%{${reset_color}%} %~%# "
+# 改行のパラメータWAKARANEEEEE
+PROMPT="$p_dir
+$p_mark "
 
 # vcs_info
 autoload -Uz vcs_info
