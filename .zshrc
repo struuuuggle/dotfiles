@@ -164,7 +164,10 @@ alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
 
 # git
 alias ggs='git status'
-alias ggp='git push'
+alias gp='git push'
+alias gl='git log'
+alias ga='git add'
+alias gc='git commit'
 
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
