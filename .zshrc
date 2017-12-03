@@ -41,7 +41,7 @@ SAVEHIST=1000
 # %n          : ユーザー名
 # %m          : ホスト名
 local p_old="%F{yellow}[@%C]%f $ "
-local p_dir="%F{yellow}[@%C]%f"
+local p_dir="%F{yellow}[@%~]%f"
 local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 # 1行表示
 #PROMPT="$p_old"
