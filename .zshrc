@@ -157,7 +157,7 @@ alias ls='gls --color=auto'
 # CUI Emacs
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 # GUI E macs
-alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs &'
+alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
 
 # VS Code
 alias vsc='/Applications/Visual Studio Code.app'
