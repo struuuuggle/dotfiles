@@ -157,10 +157,10 @@ alias ls='gls --color=auto'
 # CUI Emacs
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 # GUI E macs
-alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
+alias ee='/Applications/Emacs.app/Contents/MacOS/Emac'
 
 # VS Code
-alias vsc='/Applications/Visual Studio Code.app'
+alias vsc='/Applications/Visual\ Studio\ Code.app'
 
 # ssh
 alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
