@@ -160,7 +160,7 @@ alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 alias ee='/Applications/Emacs.app/Contents/MacOS/Emac'
 
 # VS Code
-alias vsc='/Applications/Visual\ Studio\ Code.app'
+alias vsc='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 
 # ssh
 alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
