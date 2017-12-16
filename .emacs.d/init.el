@@ -51,7 +51,7 @@
 (global-hl-line-mode t)
 
 ;;透明度
-(set-frame-parameter nil 'alpha 90)
+(set-frame-parameter nil 'alpha 95)
 
 ;; 自動セーブの中止
 (setq auto-save-default nil)
@@ -65,9 +65,3 @@
 ;;(setq eol-mnemonic-unix "(LF)")
 
 ;;; init.el ends here
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
