@@ -157,7 +157,7 @@ alias ls='gls --color=auto'
 # CUI Emacs
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 # GUI E macs
-alias ee='/Applications/Emacs.app/Contents/MacOS/Emac'
+alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
 
 # VS Code
 alias vsc='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
@@ -166,7 +166,7 @@ alias vsc='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/cod
 alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
 
 # git
-alias ggs='git status'
+alias gs='git status'
 alias gp='git push'
 alias gl='git log'
 alias ga='git add'
