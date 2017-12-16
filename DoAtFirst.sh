@@ -18,5 +18,5 @@ brew install git
 #git のバージョンを表示
 git --version
 
-#zshのインストール
-brew install zsh zsh-autosuggestions zsh-completions zsh-syntax-highlighting colordiff reattach-to-user-namespace tmux
+#ログインシェルをzshに変更
+chsh -s /bin/zsh
