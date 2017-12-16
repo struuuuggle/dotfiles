@@ -11,5 +11,5 @@
 ;; ツールバーを非表示にする
 (tool-bar-mode 0)
 
-(provide '01_toolbar)
-;;; 01_toolbar.el ends here
+(provide '01_bars)
+;;; 01_bars.el ends here
