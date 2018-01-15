@@ -213,9 +213,6 @@ eval "$(pyenv init -)"
 # Mecab
 export PATH=/usr/local/mecab/bin:$PATH
 
-# added by Anaconda3 4.4.0 installer
-export PATH="/Users/Polaris/anaconda/bin:$PATH"
-
 # cdの後にlsを実行
 chpwd() { ls -a --color=auto }
 
