@@ -94,6 +94,7 @@ zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
 
 ########################################
 # オプション
+
 # 日本語ファイル名を表示可能にする
 setopt print_eight_bit
 
@@ -109,7 +110,7 @@ setopt ignore_eof
 # '#' 以降をコメントとして扱う
 setopt interactive_comments
 
-# ディレクトリ名だけpppでcdする
+# ディレクトリ名だけでcdする
 setopt auto_cd
 
 # cd したら自動的にpushdする
@@ -192,11 +193,16 @@ elif which putclip >/dev/null 2>&1 ; then
     alias -g C='| putclip'
 fi
 
+########################################
+
 #gidrcolorsコマンドでdircolors-solorizedを読み込む設定にする
 eval $(gdircolors ~/.dircolors-solarized)
 
 #シンボリックリンクの付け替えでsolarizedの各テーマを変更できるようにする
 ln -fs ~/dircolors-solarized/dircolors.ansi-universal ~/.dircolors-solarized
+
+########################################
+#PATH
 
 #ruby
 export PATH=$HOME/.rbenv/bin:$PATH
@@ -213,13 +219,14 @@ eval "$(pyenv init -)"
 # Mecab
 export PATH=/usr/local/mecab/bin:$PATH
 
-# cdの後にlsを実行
-chpwd() { ls -a --color=auto }
-
 ### Added by the Bluemix CLI
 source /usr/local/Bluemix/bx/zsh_autocomplete
 
-######################################################
+########################################
+
+# cdの後にlsを実行
+chpwd() { ls -a --color=auto }
+
 #fgとbgを完全に無視したC-p
 #https://qiita.com/aosho235/items/83e338989b901b99fe35
 _up-line-or-history-ignoring() {
