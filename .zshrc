@@ -28,8 +28,8 @@ bindkey -e
 
 # ヒストリの設定
 HISTFILE=~/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=100000
+SAVEHIST=100000
 
 # プロンプト
 # cf. https://www.slideshare.net/tetutaro/zsh-20923001
