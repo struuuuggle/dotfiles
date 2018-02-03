@@ -12,5 +12,5 @@
                     (load-theme 'atom-one-dark t)
                     ))
 
-(provide '04_theme)
-;;; 04_theme.el ends here
+(provide '04-theme)
+;;; 04-theme.el ends here

@@ -1,4 +1,5 @@
 .emacs.d/auto-save-list
-.emacs.d/games/
+.emacs.d/games
 .emacs.d/recentf
-.emacs.d/elpa/archives/*
+.emacs.d/elpa/archives
+

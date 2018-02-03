@@ -1,4 +1,4 @@
-;;; 08_window.el --- for window
+;;; 08-window.el --- for window
 ;;; Commentary:
 ;;; Code:
 
@@ -10,4 +10,5 @@
                )
               default-frame-alist))
 
-;;; 08_window.el ends here
+(provide '08-window)
+;;; 08-window.el ends here

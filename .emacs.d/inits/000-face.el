@@ -8,5 +8,8 @@
 ;;透明度
 (set-frame-parameter nil 'alpha 95)
 
-(provide '00_face)
-;;; 00_face.el ends here
+;; スクロールを一行ずつにする
+(setq scroll-step 1)
+
+(provide '00-face)
+;;; 00-face.el ends here

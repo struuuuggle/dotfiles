@@ -9,4 +9,5 @@
 ;; ref. http://akisute3.hatenablog.com/entry/20120318/1332059326
 (global-set-key "\C-h" 'delete-backward-char)
 
-;;; 05_keybind.el ends here
+(provide '05-keybind)
+;;; 05-keybind.el ends here

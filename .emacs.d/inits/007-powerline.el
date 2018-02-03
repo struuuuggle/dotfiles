@@ -1,4 +1,4 @@
-;;; 07_powerline.el --- for powerline
+;;; 07-powerline.el --- for powerline
 ;;; Commentary:
 ;;; Code:
 
@@ -62,5 +62,5 @@
 ;;(powerline-nano-theme)
 
 
-(provide '07_powerline)
-;;; 07_powerline.el ends here
+(provide '07-powerline)
+;;; 07-powerline.el ends here
