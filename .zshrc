@@ -157,8 +157,11 @@ alias ls='gls --color=auto'
 
 # CUI Emacs
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+#alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
+
 # GUI Emacs
 alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
+#alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
 
 # VS Code
 alias vsc='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
@@ -201,29 +204,6 @@ eval $(gdircolors ~/.dircolors-solarized)
 #シンボリックリンクの付け替えでsolarizedの各テーマを変更できるようにする
 ln -fs ~/dircolors-solarized/dircolors.ansi-universal ~/.dircolors-solarized
 
-########################################
-#PATH
-
-#ruby
-export PATH=$HOME/.rbenv/bin:$PATH
-eval "$(rbenv init - zsh)"
-
-# nodebrew(20170409)
-export export PATH=$PATH:/Users/Polaris/.nodebrew/current/bin
-
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Mecab
-export PATH=/usr/local/mecab/bin:$PATH
-
-### Added by the Bluemix CLI
-source /usr/local/Bluemix/bx/zsh_autocomplete
-
-########################################
-
 # cdの後にlsを実行
 chpwd() { ls -a --color=auto }
 
@@ -265,3 +245,26 @@ function peco-select-history() {
 }
 zle -N peco-select-history
 bindkey '^R' peco-select-history
+
+########################################
+#PATH
+
+#ruby
+export PATH=$HOME/.rbenv/bin:$PATH
+eval "$(rbenv init - zsh)"
+
+# nodebrew(20170409)
+export export PATH=$PATH:/Users/Polaris/.nodebrew/current/bin
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# Mecab
+export PATH=/usr/local/mecab/bin:$PATH
+
+### Added by the Bluemix CLI
+source /usr/local/Bluemix/bx/zsh_autocomplete
+
+########################################
