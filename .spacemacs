@@ -41,15 +41,11 @@ values."
      better-defaults
      themes-megapack
      git
-     ;; org
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
      spell-checking
      syntax-checking
      version-control
-     ;; osx layer
      osx
+
      ;; language syntax
      shell-scripts
      markdown
@@ -61,6 +57,11 @@ values."
      php
      ruby
      swift
+     ;; org
+     ;; (shell :variables
+     ;;        shell-default-height 30
+     ;;        shell-default-position 'bottom)
+
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -334,9 +335,12 @@ you should place your code here."
   (setq linum-format "%3d ")
   ;; dracula theme
   (load-theme 'dracula t)
-
+  ;; background
   (set-face-background 'default "#222522")
+  ;; linum
   (set-face-background 'linum "#222522")
+  (set-face-foreground 'linum "#999999")
+
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
