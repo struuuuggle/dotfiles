@@ -331,8 +331,8 @@ you should place your code here."
 
   ;; C-hにbackspaceと同じ処理を割り当てる
   (define-key global-map "\C-h" 'delete-backward-char)
-  ;;行番号をあらかじめ3桁分確保
-  (setq linum-format "%3d ")
+  ;;行番号をあらかじめ4桁分確保
+  (setq linum-format "%4d ")
   ;; dracula theme
   (load-theme 'dracula t)
   ;; background
