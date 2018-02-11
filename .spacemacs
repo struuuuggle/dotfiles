@@ -61,7 +61,6 @@ values."
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -123,7 +122,7 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -331,8 +330,8 @@ you should place your code here."
 
   ;; C-hにbackspaceと同じ処理を割り当てる
   (define-key global-map "\C-h" 'delete-backward-char)
-  ;;行番号をあらかじめ4桁分確保
-  (setq linum-format "%4d ")
+  ;;行番号をあらかじめ3桁分確保
+  (setq linum-format "%3d  ")
   ;; dracula theme
   (load-theme 'dracula t)
   ;; background
@@ -340,7 +339,6 @@ you should place your code here."
   ;; linum
   (set-face-background 'linum "#222522")
   (set-face-foreground 'linum "#999999")
-
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -359,4 +357,5 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-)
+ '(default ((t (:background nil))))
+ '(hl-line ((t (:background "#222522")))))
