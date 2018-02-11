@@ -38,7 +38,7 @@ values."
      ;; ----------------------------------------------------------------
      helm
      auto-completion
-     better-defaults
+     ;;better-defaults
      themes-megapack
      git
      spell-checking
@@ -56,7 +56,7 @@ values."
      javascript
      php
      ruby
-     swift
+     ;;swift
      ;; org
      ;; (shell :variables
      ;;        shell-default-height 30
