@@ -1,3 +1,6 @@
+########################################
+# User configuration
+
 # 環境変数
 export LANG=ja_JP.UTF-8
 
@@ -16,8 +19,7 @@ case ${OSTYPE} in
 esac
 
 # vim:set ft=zsh:
-
-##############################################
+########################################
 
 # 色を使用出来るようにする
 autoload -Uz colors
@@ -41,28 +43,28 @@ SAVEHIST=100000
 # %n          : ユーザー名
 # %m          : ホスト名
 local p_old="%F{yellow}[@%C]%f $ "
-local p_dir="%F{yellow}[%n@%~]%f"
+local p_dir="%F{yellow}[@%~]%f"
 local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 # 1行表示
 #PROMPT="$p_old"
 #PROMPT="$p_dir $p_mark "
 # 2行表示
 # 改行のパラメータWAKARANEEEEE
-PROMPT="$p_dir
-$p_mark "
+#PROMPT="$p_dir
+#$p_mark "
 
 # vcs_info
-autoload -Uz vcs_info
-autoload -Uz add-zsh-hook
+#autoload -Uz vcs_info
+#autoload -Uz add-zsh-hook
 
-zstyle ':vcs_info:*' formats '%F{yellow}(%s)-[%b]%f'
-zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
+#zstyle ':vcs_info:*' formats '%F{yellow}(%s)-[%b]%f'
+#zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
 
 function _update_vcs_info_msg() {
     LANG=en_US.UTF-8 vcs_info
     RPROMPT="${vcs_info_msg_0_}"
 }
-add-zsh-hook precmd _update_vcs_info_msg
+#add-zsh-hook precmd _update_vcs_info_msg
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -145,23 +147,17 @@ bindkey '^R' history-incremental-pattern-search-backward
 
 alias la='ls -a'
 alias ll='ls -l'
-
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
-
 alias mkdir='mkdir -p'
 
 #lsコマンドをglsコマンドに置き換え
 alias ls='gls --color=auto'
 
-# CUI Emacs
+# Emacs
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
-#alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
-
-# GUI Emacs
 alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
-#alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
 
 # VS Code
 alias vsc='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
@@ -197,12 +193,6 @@ elif which putclip >/dev/null 2>&1 ; then
 fi
 
 ########################################
-
-#gidrcolorsコマンドでdircolors-solorizedを読み込む設定にする
-eval $(gdircolors ~/.dircolors-solarized)
-
-#シンボリックリンクの付け替えでsolarizedの各テーマを変更できるようにする
-ln -fs ~/dircolors-solarized/dircolors.ansi-universal ~/.dircolors-solarized
 
 # cdの後にlsを実行
 chpwd() { ls -a --color=auto }
@@ -268,3 +258,7 @@ export PATH=/usr/local/mecab/bin:$PATH
 source /usr/local/Bluemix/bx/zsh_autocomplete
 
 ########################################
+
+# Powerline
+powerline-daemon -q
+. /Users/Polaris/.pyenv/versions/3.6.4/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
