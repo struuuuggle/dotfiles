@@ -339,6 +339,9 @@ you should place your code here."
   ;; linum
   (set-face-background 'linum "#222522")
   (set-face-foreground 'linum "#999999")
+
+  ;; Disable current line highlight
+  (global-hl-line-mode -1)
 )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -357,4 +360,4 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
