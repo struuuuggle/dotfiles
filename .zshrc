@@ -243,11 +243,11 @@ bindkey '^R' peco-select-history
 #PATH
 
 #ruby
-export PATH=$HOME/.rbenv/bin:$PATH
+export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - zsh)"
 
 # nodebrew(20170409)
-export export PATH=$PATH:/Users/Polaris/.nodebrew/current/bin
+export PATH=$PATH:/Users/Polaris/.nodebrew/current/bin
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -255,10 +255,13 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 # Mecab
-export PATH=/usr/local/mecab/bin:$PATH
+export PATH="/usr/local/mecab/bin:$PATH"
 
 ### Added by the Bluemix CLI
 source /usr/local/Bluemix/bx/zsh_autocomplete
+
+# stack(Haskell)
+export PATH="$HOME/.local/bin:$PATH"
 
 ########################################
 
