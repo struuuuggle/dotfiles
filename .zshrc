@@ -238,3 +238,35 @@ bindkey '^R' peco-select-history
 # Powerline
 powerline-daemon -q
 . $HOME/.pyenv/versions/3.6.4/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+
+########################################
+#PATH
+
+# Disable Loading Global Profiles
+setopt no_global_rcs
+
+## 重複パスを登録しない
+typeset -U path cdpath fpath manpath
+
+#ruby
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init - zsh)"
+
+# nodebrew
+export PATH="$HOME/.nodebrew/current/bin:$PATH"
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# Mecab
+export PATH="/usr/local/mecab/bin:$PATH"
+
+### Added by the Bluemix CLI
+source /usr/local/Bluemix/bx/zsh_autocomplete
+
+# stack(Haskell)
+export PATH="$HOME/.local/bin:$PATH"
+
+########################################
