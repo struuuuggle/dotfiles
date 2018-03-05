@@ -40,10 +40,10 @@ values."
      auto-completion
      ;;better-defaults
      themes-megapack
-     git
+     ;;git
      spell-checking
      syntax-checking
-     version-control
+     ;;version-control
      osx
 
      ;; language syntax
@@ -335,7 +335,7 @@ you should place your code here."
   ;; C-hにbackspaceと同じ処理を割り当てる
   (define-key global-map "\C-h" 'delete-backward-char)
   ;;行番号をあらかじめ3桁分確保
-  (setq linum-format "%3d  ")
+  (setq linum-format "%3d ")
   ;; dracula theme
   (load-theme 'dracula t)
   ;; background
@@ -348,6 +348,7 @@ you should place your code here."
   (global-hl-line-mode -1)
 
   ;; For tidal.el
+  (load-file "~/.emacs.d/private/local/tidal.el")
   (setq tidal-interpreter "/usr/local/bin/stack")
   (setq tidal-interpreter-arguments
         (list "repl"
