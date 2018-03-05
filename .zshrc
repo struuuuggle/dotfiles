@@ -1,10 +1,4 @@
 ########################################
-# User configuration
-
-# 環境変数
-export LANG=ja_JP.UTF-8
-
-########################################
 # OS 別の設定
 case ${OSTYPE} in
     darwin*)
@@ -20,6 +14,8 @@ esac
 
 # vim:set ft=zsh:
 ########################################
+# 環境変数
+export LANG=ja_JP.UTF-8
 
 # 色を使用出来るようにする
 autoload -Uz colors
@@ -239,32 +235,6 @@ function peco-select-history() {
 zle -N peco-select-history
 bindkey '^R' peco-select-history
 
-########################################
-#PATH
-
-#ruby
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init - zsh)"
-
-# nodebrew(20170409)
-export PATH=$PATH:/Users/Polaris/.nodebrew/current/bin
-
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Mecab
-export PATH="/usr/local/mecab/bin:$PATH"
-
-### Added by the Bluemix CLI
-source /usr/local/Bluemix/bx/zsh_autocomplete
-
-# stack(Haskell)
-export PATH="$HOME/.local/bin:$PATH"
-
-########################################
-
 # Powerline
 powerline-daemon -q
-. /Users/Polaris/.pyenv/versions/3.6.4/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+. $HOME/.pyenv/versions/3.6.4/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
