@@ -1,6 +1,9 @@
 ########################################
 #PATH
 
+# Disable Loading Global Profiles
+setopt no_global_rcs
+
 ## 重複パスを登録しない
 typeset -U path cdpath fpath manpath
 
