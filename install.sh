@@ -34,7 +34,7 @@ brew tap Homebrew/bundle
 brew bundle
 
 message=$(cat <<-EOF
-##################################################
+################################################################
 # To Use Homebrew Zsh, type the commands below!
 
 
@@ -44,7 +44,19 @@ message=$(cat <<-EOF
 # Change the shell
 \$ chsh -s /usr/local/bin/zsh
 
-##################################################
+################################################################
+# Then you will have to setup .gitconfig and .gitignore_global
+
+# .gitconfig ###################################################
+[user]
+  name = <YOUR NAME>
+  email = <YOUR EMAIL ADDRESS>
+[core]
+  excludesfile = $HOME/.gitignore_global
+
+# .gitignore_global ############################################
+.DS_Store
+
 EOF
    )
 
