@@ -33,5 +33,19 @@ rm -rf fonts
 brew tap Homebrew/bundle
 brew bundle
 
-#ログインシェルをzshに変更
-chsh -s /bin/zsh
+message=$(cat <<-EOF
+##################################################
+# To Use Homebrew Zsh, type the commands below!
+
+
+# Open /etc/shells and add '/usr/local/bin/zsh'
+\$ sudo emacs /etc/shells
+
+# Change the shell
+\$ chsh -s /usr/local/bin/zsh
+
+##################################################
+EOF
+   )
+
+echo $message
