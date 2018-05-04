@@ -60,4 +60,4 @@ message=$(cat <<-EOF
 EOF
    )
 
-echo $message
+echo "$message"
