@@ -13,6 +13,7 @@ case ${OSTYPE} in
 esac
 
 # vim:set ft=zsh:
+
 ########################################
 # 環境変数
 export LANG=ja_JP.UTF-8
@@ -38,29 +39,14 @@ SAVEHIST=100000
 # %~          : カレントディクトリ(ホームディレクトリ以下全て表示)
 # %n          : ユーザー名
 # %m          : ホスト名
-local p_old="%F{yellow}[@%C]%f $ "
 local p_dir="%F{yellow}[@%~]%f"
 local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 # 1行表示
-#PROMPT="$p_old"
 #PROMPT="$p_dir $p_mark "
 # 2行表示
 # 改行のパラメータWAKARANEEEEE
 #PROMPT="$p_dir
 #$p_mark "
-
-# vcs_info
-#autoload -Uz vcs_info
-#autoload -Uz add-zsh-hook
-
-#zstyle ':vcs_info:*' formats '%F{yellow}(%s)-[%b]%f'
-#zstyle ':vcs_info:*' actionformats '%F{red}(%s)-[%b|%a]%f'
-
-function _update_vcs_info_msg() {
-    LANG=en_US.UTF-8 vcs_info
-    RPROMPT="${vcs_info_msg_0_}"
-}
-#add-zsh-hook precmd _update_vcs_info_msg
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -136,7 +122,7 @@ setopt extended_glob
 # キーバインド
 
 # ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
-bindkey '^R' history-incremental-pattern-search-backward
+#bindkey '^R' history-incremental-pattern-search-backward
 
 ########################################
 # エイリアス
@@ -170,11 +156,13 @@ alias gp='git push'
 alias gl='git log'
 alias ga='git add'
 alias gc='git commit'
+alias gd='git diff'
 
 # sudo の後のコマンドでエイリアスを有効にする
 alias sudo='sudo '
 
 # グローバルエイリアス
+export LESS='-M -R'
 alias -g L='| less'
 alias -g G='| grep'
 
@@ -192,7 +180,6 @@ elif which putclip >/dev/null 2>&1 ; then
 fi
 
 ########################################
-
 # cdの後にlsを実行
 chpwd() { ls -a --color=auto }
 
@@ -269,4 +256,6 @@ source /usr/local/Bluemix/bx/zsh_autocomplete
 # stack(Haskell)
 export PATH="$HOME/.local/bin:$PATH"
 
-########################################
+# Apache Portable Runtime
+export PATH="/usr/local/opt/apr/bin:$PATH"
+export PATH="/usr/local/opt/apr-util/bin:$PATH"
