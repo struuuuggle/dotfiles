@@ -1,10 +1,10 @@
 ;; -*- mode: emacs-lisp -*-
-;; This file is loaded by Spacemacs at startup.
-;; It must be stored in your home directory.
+;; this file is loaded by spacemacs at startup.
+;; it must be stored in your home directory.
 
 (defun dotspacemacs/layers ()
-  "Configuration Layers declaration.
-You should not put any user code in this function besides modifying the variable
+  "configuration layers declaration.
+you should not put any user code in this function besides modifying the variable
 values."
   (setq-default
    ;; Base distribution to use. This is a layer contained in the directory
@@ -120,7 +120,7 @@ values."
    dotspacemacs-verbose-loading nil
    ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
-   ;; banner, `random' chooses a random text banner in `core/banners'
+   ;; banner, `random' chooses a random text banner in 'official
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
@@ -149,8 +149,8 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Roboto Mono for Powerline"
-                               :size 14
+   dotspacemacs-default-font '("Source Code Pro for Powerline"
+                               :size 13
                                :weight light
                                :width normal
                                :powerline-scale 0.9)
@@ -326,20 +326,24 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  ;; powerline
   (setq powerline-default-separator 'arrow)
   ;;(setq ns-use-srgb-colorspace nil)
   (setq powerline-default-separator 'utf-8)
 
   ;; C-hにbackspaceと同じ処理を割り当てる
   (define-key global-map "\C-h" 'delete-backward-char)
+
   ;; Colortheme fix in terminal
   (custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
-  ;; color
+
+  ;; linum
+  (setq linum-format "%3d ")
   (set-face-background 'linum nil)
+  (set-face-foreground 'linum "#ccccc7")
+
   ;; Disable current line highlight
   (global-hl-line-mode -1)
-  ;;行番号をあらかじめ3桁分確保
-  (setq linum-format "%3d ")
   )
 
 

@@ -163,6 +163,7 @@ alias sudo='sudo '
 
 # グローバルエイリアス
 export LESS='-M -R'
+export LESSOPEN='| src-hilite-lesspipe.sh %s'
 alias -g L='| less'
 alias -g G='| grep'
 
@@ -250,12 +251,13 @@ eval "$(pyenv init -)"
 # Mecab
 export PATH="/usr/local/mecab/bin:$PATH"
 
-### Added by the Bluemix CLI
-source /usr/local/Bluemix/bx/zsh_autocomplete
-
 # stack(Haskell)
 export PATH="$HOME/.local/bin:$PATH"
 
 # Apache Portable Runtime
 export PATH="/usr/local/opt/apr/bin:$PATH"
 export PATH="/usr/local/opt/apr-util/bin:$PATH"
+
+#############################################
+# welcome script
+sh ~/dotfiles/welcome.sh
