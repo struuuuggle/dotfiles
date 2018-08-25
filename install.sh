@@ -1,7 +1,5 @@
 #!/bin/sh
 
-# Usage: sh install.sh
-
 for f in .??*
 do
     # symlinkを貼りたくないファイルを以下に書いておく
@@ -14,8 +12,9 @@ do
 done
 
 # Command Line Toolsのインストール
-xcode-select --install
-
+if ! which xcode-select --install >/dev/null 2>&1 ; then
+    xcode-select --install
+fi
 # Powerline fonts
 ## clone
 git clone https://github.com/powerline/fonts.git --depth=1
@@ -27,9 +26,11 @@ cd ..
 rm -rf fonts
 
 #HomeBrewのインストール
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
+if ! which brew >/dev/null 2>&1 ; then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
 # Brewfileを使ってもろもろインストール
+brew install caskroom/cask/brew-cask
 brew tap Homebrew/bundle
 brew bundle
 
@@ -38,14 +39,14 @@ message=$(cat <<-EOF
 # To Use Homebrew Zsh, type the commands below!
 
 
-# Open /etc/shells and add '/usr/local/bin/zsh'
-\$ sudo emacs /etc/shells
+# Add Add'/usr/local/bin/zsh' to /etc/shells
+\$ sudo echo "usr/local/bin/zsh" >> /etc/shells
 
 # Change the shell
 \$ chsh -s /usr/local/bin/zsh
 
 ################################################################
-# Then you will have to setup .gitconfig and .gitignore_global
+# Then you will have to setup .gitconfig
 
 # .gitconfig ###################################################
 [user]
@@ -53,9 +54,6 @@ message=$(cat <<-EOF
   email = <YOUR EMAIL ADDRESS>
 [core]
   excludesfile = $HOME/.gitignore_global
-
-# .gitignore_global ############################################
-.DS_Store
 
 EOF
    )

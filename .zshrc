@@ -1,22 +1,12 @@
-########################################
-# OS 別の設定
-case ${OSTYPE} in
-    darwin*)
-        #Mac用の設定
-        export CLICOLOR=1
-        alias ls='ls -G -F'
-        ;;
-    linux*)
-        #Linux用の設定
-        alias ls='ls -F --color=auto'
-        ;;
-esac
-
-# vim:set ft=zsh:
+# .zshrc
 
 ########################################
-# 環境変数
-export LANG=ja_JP.UTF-8
+# General
+
+# Compile .zshrc automatically
+if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
+    zcompile ~/.zshrc
+fi
 
 # 色を使用出来るようにする
 autoload -Uz colors
@@ -25,13 +15,7 @@ colors
 # emacs 風キーバインドにする
 bindkey -e
 
-# ヒストリの設定
-HISTFILE=~/.zsh_history
-HISTSIZE=100000
-SAVEHIST=100000
-
 # プロンプト
-# cf. https://www.slideshare.net/tetutaro/zsh-20923001
 # %B...%b     : %Bと%bの間を太字にする
 # %F{color}%f : %Fと%fの間の文字ををcolorにする
 # %K{color}%k : %Kと%kの間の背景色をcolorにする
@@ -42,11 +26,9 @@ SAVEHIST=100000
 local p_dir="%F{yellow}[@%~]%f"
 local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 # 1行表示
-#PROMPT="$p_dir $p_mark "
+#PROMPT=$'$p_dir $p_mark '
 # 2行表示
-# 改行のパラメータWAKARANEEEEE
-#PROMPT="$p_dir
-#$p_mark "
+#PROMPT=$'$p_dir\n$p_mark '
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -98,7 +80,7 @@ setopt interactive_comments
 setopt auto_cd
 
 # cd したら自動的にpushdする
-setopt auto_pushd
+#setopt auto_pushd
 
 # 重複したディレクトリを追加しない
 setopt pushd_ignore_dups
@@ -118,14 +100,22 @@ setopt hist_reduce_blanks
 # 高機能なワイルドカード展開を使用する
 setopt extended_glob
 
+# Disable Loading Global Profiles
+setopt no_global_rcs
+
+
 ########################################
 # キーバインド
 
 # ^R で履歴検索をするときに * でワイルドカードを使用出来るようにする
-#bindkey '^R' history-incremental-pattern-search-backward
+bindkey '^R' history-incremental-pattern-search-backward
+
 
 ########################################
 # エイリアス
+
+# sudo の後のコマンドでエイリアスを有効にする
+alias sudo='sudo '
 
 alias la='ls -a'
 alias ll='ls -l'
@@ -134,18 +124,16 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias mkdir='mkdir -p'
 
-#lsコマンドをglsコマンドに置き換え
+# GNU commands
+alias grep='ggrep --color=auto'
 alias ls='gls --color=auto'
+alias sed='gsed'
 
-# Emacs
+# Application
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
-
-# VS Code
+alias v='/usr/bin/vim'
 alias vsc='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
-
-# ssh
-alias ssh_s15ti032='ssh s15ti032@zenith.edu.ics.saitama-u.ac.jp'
 
 # tmux
 alias tk='tmux kill-session'
@@ -158,31 +146,28 @@ alias ga='git add'
 alias gc='git commit'
 alias gd='git diff'
 
-# sudo の後のコマンドでエイリアスを有効にする
-alias sudo='sudo '
-
 # グローバルエイリアス
-export LESS='-M -R'
-export LESSOPEN='| src-hilite-lesspipe.sh %s'
 alias -g L='| less'
-alias -g G='| grep'
+alias -g G='| grep --color=auto'
 
-# C で標準出力をクリップボードにコピーする
-# mollifier delta blog : http://mollifier.hatenablog.com/entry/20100317/p1
-if which pbcopy >/dev/null 2>&1 ; then
+# OS別の設定
+if [[ `uname` == "Darwin" ]]; then
     # Mac
     alias -g C='| pbcopy'
-elif which xsel >/dev/null 2>&1 ; then
+else
     # Linux
+    if ! command -v xsel >/dev/null 2>&1 ; then
+        eval "sudo apt-get install xsel"
+    fi
     alias -g C='| xsel --input --clipboard'
-elif which putclip >/dev/null 2>&1 ; then
-    # Cygwin
-    alias -g C='| putclip'
 fi
 
+
 ########################################
+# function
+
 # cdの後にlsを実行
-chpwd() { ls -a --color=auto }
+chpwd() { ls -a }
 
 #fgとbgを完全に無視したC-p
 #https://qiita.com/aosho235/items/83e338989b901b99fe35
@@ -211,7 +196,7 @@ bindkey '^N' _down-line-or-history-ignoring
 
 # コマンド履歴でpecoる
 # https://qiita.com/tmsanrinsha/items/72cebab6cd448704e366
-function peco-select-history() {
+_peco-select-history() {
     # historyを番号なし、逆順、最初から表示。
     # 順番を保持して重複を削除。
     # カーソルの左側の文字列をクエリにしてpecoを起動
@@ -220,44 +205,16 @@ function peco-select-history() {
     CURSOR=$#BUFFER             # カーソルを文末に移動
     zle -R -c                   # refresh
 }
-zle -N peco-select-history
-bindkey '^R' peco-select-history
+zle -N _peco-select-history
+bindkey '^R' _peco-select-history
+
+
+#############################################
+# Additional settings
 
 # Powerline
 powerline-daemon -q
-. $HOME/.pyenv/versions/3.6.4/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+source $HOME/.local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
 
-########################################
-#PATH
-
-# Disable Loading Global Profiles
-setopt no_global_rcs
-
-## 重複パスを登録しない
-typeset -U path cdpath fpath manpath
-
-#ruby
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init - zsh)"
-
-# nodebrew
-export PATH="$HOME/.nodebrew/current/bin:$PATH"
-
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Mecab
-export PATH="/usr/local/mecab/bin:$PATH"
-
-# stack(Haskell)
-export PATH="$HOME/.local/bin:$PATH"
-
-# Apache Portable Runtime
-export PATH="/usr/local/opt/apr/bin:$PATH"
-export PATH="/usr/local/opt/apr-util/bin:$PATH"
-
-#############################################
 # welcome script
 sh ~/dotfiles/welcome.sh

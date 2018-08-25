@@ -26,7 +26,7 @@ brew gdbm
 brew gdk-pixbuf
 brew gettext
 brew ghc
-brew ghc@8.0
+brew ghc
 brew git
 brew glib
 brew gmp
@@ -41,7 +41,7 @@ brew grip
 brew harfbuzz
 brew haskell-stack
 brew icu4c
-brew imagemagick@6
+brew imagemagick
 brew isl
 brew jack
 brew jansson
@@ -77,7 +77,6 @@ brew nkf
 brew node
 brew nodebrew
 brew openssl
-brew openssl@1.1
 brew p11-kit
 brew p7zip
 brew pandoc
@@ -110,9 +109,7 @@ brew yasm
 brew zsh
 
 tap homebrew/dupes
-
 tap homebrew/versions
-
 tap caskroom/cask
 cask emacs
 cask xquartz
@@ -125,9 +122,6 @@ brew emacs-plus
 tap rcmdnk/file
 brew brew-file
 
-# Other Homebrew packages
-brew isl@0.14
-
 # App Store applications
 appstore 921458519 DrCleaner (2.1.0)
 appstore 406056744 Evernote (7.0.3)
@@ -138,5 +132,5 @@ appstore 409203825 Numbers (5.0)
 appstore 409201541 Pages (7.0)
 appstore 803453959 Slack (3.1.0)
 appstore 425424353 The Unarchiver (3.11.5)
-appstore 1278508951 Trello (2.10.3)
-appstore 497799835 Xcode (9.2)
+#appstore 1278508951 Trello (2.10.3)
+#appstore 497799835 Xcode (9.2)
