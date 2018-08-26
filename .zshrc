@@ -80,7 +80,7 @@ setopt interactive_comments
 setopt auto_cd
 
 # cd したら自動的にpushdする
-#setopt auto_pushd
+setopt auto_pushd
 
 # 重複したディレクトリを追加しない
 setopt pushd_ignore_dups
@@ -125,8 +125,8 @@ alias mv='mv -i'
 alias mkdir='mkdir -p'
 
 # GNU commands
-alias grep='ggrep --color=auto'
-alias ls='gls --color=auto'
+alias grep='ggrep --color=always'
+alias ls='gls --color=always'
 alias sed='gsed'
 
 # Application
@@ -140,7 +140,7 @@ alias tk='tmux kill-session'
 
 # git
 alias gs='git status'
-alias gp='git push'
+#alias gp='git push'
 alias gl='git log'
 alias ga='git add'
 alias gc='git commit'
@@ -148,7 +148,7 @@ alias gd='git diff'
 
 # グローバルエイリアス
 alias -g L='| less'
-alias -g G='| grep --color=auto'
+alias -g G='| grep --color=always'
 
 # OS別の設定
 if [[ `uname` == "Darwin" ]]; then

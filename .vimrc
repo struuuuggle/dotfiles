@@ -30,6 +30,12 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Show line number
+set number
+
+" Set line number width
+set numberwidth=3
+
 " Sets how many lines of history VIM has to remember
 set history=500
 

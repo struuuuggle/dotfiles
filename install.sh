@@ -5,6 +5,7 @@ do
     # symlinkを貼りたくないファイルを以下に書いておく
     [[ "$f" == ".git" ]] && continue
     [[ "$f" == ".gitignore" ]] && continue
+    [[ "$f" == ".gitmodules" ]] && continue
     [[ "$f" == ".DS_Store" ]] && continue
     [[ "$f" == ".emacs.d.bak" ]] && continue
 
@@ -34,27 +35,24 @@ brew install caskroom/cask/brew-cask
 brew tap Homebrew/bundle
 brew bundle
 
-message=$(cat <<-EOF
-################################################################
-# To Use Homebrew Zsh, type the commands below!
-
-
 # Add Add'/usr/local/bin/zsh' to /etc/shells
-\$ sudo echo "usr/local/bin/zsh" >> /etc/shells
+sudo echo "usr/local/bin/zsh" >> /etc/shells
 
 # Change the shell
-\$ chsh -s /usr/local/bin/zsh
+chsh -s /usr/local/bin/zsh
 
+message=$(cat <<-EOF
 ################################################################
-# Then you will have to setup .gitconfig
+# Finally, you will have to setup .gitconfig
 
 # .gitconfig ###################################################
 [user]
-  name = <YOUR NAME>
-  email = <YOUR EMAIL ADDRESS>
+    name = <YOUR NAME>
+    email = <YOUR EMAIL ADDRESS>
 [core]
-  excludesfile = $HOME/.gitignore_global
-
+    excludesfile = ~/.gitignore_global
+[color]
+	ui = true
 EOF
    )
 
