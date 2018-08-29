@@ -47,6 +47,7 @@ brew grep
 brew grip
 brew harfbuzz
 brew haskell-stack
+brew htop
 brew icu4c
 brew imagemagick@6
 brew isl
@@ -132,7 +133,7 @@ tap homebrew/cask
 cask alfred
 cask fontforge
 cask spotmenu
-cask xquartz
+cask virtualbox
 
 tap argon/mas
 
@@ -150,6 +151,7 @@ brew isl@0.14
 cask emacs
 cask mongodb
 cask supercollider
+cask xquartz
 
 # App Store applications
 appstore 921458519 DrCleaner (2.1.0)

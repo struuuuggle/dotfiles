@@ -32,6 +32,8 @@ setopt no_global_rcs
 export PYENV_ROOT="$HOME/.pyenv"
 
 path=(
+    # X11
+    /usr/X11/bin(N-/)
     # GNU
     /usr/local/opt/coreutils/libexec/gnubin(N-/)
     # pyenv

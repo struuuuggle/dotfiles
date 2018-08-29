@@ -131,7 +131,7 @@ alias sed='gsed'
 
 # Application
 alias e='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
-alias ee='/Applications/Emacs.app/Contents/MacOS/Emacs'
+alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 alias v='/usr/bin/vim'
 alias vsc='/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'
 
@@ -145,7 +145,8 @@ alias gl='git log'
 alias ga='git add'
 alias gc='git commit'
 alias gd='git diff'
-
+alias gcl='git clone'
+alias gcm='git commit -m'
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep --color=always'
