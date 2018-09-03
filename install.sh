@@ -9,9 +9,17 @@ do
     [[ "$f" == ".DS_Store" ]] && continue
     [[ "$f" == ".emacs.d.bak" ]] && continue
 
-    ln -s $HOME/dotfiles/$f $HOME/$f
+    if echo "$f" | grep ".zsh" >/dev/null; then
+        if [[ `uname` == "Darwin" ]]; then
+            ln -s $HOME/dotfiles/$f $HOME/${f%%.darwin}
+        elif [[ `uname` == "Linux" ]]; then
+            ln -s $HOME/dotfiles/$f $HOME/${f%%.linux}
+        fi
+    fi
+
 done
 
+exit 0
 # Command Line Toolsのインストール
 if ! which xcode-select --install >/dev/null 2>&1 ; then
     xcode-select --install
@@ -52,7 +60,7 @@ message=$(cat <<-EOF
 [core]
     excludesfile = ~/.gitignore_global
 [color]
-	ui = true
+  ui = true
 EOF
    )
 

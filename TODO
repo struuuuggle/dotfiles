@@ -1,2 +1,2 @@
-[ ] .zsh*をLinux用とMac(Darwin)用に分ける
-[ ] install.shにおいて、HOSTOSに応じて.zshrc.darwinと.zshrc.linuxを読み分ける
+[x] .zsh*をLinux用とMac(Darwin)用に分ける
+[x] install.shにおいて、HOSTOSに応じて.zshrc.darwinと.zshrc.linuxを読み分ける
