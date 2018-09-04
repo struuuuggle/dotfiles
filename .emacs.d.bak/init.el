@@ -7,25 +7,20 @@
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
 (package-initialize)
-(init-loader-load)
-(setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
-        ("melpa-stable" . "https://stable.melpa.org/packages/")
-        ("melpa" . "http://melpa.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")
-        ))
 
+(init-loader-load)
 (require 'package)
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/" ))
+(package-initialize)
 
 ;; Load path
 (setq load-path
-  (append
-  (list
-  (expand-file-name "~/.emacs.d/elpa/")
-  (expand-file-name "~/.emacs.d/lisp/")
-  (expand-file-name "~/.emacs.d/inits/")
-  )
-  load-path))
+      (append '("~/.emacs.d/elpa/" "~/.emacs.d/lisp/" "~/.emacs.d/inits/")
+              load-path))
 
 ;; Preference
 (require '000-face)
@@ -40,13 +35,21 @@
 (require '009-markdown)
 (require '010-font)
 (require '011-sound)
+(require '012-savefile)
 (require '030-whitespace)
 
-;; *.~ とかのバックアップファイルを作らない
-(setq make-backup-files nil)
-
-;; 自動セーブの中止
-(setq auto-save-default nil)
-
-
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (ac-helm websocket web-server uuidgen powerline package-utils nyan-mode init-loader flycheck dracula-theme dashboard color-theme-sanityinc-solarized atom-one-dark-theme atom-dark-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:background "nil")))))

@@ -1,15 +1,17 @@
-
+;;; 000-face.el --- Appearance
 ;;; Commentary:
 ;;; Code:
 
 ;; カーソル行をハイライトする
-(global-hl-line-mode t)
+;; (global-hl-line-mode t)
 
 ;;透明度
-(set-frame-parameter nil 'alpha 95)
+(custom-set-faces
+ '(default ((t (:background "nil")))))
+
 
 ;; スクロールを一行ずつにする
 (setq scroll-step 1)
 
-(provide '00-face)
-;;; 00-face.el ends here
+(provide '000-face)
+;;; 000-face.el ends here

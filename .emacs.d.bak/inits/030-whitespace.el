@@ -1,4 +1,4 @@
-
+;;; 030-whitespace.el --- 
 ;;; Commentary:
 ;;; Show white space, tab, and so on.
 ;;; ref. http://openlab.dino.co.jp/2008/07/15/233005294.html
@@ -30,5 +30,5 @@
                (font-lock-mode t)
                (font-lock-fontify-buffer))))
 
-(provide '30-whitespace)
-;;; 30-whitespace.el ends here
+(provide '030-whitespace)
+;;; 030-whitespace.el ends here

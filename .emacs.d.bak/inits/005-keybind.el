@@ -1,4 +1,4 @@
-
+;;; 005-keybind.el --- keys
 ;;; Commentary:
 ;;; Code:
 
@@ -8,5 +8,5 @@
 ;; C-hにbackspaceと同じ処理を割り当てる
 (global-set-key "\C-h" 'delete-backward-char)
 
-(provide '05-keybind)
-;;; 05-keybind.el ends here
+(provide '005-keybind)
+;;; 005-keybind.el ends here
