@@ -24,13 +24,11 @@ exit 0
 if ! which xcode-select --install >/dev/null 2>&1 ; then
     xcode-select --install
 fi
+
 # Powerline fonts
-## clone
 git clone https://github.com/powerline/fonts.git --depth=1
-## install
 cd fonts
 ./install.sh
-## clean-up a bit
 cd ..
 rm -rf fonts
 
@@ -42,6 +40,9 @@ fi
 brew install caskroom/cask/brew-cask
 brew tap Homebrew/bundle
 brew bundle
+
+# spacemacs
+git clone https://github.com/syl20bnr/spacemacs.git ./.emacs.d
 
 # Add Add'/usr/local/bin/zsh' to /etc/shells
 sudo echo "usr/local/bin/zsh" >> /etc/shells

@@ -142,7 +142,7 @@ alias tk='tmux kill-session'
 
 # git
 alias gs='git status'
-#alias gp='git push'
+alias gp='git push'
 alias gl='git log'
 alias ga='git add'
 alias gc='git commit'
@@ -151,18 +151,7 @@ alias gd='git diff'
 # グローバルエイリアス
 alias -g L='| less'
 alias -g G='| grep --color=always'
-
-# OS別の設定
-if [[ `uname` == "Darwin" ]]; then
-    # Mac
-    alias -g C='| pbcopy'
-else
-    # Linux
-    if ! command -v xsel >/dev/null 2>&1 ; then
-        eval "sudo apt-get install xsel"
-    fi
-    alias -g C='| xsel --input --clipboard'
-fi
+alias -g C='| pbcopy'
 
 
 ########################################
