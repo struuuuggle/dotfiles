@@ -207,5 +207,4 @@ bindkey '^R' _peco-select-history
 powerline-daemon -q
 source $HOME/.local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
 
-# welcome script
-sh ~/dotfiles/welcome.sh
+# Welcome Messageは/etc/motdに書く
