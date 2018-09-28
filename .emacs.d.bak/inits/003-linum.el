@@ -1,4 +1,4 @@
-
+;;; 003-linum.el --- custom settings for line number
 ;;; Commentary:
 ;;; Code:
 
@@ -8,5 +8,5 @@
 ;;行番号をあらかじめ3桁分確保
 (setq linum-format "%3d ")
 
-(provide '03-linum)
-;;; 03-linum.el ends here
+(provide '003-linum)
+;;; 003-linum.el ends here

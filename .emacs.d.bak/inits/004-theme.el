@@ -1,16 +1,16 @@
-
-
+;;; 004-theme.el --- theme settings
 ;;; Commentary:
 ;;; Code:
 
 ;; テーマの読み込み
 ;;-nwオプションをつけて起動した時としていない時でテーマを切り替える
-(load-theme 'manoj-dark t)
-(if window-system (progn
-                    ;;for atom-one-dark-theme
-                    (add-to-list 'custom-theme-load-path "~/.emacs.d/elpa/atom-one-dark-theme-20170117.1905/atom-one-dark-theme")
-                    (load-theme 'atom-one-dark t)
-                    ))
+(load-theme 'dracula t)
 
-(provide '04-theme)
-;;; 04-theme.el ends here
+;; その他細かい色の設定
+(set-face-background 'linum nil)
+(set-face-foreground 'linum "#999999")
+;; comment & doc (see also 'font-lock-string-face)
+;; (set-face-foreground 'font-lock-comment-face "#8292c4")
+(set-face-foreground 'font-lock-doc-face "#8292c4")
+(provide '004-theme)
+;;; 004-theme.el ends here

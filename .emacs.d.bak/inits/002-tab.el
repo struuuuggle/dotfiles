@@ -1,4 +1,4 @@
-;;; 02-tab.el --- tab settings
+;;; 002-tab.el --- tab settings
 ;;; Commentary:
 ;;; Code:
 
@@ -8,5 +8,5 @@
 ;; タブ文字ではなくスペースを使う
 (setq-default indent-tabs-mode nil)
 
-(provide '02-tab)
-;;; 02-tab.el ends here
+(provide '002-tab)
+;;; 002-tab.el ends here

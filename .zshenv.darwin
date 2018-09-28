@@ -36,6 +36,8 @@ path=(
     /usr/X11/bin(N-/)
     # GNU
     /usr/local/opt/coreutils/libexec/gnubin(N-/)
+    # rbenv
+    $HOME/.rbenv/bin(N-/)
     # pyenv
     PYENV_ROOT/shims(N-/)
     # nodebrew
@@ -44,7 +46,6 @@ path=(
     $HOME/.local/bin(N-/)
     #Rust
     $HOME/.cargo/bin(N-/)
-
     # 雑用スクリプト
     $HOME/bin(N-/)
     # /etc/paths に書いてあるもの
@@ -61,4 +62,9 @@ typeset -U path cdpath fpath manpath
 # pyenv
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
+fi
+
+# rbenv
+if command -v rbenv 1>/dev/null 2>&1; then
+    eval "$(rbenv init -)"
 fi
