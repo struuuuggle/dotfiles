@@ -153,6 +153,10 @@ alias -g L='| less'
 alias -g G='| grep --color=always'
 alias -g C='| pbcopy'
 
+# virtualenv
+alias sac='source ./bin/activate'
+alias deac='deactivate'
+
 
 ########################################
 # function
@@ -208,3 +212,4 @@ powerline-daemon -q
 source $HOME/.local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
 
 # Welcome Messageは/etc/motdに書く
+
