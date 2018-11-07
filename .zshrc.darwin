@@ -26,9 +26,9 @@ bindkey -e
 local p_dir="%F{yellow}[@%~]%f"
 local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 # 1行表示
-#PROMPT=$'$p_dir $p_mark '
+#PROMPT="$p_dir $p_mark "
 # 2行表示
-#PROMPT=$'$p_dir\n$p_mark '
+#PROMPT="$p_dir\n$p_mark "
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
