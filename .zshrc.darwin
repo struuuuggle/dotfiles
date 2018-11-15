@@ -154,7 +154,7 @@ alias -g G='| grep --color=always'
 alias -g C='| pbcopy'
 
 # virtualenv
-alias sac='source ./bin/activate'
+alias sac='source .env/bin/activate'
 alias deac='deactivate'
 
 
