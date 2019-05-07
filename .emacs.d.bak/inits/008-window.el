@@ -5,10 +5,9 @@
 ;; ウィンドウサイズ
 (setq default-frame-alist
       (append (list
-               '(width . 100)
+               '(width . 117)
                '(height . 80)
                )
               default-frame-alist))
 
-(provide '008-window)
 ;;; 008-window.el ends here

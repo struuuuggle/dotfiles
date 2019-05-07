@@ -5,9 +5,9 @@
 (require 'dashboard)
 (dashboard-setup-startup-hook)
 ;; Set the title
-;; (setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
+(setq dashboard-banner-logo-title "Welcome to Emacs Dashboard")
 ;; Set the banner
-(setq dashboard-startup-banner "~/.emacs.d/banner/000-emacs.txt")
+(setq dashboard-startup-banner 'logo)
 ;; Value can be
 ;; 'official which displays the official emacs logo
 ;; 'logo which displays an alternative emacs logo
@@ -17,13 +17,11 @@
 ;; Content is not centered by default. To center, set
 (setq dashboard-center-content t)
 
-(setq dashboard-items '((recents  . 5)
+(setq dashboard-items '((recents  . 10)
                         (bookmarks . 5)
                         (projects . 5)
-                        (agenda . 5)
+                        ;; (agenda . 5)
                         (registers . 5)))
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
-
-(provide '070-dashboard)
 ;;; 070-dashboard.el ends here

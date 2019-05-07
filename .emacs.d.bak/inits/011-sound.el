@@ -2,8 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-;; 警告音を消す
-(setq visible-bell t)
+;; アラートを無効化
+(setq ring-bell-function 'ignore)
 
-(provide '011-sound)
 ;;; 011-sound.el ends here

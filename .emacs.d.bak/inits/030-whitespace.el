@@ -30,5 +30,4 @@
                (font-lock-mode t)
                (font-lock-fontify-buffer))))
 
-(provide '030-whitespace)
 ;;; 030-whitespace.el ends here

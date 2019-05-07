@@ -8,5 +8,4 @@
 ;;行番号をあらかじめ3桁分確保
 (setq linum-format "%3d ")
 
-(provide '003-linum)
 ;;; 003-linum.el ends here

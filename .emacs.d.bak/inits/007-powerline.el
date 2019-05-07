@@ -52,7 +52,7 @@
 
 
 ;; 上に定義したpowerline-my-themeを呼び出す
-(powerline-my-theme)
+;;(powerline-my-theme)
 
 ;; There are five builtin themes:
 ;;(powerline-default-thme)
@@ -62,5 +62,4 @@
 ;;(powerline-nano-theme)
 
 
-(provide '007-powerline)
 ;;; 007-powerline.el ends here

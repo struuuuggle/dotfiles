@@ -7,5 +7,4 @@
        '(:eval (list (nyan-create)))
        ))
 
-(provide '040-mode-line)
 ;;; 040-mode-line.el ends here

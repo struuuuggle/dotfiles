@@ -24,23 +24,6 @@
                 "~/.emacs.d/inits/")
               load-path))
 
-;; Preference
-;; (require '000-face)
-;; (require '001-bars)
-;; (require '002-tab)
-;; (require '003-linum)
-;; (require '004-theme)
-;; (require '005-keybind)
-;; (require '006-flycheck)
-;; (require '007-powerline)
-;; (require '008-window)
-;; (require '009-markdown)
-;; (require '010-font)
-;; (require '011-sound)
-;; (require '012-savefile)
-;; (require '020-doom-themes)
-;; (require '030-whitespace)
-;; (require '040-mode-line)
 
 ;;; init.el ends here
 (custom-set-variables
@@ -48,12 +31,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(doom-themes-enable-bold t)
+ '(doom-themes-enable-italic t)
  '(package-selected-packages
    (quote
-    (projectile dashboard-project-status company-box company-lsp company ivy magit neotree doom-themes ac-helm websocket web-server uuidgen powerline package-utils nyan-mode init-loader flycheck dracula-theme dashboard))))
+    (rainbow-delimiters doom-modeline ivy-rich beacon git-gutter projectile dashboard-project-status company-box company-lsp company ivy magit neotree doom-themes ac-helm websocket web-server uuidgen powerline package-utils nyan-mode init-loader flycheck dracula-theme dashboard))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background "nil")))))
+ '(default ((t (:background nil))))
+ '(doom-modeline-bar ((t (:background "#636463"))))
+ )

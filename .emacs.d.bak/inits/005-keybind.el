@@ -12,5 +12,4 @@
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
 
-(provide '005-keybind)
 ;;; 005-keybind.el ends here

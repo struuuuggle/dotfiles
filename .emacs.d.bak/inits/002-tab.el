@@ -8,5 +8,4 @@
 ;; タブ文字ではなくスペースを使う
 (setq-default indent-tabs-mode nil)
 
-(provide '002-tab)
 ;;; 002-tab.el ends here

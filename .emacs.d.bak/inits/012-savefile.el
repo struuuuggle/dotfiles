@@ -8,5 +8,4 @@
 ;; 自動セーブの中止
 (setq auto-save-default nil)
 
-(provide '012-savefile)
 ;;; 012-savefile.el ends here

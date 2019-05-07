@@ -10,5 +10,4 @@
 (require 'company-box)
 (add-hook 'company-mode-hook 'company-box-mode)
 
-(provide '060-company)
 ;;; 060-company.el ends here

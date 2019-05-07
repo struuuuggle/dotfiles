@@ -5,5 +5,4 @@
 ;; 警告音を消す
 (setq visible-bell t)
 
-(provide '012-savefile)
 ;;; 012-savefile.el ends here

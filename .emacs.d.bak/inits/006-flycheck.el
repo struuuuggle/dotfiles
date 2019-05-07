@@ -5,5 +5,4 @@
 ;; for flycheck
 (global-flycheck-mode)
 
-(provide '006-flycheck)
 ;;; 006-flycheck.el ends here
