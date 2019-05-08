@@ -23,10 +23,10 @@ bindkey -e
 # %~          : カレントディクトリ(ホームディレクトリ以下全て表示)
 # %n          : ユーザー名
 # %m          : ホスト名
-local p_dir="%F{yellow}[@%~]%f"
+local p_dir="%F{yellow}[%n@%~]%f"
 local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
 # 1行表示
-#PROMPT="$p_dir $p_mark "
+PROMPT="$p_dir $p_mark "
 # 2行表示
 #PROMPT="$p_dir\n$p_mark "
 
@@ -208,8 +208,8 @@ bindkey '^R' _peco-select-history
 # Additional settings
 
 # Powerline
-powerline-daemon -q
-source $HOME/.local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+# powerline-daemon -q
+# source $HOME/.local/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
 
 # Welcome Messageは/etc/motdに書く
 
