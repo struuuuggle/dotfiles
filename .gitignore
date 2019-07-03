@@ -1,7 +1,10 @@
-.emacs.d/auto-save-list
-.emacs.d/games
-.emacs.d/recentf
-.emacs.d/elpa/archives/
-.emacs.d.bak/elpa/archives/
-.emacs.d.bak/network-security.data
-
+.emacs.d[\.bak]*/elpa/
+.emacs.d[\.bak]*/eshell/
+.emacs.d[\.bak]*/transient/
+.emacs.d[\.bak]*/auto-save-list
+.emacs.d[\.bak]*/games
+.emacs.d[\.bak]*/recentf
+.emacs.d[\.bak]*/tramp
+.emacs.d[\.bak]*/projectile-bookmarks.eld
+.emacs.d[\.bak]*/network-security.data
+*~
