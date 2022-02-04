@@ -1,0 +1,20 @@
+# .emacs.d
+elpa/
+eshell/
+transient/
+auto-save-list
+games
+recentf
+tramp
+projectile-bookmarks.eld
+network-security.data
+.persistent-scratch
+amx-items
+*~
+bookmarks
+*.cache
+.lsp-session-v1
+custom.el
+
+# karabiner
+automatic_backups/
