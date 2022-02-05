@@ -27,7 +27,7 @@ do
     [[ "$f" == ".gitignore_global" ]] && continue
     [[ "$f" == ".commit_template" ]] && continue
 
-    make_symlink $HOME/dotfiles/git/$f
+    make_symlink $(realpath $f)
 done
 
 echo "==> dotfiles/zsh/"
@@ -42,13 +42,13 @@ fi
 echo "==> dotfiles/bash/"
 for f in bash/.??*
 do
-    make_symlink $HOME/dotfiles/bash/$f
+    make_symlink $(realpath $f)
 done
 
 echo "==> dotfiles/vim/"
 for f in vim/.??*
 do
-    make_symlink $HOME/dotfiles/vim/$f
+    make_symlink $(realpath $f)
 done
 
 echo "==> dotfiles/"
@@ -62,7 +62,7 @@ do
     [[ "$f" == ".spacemacs" ]] && continue
     [[ "$f" == ".tmux.conf" ]] && continue
 
-    make_symlink $HOME/dotfiles/$f
+    make_symlink $(realpath $f)
 done
 
 echo "✅ Done"

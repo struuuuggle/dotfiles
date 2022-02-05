@@ -29,7 +29,9 @@ SAVEHIST=100000
 # Disable Loading Global Profiles
 setopt no_global_rcs
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [[ `uname -m` == 'arm64' ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
 export MINT_LINK_PATH=/opt/mint/bin
 export MINT_PATH=/opt/mint/lib

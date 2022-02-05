@@ -1,20 +1,21 @@
 # .emacs.d
-elpa/
-eshell/
-transient/
-auto-save-list
-games
-recentf
-tramp
-projectile-bookmarks.eld
-network-security.data
+*.cache
+*.elc
+*~
+.lsp-session-v1
 .persistent-scratch
 amx-items
-*~
+auto-save-list
 bookmarks
-*.cache
-.lsp-session-v1
 custom.el
+elpa/
+eshell/
+games
+network-security.data
+projectile-bookmarks.eld
+recentf
+tramp
+transient/
 
 # karabiner
 automatic_backups/
