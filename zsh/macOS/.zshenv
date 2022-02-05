@@ -35,7 +35,6 @@ fi
 
 export MINT_LINK_PATH=/opt/mint/bin
 export MINT_PATH=/opt/mint/lib
-export RBENV_ROOT=$(brew --prefix rbenv)
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-16.jdk/Contents/Home"
 
 path=(
@@ -45,7 +44,7 @@ path=(
     # GNU
     /usr/local/opt/coreutils/libexec/gnubin(N-/)
     # rbenv
-    $RBENV_ROOT/bin(N-/)
+    $HOME/.rbenv/bin(N-/)
     # pyenv
     $HOME/.pyenv/shims(N-/)
     # nodebrew
