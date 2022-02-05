@@ -16,6 +16,7 @@ projectile-bookmarks.eld
 recentf
 tramp
 transient/
+var/
 
 # karabiner
 automatic_backups/

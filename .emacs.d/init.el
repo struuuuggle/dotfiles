@@ -33,8 +33,6 @@
     :init
     ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
     (leaf hydra :ensure t)
-    (leaf el-get :ensure t)
-    (leaf blackout :ensure t)
 
     :config
     ;; initialize leaf-keywords.el
@@ -47,6 +45,12 @@
 
 
 ;;; faces:
+
+(leaf page-break-lines
+  :emacs>= 24.4
+  :ensure t
+  :global-minor-mode
+  (global-page-break-lines-mode))
 
 (leaf beacon
   :ensure t
@@ -99,8 +103,6 @@
 (leaf cus-start
   :doc "define customization properties of builtins"
   :tag "builtin" "internal"
-  :global-minor-mode
-  (global-page-break-lines-mode)
   :custom ((user-full-name . "Mikiya Abe")
            (user-mail-address . "struuuuggle@gmail.com")
            (user-login-name . "struuuuggle")
@@ -144,7 +146,6 @@
 
 (leaf doom-themes
   :ensure t
-  :require t
   :custom-face
   (doom-modeline-bar . '((t (:background "#6272a4"))))
   :config
@@ -328,6 +329,7 @@
   ("C-x M-g" . magit-dispatch-popup))
 
 (leaf git-gutter
+  :ensure t
   :custom
   (git-gutter:modified-sign . " ")
   (git-gutter:added-sign    . " ")
@@ -354,7 +356,7 @@
 (leaf fira-code-mode
   :when window-system
   :doc "Emacs minor mode for Fira Code ligatures using prettify-symbols"
-  :require t
+  :ensure t
   :global-minor-mode t)
 
 ;; 表示確認用:
@@ -366,18 +368,17 @@
 
 ;; configure the package to point to the sourcekit-lsp executable
 (leaf lsp-sourcekit
-  :require t
   :after lsp-mode
   :custom
   `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
   )
-  ;; (setq lsp-sourcekit-extra-args '("-Xswiftc" "-sdk" "-Xswiftc" "/Applications/Xcode-13.0.0-Release.Candidate.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.0.sdk" "-Xswiftc" "-target" "-Xswiftc" "x86_64-apple-ios15.0-simulator")))
+;; (setq lsp-sourcekit-extra-args '("-Xswiftc" "-sdk" "-Xswiftc" "/Applications/Xcode-13.0.0-Release.Candidate.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.0.sdk" "-Xswiftc" "-target" "-Xswiftc" "x86_64-apple-ios15.0-simulator")))
 
 (defvar lsp-sourcekit-extra-args (quote ("-Xswiftc" "-sdk" "-Xswiftc" "/Applications/Xcode-13.0.0-Release.Candidate.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.0.sdk" "-Xswiftc" "-target" "-Xswiftc" "x86_64-apple-ios15.0-simulator")))
 
 ;; enable lsp automatically whenever you visit a .swift file
 (leaf swift-mode
-  :require t
+  :ensure t
   :config
   (add-hook 'swift-mode-hook
             #'(lambda nil
@@ -387,17 +388,17 @@
                 (lsp))))
 
 (leaf lsp-mode
-  :require t
+  :ensure t
   :config
   (leaf lsp-ui
     :ensure t
     :bind
     (:swift-mode-map
-    ("C-c C-r" . lsp-ui-peek-find-references)
-    ("C-j" . lsp-ui-doc-show)
-    ("C-c i" . lsp-ui-peek-find-implementation)
-    ("M-s-0" . lsp-ui-imenu)
-    ("C-c s" . lsp-ui-sideline-mode))
+     ("C-c C-r" . lsp-ui-peek-find-references)
+     ("C-j" . lsp-ui-doc-show)
+     ("C-c i" . lsp-ui-peek-find-implementation)
+     ("M-s-0" . lsp-ui-imenu)
+     ("C-c s" . lsp-ui-sideline-mode))
     :custom
     ;; lsp-ui-doc
     (lsp-ui-doc-enable . t)
@@ -427,7 +428,6 @@
     (lsp-ui-peek-fontify . 'always)))
 
 (leaf smart-jump
-  :require t
   :ensure t
   :bind
   ("s-b" . smart-jump-go)
@@ -441,13 +441,11 @@
 
 (leaf json-mode
   :doc "Major mode for editing JSON files with emacs"
-  :require t
   :ensure t
   :config
   (leaf json-reformat
     :doc "Reformat tool for JSON"
     :emacs>= 23
-    :require t
     :ensure t
     :custom
     (json-reformat:indent-width . 2)))
@@ -463,12 +461,10 @@
     :hook (org-mode-hook))
   (leaf org-download
     :doc "Drag and drop images to Emacs org-mode"
-    :require t
     :ensure t
     :custom ((org-download-image-dir . "~/Documents/Org/pictures/")))
   (leaf org-journal
     :doc "A simple org-mode based journaling mode"
-    :require t
     :ensure t
     :custom
     (org-journal-date-format . "%A, %d %B %Y"))
