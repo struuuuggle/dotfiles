@@ -393,6 +393,8 @@
 (leaf lsp-mode
   :require t
   :ensure t
+  :hook
+  (swift-mode-hook . lsp)
   :config
   (leaf lsp-ui
     :require t
@@ -449,18 +451,25 @@
                                   "-Xswiftc"
                                   "x86_64-apple-ios15.2-simulator"))))
 
+(setq lsp-sourcekit-extra-args '("-Xswiftc"
+                                 "-sdk"
+                                 "-Xswiftc"
+                                 "/Applications/Xcode-13.2.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+                                 "-Xswiftc"
+                                 "-target"
+                                 "-Xswiftc"
+                                 "x86_64-apple-ios15.2-simulator"))
+
 (leaf swift-mode
   :require t
   :ensure t
-  :hook
-  ;; enable lsp automatically whenever you visit a .swift file
-  (swift-mode-hook . lsp)
   :config
+  (add-to-list 'company-backends 'company-sourcekit)
   (leaf company-sourcekit
     :ensure t
-    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"
-    :config
-    (add-to-list 'company-backends 'company-sourcekit)))
+    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"))
+
+
 
 (leaf smart-jump
   :ensure t
