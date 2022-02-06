@@ -455,7 +455,8 @@
 
 (leaf org-mode
   :config
-  (add-to-list 'org-speed-commands-user '(("d" org-todo "DONE")))
+  (leaf org-keys
+    :custom ((org-speed-commands-user . '(("d" org-todo "DONE")))))
   (leaf org-bullets
     :doc "utf-8 bullets for org-mod"
     :hook (org-mode-hook))
@@ -469,6 +470,8 @@
     :custom
     (org-journal-date-format . "%A, %d %B %Y"))
   :custom
+  ;; 行を折り返す
+  (org-startup-truncated . nil)
   ;; 画像をインラインで表示
   (org-startup-with-inline-images . t)
   ;; 見出しの余分な*を消す
