@@ -141,6 +141,14 @@
   :tag "builtin"
   :global-minor-mode show-paren-mode)
 
+(leaf restart-emacs
+  :if window-system
+  :ensure t)
+
+(leaf neotree
+  :custom ((neo-theme . (if (display-graphic-p) 'icons 'arrow)))
+  :bind (([f8] . 'neotree-toggle)))
+
 
 ;;; theme:
 
@@ -278,8 +286,7 @@
 
   (leaf ivy-rich
     :ensure t
-    :global-minor-mode t)
-  )
+    :global-minor-mode t))
 
 (leaf prescient
   :doc "Better sorting and filtering"
@@ -350,6 +357,10 @@
 
 ;;; font:
 
+;; 表示確認用:
+;; 0123456789
+;; 一二三四五六
+
 (leaf cus-fonte
   :config (set-frame-font "-*-Fira Code-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1"))
 
@@ -359,41 +370,35 @@
   :ensure t
   :global-minor-mode t)
 
-;; 表示確認用:
-;; 0123456789
-;; 一二三四五六
-
-
-;;; lsp:
-
-;; configure the package to point to the sourcekit-lsp executable
-(leaf lsp-sourcekit
-  :after lsp-mode
-  :custom
-  `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
-  )
-;; (setq lsp-sourcekit-extra-args '("-Xswiftc" "-sdk" "-Xswiftc" "/Applications/Xcode-13.0.0-Release.Candidate.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.0.sdk" "-Xswiftc" "-target" "-Xswiftc" "x86_64-apple-ios15.0-simulator")))
-
-(defvar lsp-sourcekit-extra-args (quote ("-Xswiftc" "-sdk" "-Xswiftc" "/Applications/Xcode-13.0.0-Release.Candidate.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator15.0.sdk" "-Xswiftc" "-target" "-Xswiftc" "x86_64-apple-ios15.0-simulator")))
-
-;; enable lsp automatically whenever you visit a .swift file
-(leaf swift-mode
+(leaf all-the-icons
+  :doc "A utility package to collect various Icon Fonts and propertize them within Emacs."
+  :if (display-graphic-p)
+  :require t
   :ensure t
   :config
-  (add-hook 'swift-mode-hook
-            #'(lambda nil
-                (lsp)))
-  (add-hook 'lisp-mode-hook
-            #'(lambda nil
-                (lsp))))
+  (leaf all-the-icons-ivy-rich
+    :ensure t
+    :init
+    (all-the-icons-ivy-rich-mode 1)
+    :require t)
+  
+  (leaf all-the-icons-dired
+    :doc "Adds dired support to all-the-icons"
+    :ensure t
+    :hook ((dired-mode-hook . all-the-icons-dired-mode))))
+
+
+;;; lsp
 
 (leaf lsp-mode
+  :require t
   :ensure t
   :config
   (leaf lsp-ui
+    :require t
     :ensure t
     :bind
-    (:swift-mode-map
+    (:lsp-mode-map
      ("C-c C-r" . lsp-ui-peek-find-references)
      ("C-j" . lsp-ui-doc-show)
      ("C-c i" . lsp-ui-peek-find-implementation)
@@ -425,16 +430,43 @@
     (lsp-ui-peek-peek-height . 30)
     (lsp-ui-peek-list-width . 8)
     ;; never, on-demand, or always
-    (lsp-ui-peek-fontify . 'always)))
+    (lsp-ui-peek-fontify . 'always))
+  
+  (leaf lsp-sourcekit
+    :require t
+    :ensure t
+    :after lsp-mode
+    :custom
+    ;; configure the package to point to the sourcekit-lsp executable
+    `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
+    :setq
+    (lsp-sourcekit-extra-args . '("-Xswiftc"
+                                  "-sdk"
+                                  "-Xswiftc"
+                                  "/Applications/Xcode-13.2.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+                                  "-Xswiftc"
+                                  "-target"
+                                  "-Xswiftc"
+                                  "x86_64-apple-ios15.2-simulator"))))
+
+(leaf swift-mode
+  :require t
+  :ensure t
+  :hook
+  ;; enable lsp automatically whenever you visit a .swift file
+  (swift-mode-hook . lsp)
+  :config
+  (leaf company-sourcekit
+    :ensure t
+    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"
+    :config
+    (add-to-list 'company-backends 'company-sourcekit)))
 
 (leaf smart-jump
   :ensure t
   :bind
   ("s-b" . smart-jump-go)
   ("M-," . smart-jump-back))
-
-;; (require 'company-sourcekit)
-;; (add-to-list 'company-backends 'company-sourcekit)
 
 
 ;;; languages:
