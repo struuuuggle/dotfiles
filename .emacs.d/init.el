@@ -441,7 +441,6 @@
     :custom
     ;; configure the package to point to the sourcekit-lsp executable
     `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
-    :setq
     (lsp-sourcekit-extra-args . '("-Xswiftc"
                                   "-sdk"
                                   "-Xswiftc"
@@ -450,15 +449,6 @@
                                   "-target"
                                   "-Xswiftc"
                                   "x86_64-apple-ios15.2-simulator"))))
-
-(setq lsp-sourcekit-extra-args '("-Xswiftc"
-                                 "-sdk"
-                                 "-Xswiftc"
-                                 "/Applications/Xcode-13.2.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
-                                 "-Xswiftc"
-                                 "-target"
-                                 "-Xswiftc"
-                                 "x86_64-apple-ios15.2-simulator"))
 
 (leaf swift-mode
   :require t
