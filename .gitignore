@@ -9,7 +9,7 @@ auto-save-list
 bookmarks
 custom.el
 elpa/
-eshell/
+history
 games
 network-security.data
 projectile-bookmarks.eld

@@ -190,7 +190,7 @@ alias c='(){git switch -c $1}'
 
 # Xcode
 alias derived='rm -rf ~/Library/Developer/Xcode/DerivedData'
-alias rec="xcrun simctl io booted recordVideo $(date '+%Y%m%d-%H:%M:%S').mp4"
+alias rec='xcrun simctl io booted recordVideo $(date "+%Y%m%d-%H:%M:%S").mp4'
 
 # グローバルエイリアス
 alias -g C='| pbcopy'

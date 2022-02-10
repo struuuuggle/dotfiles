@@ -627,6 +627,16 @@
           ("s-p" . projectile-command-map))))
 
 
+;;; eshell:
+
+(leaf exec-path-from-shell
+  :ensure t
+  :when (memq window-system
+              '(mac ns x))
+  :config
+  (exec-path-from-shell-initialize))
+
+
 ;;; keybind:
 
 ;; C-hにbackspaceと同じ処理を割り当てる
