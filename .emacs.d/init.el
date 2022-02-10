@@ -133,8 +133,7 @@
            (scroll-bar-mode . nil)
            (scroll-preserve-screen-position . t)
            (tool-bar-mode . nil)
-           (truncate-lines . nil)
-           (truncate-lines . t)))
+           (truncate-lines . nil)))
 
 (leaf cus-edit
   :doc "tools for customizing Emacs and Lisp packages"
@@ -157,6 +156,26 @@
   :tag "builtin"
   :global-minor-mode show-paren-mode)
 
+(leaf elec-pair
+  :tag "builtin"
+  :config
+  ;; When enabled, typing an open parenthesis automatically inserts the corresponding closing parenthesis, and vice versa.
+  (electric-pair-mode)
+  :custom
+  (electric-pair-delete-adjacent-pairs . t))
+
+(leaf simple
+  :tag "builtin"
+  :custom
+  ;; do not show line numbers in the mode line
+  (line-number-mode . nil)
+  ;; do not show column numbers in the mode line
+  (column-number-mode . nil))
+
+(leaf eldoc
+  :tag "builtin"
+  :blackout t)
+
 (leaf restart-emacs
   :if window-system
   :ensure t)
@@ -172,6 +191,7 @@
   (load-theme 'doom-dracula t)
   (doom-themes-treemacs-config)
   (doom-themes-org-config)
+  (set-face-foreground 'vertical-border (doom-color 'base3)))
 
 (when (not window-system)
   ;; linum
@@ -515,6 +535,8 @@
     :custom
     (org-journal-date-format . "%A, %d %B %Y"))
   :custom
+  ;; dでタスクをDONEにする
+  (org-speed-commands-user . '(("d" org-todo "DONE")))
   ;; 行を折り返す
   (org-startup-truncated . nil)
   ;; 画像をインラインで表示
