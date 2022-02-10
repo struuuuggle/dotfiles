@@ -101,6 +101,18 @@
   ;; (which-key-setup-side-window-right-bottom)
   :global-minor-mode t)
 
+(leaf treemacs
+  :ensure t
+  :config
+  :bind ([f8] . 'treemacs)
+  :config
+  (leaf treemacs-icons-dired
+    :ensure t
+    :commands treemacs-icons-dired-enable-once
+    :hook ((dired-mode-hook . treemacs-icons-dired-enable-once)))
+  (leaf treemacs-all-the-icons
+    :ensure t))
+
 
 ;;; config:
 
@@ -149,10 +161,6 @@
   :if window-system
   :ensure t)
 
-(leaf neotree
-  :custom ((neo-theme . (if (display-graphic-p) 'icons 'arrow)))
-  :bind (([f8] . 'neotree-toggle)))
-
 
 ;;; theme:
 
@@ -162,8 +170,8 @@
   (doom-modeline-bar . '((t (:background "#6272a4"))))
   :config
   (load-theme 'doom-dracula t)
-  (doom-themes-neotree-config)
-  (doom-themes-org-config))
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config)
 
 (when (not window-system)
   ;; linum
