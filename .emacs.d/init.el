@@ -290,7 +290,8 @@
     :url "https://github.com/abo-abo/swiper"
     :emacs>= 24.5
     :ensure t
-    :bind (("C-s" . swiper)))
+    :bind (("C-s" . swiper)
+           ("M-s" . 'swiper-isearch-thing-at-point)))
 
   (leaf counsel
     :doc "Various completion functions using Ivy"
