@@ -193,6 +193,13 @@
   (doom-themes-org-config)
   (set-face-foreground 'vertical-border (doom-color 'base3)))
 
+(leaf doom-modeline
+  :ensure t
+  :hook (after-init-hook)
+  :custom
+  (doom-modeline-icon . t)
+  (doom-modeline-buffer-encoding . nil))
+
 (when (not window-system)
   ;; linum
   (set-face-attribute 'line-number nil
