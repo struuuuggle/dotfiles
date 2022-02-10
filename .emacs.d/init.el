@@ -354,7 +354,8 @@
           ("<tab>" . company-complete-selection))
          (company-search-map
           ("C-n" . company-select-next)
-          ("C-p" . company-select-previous)))
+          ("C-p" . company-select-previous))
+         ("M-SPC" . company-complete))
   :custom ((company-idle-delay . 0)
            (company-minimum-prefix-length . 1)
            (company-transformers . '(company-sort-by-occurrence)))
@@ -477,13 +478,14 @@
 (leaf swift-mode
   :require t
   :ensure t
+  :hook (swift-mode-hook . flycheck-swift3-setup)
   :config
   (add-to-list 'company-backends 'company-sourcekit)
   (leaf company-sourcekit
     :ensure t
-    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"))
-
-
+    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten")
+  (leaf flycheck-swift3
+    :ensure t))
 
 (leaf smart-jump
   :ensure t
