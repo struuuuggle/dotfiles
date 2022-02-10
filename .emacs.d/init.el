@@ -514,6 +514,9 @@
     :custom
     (json-reformat:indent-width . 2)))
 
+(leaf yaml-mode
+  :ensure t)
+
 
 ;;; org-mode:
 
