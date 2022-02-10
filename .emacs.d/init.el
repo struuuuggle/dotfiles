@@ -33,6 +33,7 @@
     :init
     ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
     (leaf hydra :ensure t)
+    (leaf blackout :ensure t)
 
     :config
     ;; initialize leaf-keywords.el
@@ -49,12 +50,14 @@
 (leaf page-break-lines
   :emacs>= 24.4
   :ensure t
+  :blackout t
   :global-minor-mode
   (global-page-break-lines-mode))
 
 (leaf beacon
   :ensure t
   :if (window-system)
+  :blackout t
   :custom
   (beacon-color . "#62f992")
   :config (beacon-mode 1))
@@ -85,6 +88,7 @@
 (leaf which-key
   :doc "Emacs package that displays available keybindings in popup"
   :ensure t
+  :blackout t
   :hook (after-init-hook)
   :bind (which-key-mode-map
          ("C-x TAB" . which-key-C-h-dispatch))
@@ -198,7 +202,7 @@
 
 (leaf highlight-indent-guides
   :if (window-system)
-  :diminish
+  :blackout
   :hook
   ((prog-mode yaml-mode) . highlight-indent-guides-mode)
   :custom
@@ -213,6 +217,7 @@
 (leaf flycheck
   :doc "On-the-fly syntax checking"
   :emacs>= 24.3
+  :blackout t
   :ensure t
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
@@ -366,6 +371,7 @@
 
 (leaf fira-code-mode
   :when window-system
+  :blackout t
   :doc "Emacs minor mode for Fira Code ligatures using prettify-symbols"
   :ensure t
   :global-minor-mode t)
@@ -579,7 +585,7 @@
 
 (leaf projectile
   :ensure t
-  :diminish
+  :blackout t
   :custom
   (projectile-switch-project-action . 'projectile-dired)
   (projectile-project-search-path . '("~/Documents/" "~/sandbox/" ("~/ghq/" . 3)))
