@@ -436,15 +436,11 @@
     :ensure t
     :bind
     (:lsp-mode-map
-     ("C-c C-r" . lsp-ui-peek-find-references)
-     ("C-j" . lsp-ui-doc-show)
-     ("C-c i" . lsp-ui-peek-find-implementation)
-     ("M-s-0" . lsp-ui-imenu)
-     ("C-c s" . lsp-ui-sideline-mode))
+     ("C-j" . lsp-ui-doc-show))
+    ("M-s-0" . imenu-list-smart-toggle)
     :custom
     ;; lsp-ui-doc
     (lsp-ui-doc-enable . t)
-    (lsp-ui-doc-include-signature . t)
     (lsp-ui-doc-position . 'at-point) ;; top, bottom, or at-point
     (lsp-ui-doc-max-width . 200) ;; Original value is 150
     (lsp-ui-doc-max-height . 300) ;; Original value is 13
@@ -452,13 +448,6 @@
     (lsp-ui-doc-use-webkit . t)
     ;; lsp-ui-flycheck
     (lsp-ui-flycheck-enable . nil)
-    ;; lsp-ui-sideline
-    (lsp-ui-sideline-enable . nil)
-    (lsp-ui-sideline-ignore-duplicate . t)
-    (lsp-ui-sideline-show-symbol . t)
-    (lsp-ui-sideline-show-hover . t)
-    (lsp-ui-sideline-show-diagnostics . nil)
-    (lsp-ui-sideline-show-code-actions . nil)
     ;; lsp-ui-imenu
     (lsp-ui-imenu-enable . nil)
     (lsp-ui-imenu-kind-position . 'top)
