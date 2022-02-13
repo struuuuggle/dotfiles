@@ -411,7 +411,11 @@
   :blackout t
   :doc "Emacs minor mode for Fira Code ligatures using prettify-symbols"
   :ensure t
-  :global-minor-mode t)
+  :config
+  (global-fira-code-mode)
+  :custom
+  (fira-code-mode-enable-hex-literal . nil)
+  (fira-code-mode-disabled-ligatures . nil))
 
 (leaf all-the-icons
   :doc "A utility package to collect various Icon Fonts and propertize them within Emacs."
@@ -486,11 +490,14 @@
   :require t
   :ensure t
   :hook (swift-mode-hook . flycheck-swift3-setup)
+  :defvar company-backends
   :config
-  (add-to-list 'company-backends 'company-sourcekit)
+  (add-to-list 'company-backends '(company-sourcekit))
   (leaf company-sourcekit
     :ensure t
-    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten")
+    :url "https://github.com/nathankot/company-sourcekit"
+    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"
+    :doc "First install SourceKittenDaemon. Make sure that it's in the exec-path of your Emacs.")
   (leaf flycheck-swift3
     :ensure t))
 
@@ -521,24 +528,27 @@
 ;;; org-mode:
 
 (leaf org-mode
+  :defvar org-inline-image-overlays
+  :hook
+  ;; org-inline-image-overlays
+  ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
+  (org-babel-after-execute-hook . (lambda ()
+                                    (when org-inline-image-overlays
+                                      (org-redisplay-inline-images))))
   :config
   (leaf org-keys
-    :custom ((org-speed-commands-user . '(("d" org-todo "DONE")))))
-  (leaf org-bullets
-    :doc "utf-8 bullets for org-mod"
-    :hook (org-mode-hook))
-  (leaf org-download
-    :doc "Drag and drop images to Emacs org-mode"
-    :ensure t
-    :custom ((org-download-image-dir . "~/Documents/Org/pictures/")))
-  (leaf org-journal
-    :doc "A simple org-mode based journaling mode"
-    :ensure t
-    :custom
-    (org-journal-date-format . "%A, %d %B %Y"))
+    :custom (
+             ;; dでタスクをDONEにする
+             (org-speed-commands-user . '(("d" org-todo "DONE")))))
   :custom
-  ;; dでタスクをDONEにする
-  (org-speed-commands-user . '(("d" org-todo "DONE")))
+  ;; org-babelに使用できる言語を追加する
+  (org-babel-load-languages . '((shell . t)
+                                (swift . t)
+                                (python . t)
+                                (ruby . t)
+                                (emacs-lisp . t)))
+  ;; コードブロック実行前に確認を求めない
+  (org-confirm-babel-evaluate . nil)
   ;; 行を折り返す
   (org-startup-truncated . nil)
   ;; 画像をインラインで表示
@@ -550,14 +560,6 @@
   (org-use-speed-commands . t)
   ;; ファイルの場所
   (org-directory . "~/Documents/Org/")
-  ;; org-babelに使用できる言語を追加する
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               '((shell . t)
-                                 (swift . t)
-                                 (python . t)
-                                 (kotlin . t)
-                                 (ruby . t)
-                                 (emacs-lisp . t)))
   ;; Org-captureのテンプレート
   ;;
   ;; Template expansion
@@ -587,6 +589,55 @@
   ("C-c m" . 'open-memo)
   ;; task.orgを開く
   ("C-c t" . 'open-task))
+
+(leaf ob-swift
+  :doc "org-babel functions for swift evaluation"
+  :url "https://github.com/zweifisch/ob-swift"
+  :after ob
+  :ensure t)
+
+(leaf ob-swiftui
+  :ensure t
+  :require t
+  :doc "Evaluate SwiftUI snippets using Emacs org babel."
+  :url "https://github.com/xenodium/ob-swiftui"
+  :defvar org-babel-tangle-lang-exts org-babel-load-languages org-src-lang-modes
+  :after ob-tangle
+  :config
+  (add-to-list 'org-babel-tangle-lang-exts
+               '("swiftui" . "swift"))
+  (add-to-list 'org-babel-load-languages
+	             '((swiftui . t)))
+  (add-to-list 'org-src-lang-modes
+               '("swiftui" . swift)))
+
+(leaf company-org-block
+  :doc "'<' triggers company completion of org blocks."
+  :url "https://github.com/xenodium/company-org-block"
+  :ensure t
+  :hook
+  (org-mode-hook . (lambda ()
+                     (setq-local company-backends '(company-org-block))
+                     (company-mode 1))))
+
+(leaf org-superstar
+  :doc "Make org-mode stars a little more super"
+  :url "https://github.com/integral-dw/org-superstar-mode"
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook
+            (lambda nil
+              (org-superstar-mode 1))))
+
+(leaf org-download
+  :doc "Drag and drop images to Emacs org-mode"
+  :ensure t
+  :custom ((org-download-image-dir . "~/Documents/Org/pictures/")))
+(leaf org-journal
+  :doc "A simple org-mode based journaling mode"
+  :ensure t
+  :custom
+  (org-journal-date-format . "%A, %d %B %Y"))
 
 (defun org-journal-find-location ()
   "Quoted from `https://www.mhatta.org/wp/2019/02/25/org-mode-101-8/`."
@@ -634,7 +685,8 @@
   :when (memq window-system
               '(mac ns x))
   :config
-  (exec-path-from-shell-initialize))
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
 
 
 ;;; keybind:

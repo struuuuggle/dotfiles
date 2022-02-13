@@ -17,6 +17,7 @@ recentf
 tramp
 transient/
 var/
+request/
 
 # karabiner
 automatic_backups/
