@@ -287,7 +287,11 @@
   :custom ((ivy-initial-inputs-alist . nil)
            (ivy-use-selectable-prompt . t)
            (ivy-display-style . t)
-           (ivy-height-alist . '((t lambda (_caller) (/ (frame-height) 2)))))
+           (ivy-height-alist . '((t lambda (_caller) (/ (frame-height) 2))))
+           ;; 行が長いときは折り返す
+           (ivy-truncate-lines . nil)
+           ;; 最初と最後の候補を行き来できるようにする
+           (ivy-wrap . t))
   :global-minor-mode t
   :config
   (leaf swiper
@@ -589,6 +593,13 @@
   ("C-c m" . 'open-memo)
   ;; task.orgを開く
   ("C-c t" . 'open-task))
+
+(leaf org-indent
+  :tag "builtin"
+  :custom
+  (org-startup-indented . t)
+  (org-startup-folded . 'showall)
+  (org-indent-indentation-per-level . 4))
 
 (leaf ob-swift
   :doc "org-babel functions for swift evaluation"
