@@ -539,15 +539,13 @@
   (org-babel-after-execute-hook . (lambda ()
                                     (when org-inline-image-overlays
                                       (org-redisplay-inline-images))))
-  :config
-  (leaf org-keys
-    :custom (
-             ;; dでタスクをDONEにする
-             (org-speed-commands-user . '(("d" org-todo "DONE")))))
   :custom
+  ;; dでタスクをDONEにする
+  (org-speed-commands-user . '(("d" org-todo "DONE")))
   ;; org-babelに使用できる言語を追加する
   (org-babel-load-languages . '((shell . t)
                                 (swift . t)
+                                (haskell . t)
                                 (python . t)
                                 (ruby . t)
                                 (emacs-lisp . t)))
@@ -598,8 +596,7 @@
   :tag "builtin"
   :custom
   (org-startup-indented . t)
-  (org-startup-folded . 'showall)
-  (org-indent-indentation-per-level . 4))
+  (org-startup-folded . 'showall))
 
 (leaf ob-swift
   :doc "org-babel functions for swift evaluation"
