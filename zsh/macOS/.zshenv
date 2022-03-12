@@ -33,8 +33,9 @@ if [[ `uname -m` == 'arm64' ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-export MINT_LINK_PATH=/opt/mint/bin
-export MINT_PATH=/opt/mint/lib
+export MINT_PATH="$HOME/.mint"
+export MINT_LINK_PATH="$MINT_PATH/bin"
+
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-16.jdk/Contents/Home"
 
 path=(
