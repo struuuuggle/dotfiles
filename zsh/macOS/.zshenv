@@ -38,6 +38,8 @@ export MINT_LINK_PATH="$MINT_PATH/bin"
 
 export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-16.jdk/Contents/Home"
 
+export GOPATH="$HOME/go"
+
 path=(
     # $JAVA_HOME/bin(N-/)
     # X11
@@ -45,7 +47,7 @@ path=(
     # GNU
     /usr/local/opt/coreutils/libexec/gnubin(N-/)
     # rbenv
-    $HOME/.rbenv/bin(N-/)
+    $HOME/.rbenv/shims(N-/)
     # pyenv
     $HOME/.pyenv/shims(N-/)
     # nodebrew
@@ -72,6 +74,8 @@ path=(
     $MINT_LINK_PATH(N-/)
     # Java
     $JAVA_HOME/bin(N-/)
+    # Go
+    $GOPATH/bin/(N-/)
 )
 
 # rbenv

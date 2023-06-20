@@ -119,10 +119,7 @@
 (leaf cus-start
   :doc "define customization properties of builtins"
   :tag "builtin" "internal"
-  :custom ((user-full-name . "Mikiya Abe")
-           (user-mail-address . "struuuuggle@gmail.com")
-           (user-login-name . "struuuuggle")
-           (history-delete-duplicates . t)
+  :custom ((history-delete-duplicates . t)
            (history-length . 1000)
            (select-enable-cliboard . t)
            (indent-tabs-mode . nil)
@@ -134,6 +131,16 @@
            (scroll-preserve-screen-position . t)
            (tool-bar-mode . nil)
            (truncate-lines . nil)))
+
+(when (and (memq window-system '(ns nil))
+           (fboundp 'mac-get-current-input-source))
+  (when (version< "27.0" emacs-version)
+    ;; Required for some cases when auto detection is failed or the locale is "en".
+    (custom-set-variables
+     '(mac-default-input-source "com.google.inputmethod.Japanese.base")))
+  ;; supress `'Warning: the function ‘mac-input-method-mode’ is not known to be defined.`'
+  (declare-function mac-input-method-mode "mac-input-method-mode")
+  (mac-input-method-mode 1))
 
 (leaf cus-edit
   :doc "tools for customizing Emacs and Lisp packages"
@@ -219,6 +226,26 @@
 
 ;; cursol
 (set-cursor-color (doom-color 'green))
+
+(defun struuuuggle/toggle-opacity ()
+  "Toggle the opacity of the entire window."
+  (interactive)
+  (if (< (frame-parameter nil 'alpha) 100)
+      (set-frame-parameter nil 'alpha 100)
+    (set-frame-parameter nil 'alpha 85)))
+(global-set-key (kbd "s-u") 'struuuuggle/toggle-opacity)
+
+
+;;; window
+
+(leaf ace-window
+  :ensure t
+  :custom
+  (aw-keys . '(?j ?k ?h ?l ?a ?s ?d ?f ?g))
+  (aw-ignore-current . t)
+  (aw-minibuffer-flag . nil)
+  :bind ("C-o" . ace-window)
+  :custom-face (aw-leading-char-face . '((t (:height 4.0 :foreground "#999999")))))
 
 
 ;;; sound:
@@ -404,11 +431,14 @@
 ;;; font:
 
 ;; 表示確認用:
-;; 0123456789
-;; 一二三四五六
+;; 0123456789012345678901234567890123456789
+;; 一二三四五六一二三四五六一二三四五六一二三四五六
+
 
 (leaf cus-fonte
-  :config (set-frame-font "-*-Fira Code-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1"))
+  :config
+  (set-frame-font "-*-Fira Code-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
+  (set-fontset-font t 'japanese-jisx0208 "-*-Noto Sans-normal-normal-normal-*-13-*-*-*-p-0-fontset-auto4"))
 
 (leaf fira-code-mode
   :when window-system
@@ -418,6 +448,7 @@
   :config
   (global-fira-code-mode)
   :custom
+  (fira-code-mode-disabled-ligatures '("[]" "x"))
   (fira-code-mode-enable-hex-literal . nil)
   (fira-code-mode-disabled-ligatures . nil))
 
@@ -446,20 +477,33 @@
   :ensure t
   :hook
   (swift-mode-hook . lsp)
+  (ruby-mode-hook . lsp)
   :config
   (leaf lsp-ui
     :require t
     :ensure t
+    :defun (lsp-ui-doc--hide-frame lsp-ui-doc-show lsp-ui-doc-mode)
+    :defvar (lsp-ui-doc-mode)
+    :preface
+    (defun struuuuggle/toggle-lsp-ui-doc ()
+      (interactive)
+      (if lsp-ui-doc-mode
+          (progn
+          (lsp-ui-doc-mode -1)
+          (lsp-ui-doc--hide-frame))
+        (progn
+          (lsp-ui-doc-mode 1)
+          (lsp-ui-doc-show))))
     :bind
     (:lsp-mode-map
-     ("C-j" . lsp-ui-doc-show))
+     ("C-j" . struuuuggle/toggle-lsp-ui-doc))
     ("M-s-0" . imenu-list-smart-toggle)
     :custom
     ;; lsp-ui-doc
     (lsp-ui-doc-enable . t)
     (lsp-ui-doc-position . 'at-point) ;; top, bottom, or at-point
     (lsp-ui-doc-max-width . 200) ;; Original value is 150
-    (lsp-ui-doc-max-height . 300) ;; Original value is 13
+    (lsp-ui-doc-max-height . 30) ;; Original value is 13
     (lsp-ui-doc-use-childframe . t)
     (lsp-ui-doc-use-webkit . t)
     ;; lsp-ui-flycheck
@@ -475,20 +519,21 @@
     (lsp-ui-peek-fontify . 'always))
   
   (leaf lsp-sourcekit
+    :url "https://github.com/emacs-lsp/lsp-sourcekit"
     :require t
     :ensure t
     :after lsp-mode
     :custom
     ;; configure the package to point to the sourcekit-lsp executable
     `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
-    (lsp-sourcekit-extra-args . '("-Xswiftc"
+    (lsp-sourcekit-extra-args . `("-Xswiftc"
                                   "-sdk"
                                   "-Xswiftc"
-                                  "/Applications/Xcode-13.2.1.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+                                  "/Applications/Xcode-14.3.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
                                   "-Xswiftc"
                                   "-target"
                                   "-Xswiftc"
-                                  "x86_64-apple-ios15.2-simulator"))))
+                                  "arm64-apple-ios16.4-simulator"))))
 
 (leaf swift-mode
   :require t
@@ -514,6 +559,10 @@
 
 ;;; languages:
 
+(leaf leaf-convert
+  :hook ((xref-backend-functions . dumb-jump-xref-activate)))
+(setq dumb-jump-mode t)
+
 (leaf json-mode
   :doc "Major mode for editing JSON files with emacs"
   :ensure t
@@ -528,11 +577,24 @@
 (leaf yaml-mode
   :ensure t)
 
+(leaf leaf-convert
+  :hook ((projectile-mode-hook . projectile-rails-on))
+  :init
+  (projectile-mode)
+  :require projectile projectile-rails)
+
+(leaf leaf-convert
+  :defvar lsp-solargraph-use-bundler
+  :hook ((ruby-mode-hook . lsp))
+  :require lsp-mode
+  :setq ((lsp-solargraph-use-bundler . t)))
+
 
 ;;; org-mode:
 
 (leaf org-mode
   :defvar org-inline-image-overlays
+  :defun (org-redisplay-inline-images)
   :hook
   ;; org-inline-image-overlays
   ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
@@ -548,7 +610,8 @@
                                 (haskell . t)
                                 (python . t)
                                 (ruby . t)
-                                (emacs-lisp . t)))
+                                (emacs-lisp . t)
+                                (mermaid . t)))
   ;; コードブロック実行前に確認を求めない
   (org-confirm-babel-evaluate . nil)
   ;; 行を折り返す
@@ -619,6 +682,12 @@
   (add-to-list 'org-src-lang-modes
                '("swiftui" . swift)))
 
+(leaf ob-mermaid
+  :doc "Generate mermaid diagrams within Emacs org-mode babel"
+  :url "https://github.com/arnm/ob-mermaid"
+  :custom
+  (ob-mermaid-cli-path . "/opt/homebrew/bin/mmdc"))
+
 (leaf company-org-block
   :doc "'<' triggers company completion of org blocks."
   :url "https://github.com/xenodium/company-org-block"
@@ -680,13 +749,15 @@
   :custom
   (projectile-switch-project-action . 'projectile-dired)
   (projectile-project-search-path . '("~/Documents/" "~/sandbox/" ("~/ghq/" . 3)))
+  :bind
+  ("C-]" . projectile-switch-project)
   :config
   (projectile-mode +1)
   :bind ((projectile-mode-map
           ("s-p" . projectile-command-map))))
 
 
-;;; eshell:
+;;; shell;
 
 (leaf exec-path-from-shell
   :ensure t
@@ -695,6 +766,15 @@
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
+
+(leaf vterm
+  :ensure t)
+
+(leaf vterm-toggle
+  :ensure t
+  :custom
+  (vterm-toggle-scope . 'project)
+  :bind ((kbd "s-t") . vterm-toggle))
 
 
 ;;; keybind:

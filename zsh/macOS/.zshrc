@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
 # .zshrc
 
 ########################################
@@ -281,8 +274,8 @@ peco-select-git-branch() {
   BUFFER="git branch -a --sort=-authordate | cut -c 3- | grep -v origin | peco | xargs git switch"
   zle accept-line
 }
-zle -N peco-select-git-branch
-bindkey '^J' peco-select-git-branch
+# zle -N peco-select-git-branch
+# bindkey '^J' peco-select-git-branch
 
 # カレントディレクトリ配下のファイルをpecoってEmacsで開く
 peco-tree-emacs() {
@@ -295,6 +288,19 @@ peco-tree-emacs() {
 }
 zle -N peco-tree-emacs
 bindkey '^X^F' peco-tree-emacs
+
+# https://github.com/akermu/emacs-libvterm#shell-side-configuration
+vterm_printf(){
+    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
+        # Tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
 
 #############################################
 # Additional settings
