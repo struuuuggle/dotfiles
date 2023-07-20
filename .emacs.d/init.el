@@ -559,10 +559,6 @@
 
 ;;; languages:
 
-(leaf leaf-convert
-  :hook ((xref-backend-functions . dumb-jump-xref-activate)))
-(setq dumb-jump-mode t)
-
 (leaf json-mode
   :doc "Major mode for editing JSON files with emacs"
   :ensure t
@@ -682,12 +678,6 @@
   (add-to-list 'org-src-lang-modes
                '("swiftui" . swift)))
 
-(leaf ob-mermaid
-  :doc "Generate mermaid diagrams within Emacs org-mode babel"
-  :url "https://github.com/arnm/ob-mermaid"
-  :custom
-  (ob-mermaid-cli-path . "/opt/homebrew/bin/mmdc"))
-
 (leaf company-org-block
   :doc "'<' triggers company completion of org blocks."
   :url "https://github.com/xenodium/company-org-block"
@@ -752,6 +742,8 @@
   :bind
   ("C-]" . projectile-switch-project)
   :config
+  (leaf projectile-rails
+    :ensure t)
   (projectile-mode +1)
   :bind ((projectile-mode-map
           ("s-p" . projectile-command-map))))
