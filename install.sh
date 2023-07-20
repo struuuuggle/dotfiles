@@ -1,14 +1,6 @@
-#!/bin/sh
+#!/bin/zsh
 
-if [[ `uname` == "Darwin" ]]; then
-    #HomeBrew
-    if ! which brew >/dev/null 2>&1 ; then
-        echo "==> Downloading HomeBrew ..."
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    # Brewfileを使ってもろもろインストール
-    brew bundle  --file $HOME/dotfiles/Brewfile
-fi
+set -euo pipefail
 
 make_symlink() {
     if [ $# -ne 1 ]; then
@@ -20,7 +12,9 @@ make_symlink() {
     ln -sf $FILE_PATH $HOME/$FILE_NAME
 }
 
-echo "==> dotfiles/git/"
+############################################################
+# symlink
+
 for f in git/.??*
 do
     # symlinkを貼りたくないファイルを以下に書いておく
@@ -30,28 +24,19 @@ do
     make_symlink $(realpath $f)
 done
 
-echo "==> dotfiles/zsh/"
-if [[ `uname` == "Darwin" ]]; then
-    make_symlink $HOME/dotfiles/zsh/macOS/.zshenv
-    make_symlink $HOME/dotfiles/zsh/macOS/.zshrc
-elif [[ `uname` == "Linux" ]]; then
-    make_symlink $HOME/dotfiles/zsh/Linux/.zshenv
-    make_symlink $HOME/dotfiles/zsh/Linux/.zshrc
-fi
+make_symlink "$(realpath zsh/$(uname)/.zshenv)"
+make_symlink "$(realpath zsh/$(uname)/.zshrc)"
 
-echo "==> dotfiles/bash/"
 for f in bash/.??*
 do
     make_symlink $(realpath $f)
 done
 
-echo "==> dotfiles/vim/"
 for f in vim/.??*
 do
     make_symlink $(realpath $f)
 done
 
-echo "==> dotfiles/"
 for f in .??*
 do
     # symlinkを貼りたくないファイルを以下に書いておく
@@ -59,16 +44,33 @@ do
     [[ "$f" == ".git" ]] && continue
     [[ "$f" == ".gitignore" ]] && continue
     [[ "$f" == ".gitmodules" ]] && continue
-    [[ "$f" == ".spacemacs" ]] && continue
     [[ "$f" == ".tmux.conf" ]] && continue
 
     make_symlink $(realpath $f)
 done
 
+############################################################
+# PATHを通しておく
+
+source ~/.zshenv && source ~/.zshrc
+
+############################################################
+# HomeBrew
+
+if [[ `uname` == "Darwin" ]]; then
+    #HomeBrew
+    if ! which brew >/dev/null 2>&1 ; then
+        echo "==> Downloading HomeBrew ..."
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    # Brewfileを使ってもろもろインストール
+    brew bundle  --file $(realpath Brewfile)
+fi
+
+############################################################
+# zsh-autosuggestions
+
 if [ ! -d ~/.zsh/zsh-autosuggestions ]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 fi
-
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-echo "✅ Done"
