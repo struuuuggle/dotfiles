@@ -3,12 +3,9 @@
 	name = struuuuggle
 	email = struuuuggle@gmail.com
 [core]
-	excludesfile = ~/dotfiles/git/.gitignore_global
 	editor = emacsclient -nw
 [color]
   ui = true
-[commit]
-	template = ~/dotfiles/git/.commit_template
 [pager]
 	branch = false
 [init]
