@@ -2,7 +2,7 @@
 
 ## installation
 ```
-$ ./install.sh
+make
 ```
 
 ## システム環境設定にて
@@ -51,8 +51,6 @@ Mission ControlとアプリケーションExposeはチェックを入れない�
 ### 設定ファイルをインポートするアプリケーション
 - Alfred
 
-- iTerm2
-
 起動後、環境設定 > General > Preferences > "Load preferences from a custom folder or URL"にチェックを入れる。
 `~/dotfiles/Library/Preferences/`を選択。
 
@@ -66,4 +64,3 @@ Options > Backup and Restore > Retore
 
 ## TODO
 - [ ] GUIでポチポチする系の設定をdefaultコマンド経由で行う
-- [ ] install.shとmap.shの処理を関数に切り分ける
