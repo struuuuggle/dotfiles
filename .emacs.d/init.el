@@ -130,7 +130,8 @@
            (scroll-bar-mode . nil)
            (scroll-preserve-screen-position . t)
            (tool-bar-mode . nil)
-           (truncate-lines . nil)))
+           (truncate-lines . nil)
+           (make-backup-files . t)))
 
 (when (and (memq window-system '(ns nil))
            (fboundp 'mac-get-current-input-source))
@@ -606,8 +607,7 @@
                                 (haskell . t)
                                 (python . t)
                                 (ruby . t)
-                                (emacs-lisp . t)
-                                (mermaid . t)))
+                                (emacs-lisp . t)))
   ;; コードブロック実行前に確認を求めない
   (org-confirm-babel-evaluate . nil)
   ;; 行を折り返す
