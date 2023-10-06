@@ -131,7 +131,7 @@
            (scroll-preserve-screen-position . t)
            (tool-bar-mode . nil)
            (truncate-lines . nil)
-           (make-backup-files . t)))
+           (make-backup-files . nil)))
 
 (when (and (memq window-system '(ns nil))
            (fboundp 'mac-get-current-input-source))
@@ -760,7 +760,8 @@
     (exec-path-from-shell-initialize)))
 
 (leaf vterm
-  :ensure t)
+  :ensure t
+  :hook (vterm-mode-hook . (lambda () (display-line-numbers-mode -1))))
 
 (leaf vterm-toggle
   :ensure t
