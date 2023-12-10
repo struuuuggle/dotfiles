@@ -398,7 +398,9 @@
          ("M-SPC" . company-complete))
   :custom ((company-idle-delay . 0)
            (company-minimum-prefix-length . 1)
-           (company-transformers . '(company-sort-by-occurrence)))
+           (company-transformers . '(company-sort-by-occurrence))
+           ;; 大文字小文字を区別して補完する
+           (company-dabbrev-downcase . nil))
   :global-minor-mode global-company-mode)
 
 
@@ -617,7 +619,7 @@
   (org-startup-with-inline-images . t)
   ;; 見出しの余分な*を消す
   (org-hide-leading-stars . t)
-  (org-todo-keywords . '((sequence "TODO" "DOING" "|" "DONE")))
+  (org-todo-keywords . '((sequence "TODO" "DOING" "PENDING" "|" "DONE")))
   ;; スピードコマンドを有効化
   (org-use-speed-commands . t)
   ;; ファイルの場所
@@ -738,10 +740,9 @@
   :ensure t
   :blackout t
   :custom
-  (projectile-switch-project-action . 'projectile-dired)
+  (projectile-switch-project-action . 'magit-status)
   (projectile-project-search-path . '("~/Documents/" "~/sandbox/" ("~/ghq/" . 3)))
-  :bind
-  ("C-]" . projectile-switch-project)
+  (projectile-completion-system . 'ivy)
   :config
   (leaf projectile-rails
     :ensure t)
@@ -762,13 +763,33 @@
 
 (leaf vterm
   :ensure t
-  :hook (vterm-mode-hook . (lambda () (display-line-numbers-mode -1))))
-
-(leaf vterm-toggle
-  :ensure t
+  :hook (vterm-mode-hook . (lambda () (display-line-numbers-mode -1)))
+  :defun (send-backspace vterm-send-key)
+  :preface
+  (defun send-backspace nil
+    "Send a backspace character to vterm process."
+    (interactive)
+    (vterm-send-key (kbd "C-h")))
   :custom
-  (vterm-toggle-scope . 'project)
-  :bind ((kbd "s-t") . vterm-toggle))
+  (vterm-shell . "/bin/zsh")
+  (vterm-kill-buffer-on-exit . t)
+  (vterm-vterm-buffer-name-string . "vterm: %s")
+  (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o"))
+  :config
+  (leaf vterm-toggle
+    :ensure t
+    :custom
+    (vterm-toggle-scope . 'project)
+    :bind ((kbd "s-t") . vterm-toggle))
+  (add-hook 'vterm-mode-hook (lambda nil (local-set-key (kbd "C-h") #'send-backspace)))
+  ;; (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
+  )
+
+
+;;; tramp
+
+(leaf tramp
+  :ensure t)
 
 
 ;;; keybind:
