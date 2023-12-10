@@ -131,7 +131,8 @@
            (scroll-preserve-screen-position . t)
            (tool-bar-mode . nil)
            (truncate-lines . nil)
-           (make-backup-files . nil)))
+           (make-backup-files . nil)
+           (auto-save-draft . nil)))
 
 (when (and (memq window-system '(ns nil))
            (fboundp 'mac-get-current-input-source))
