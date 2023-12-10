@@ -290,6 +290,17 @@ peco-tree-emacs() {
 zle -N peco-tree-emacs
 bindkey '^X^F' peco-tree-emacs
 
+function peco-checkout-pull-request () {
+    local selected_pr_id=$(gh pr list | peco | awk '{ print $1 }')
+    if [ -n "$selected_pr_id" ]; then
+        BUFFER="gh pr checkout ${selected_pr_id}"
+        zle accept-line
+    fi
+    zle clear-screen
+}
+zle -N peco-checkout-pull-request
+bindkey "^[^J" peco-checkout-pull-request
+
 # https://github.com/akermu/emacs-libvterm#shell-side-configuration
 vterm_printf(){
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
