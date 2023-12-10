@@ -180,6 +180,7 @@ alias gr='git restore'
 alias grs='git restore --staged'
 alias gp='git push origin $(git branch --contains=HEAD | cut -d" " -f2-)'
 alias c='(){git switch -c $1}'
+alias gdhead="git diff origin/$(git config init.defaultBranch)...HEAD"
 
 # Xcode
 alias derived='rm -rf ~/Library/Developer/Xcode/DerivedData'
