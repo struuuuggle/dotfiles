@@ -1,6 +1,9 @@
 # General
 .DS_Store
 
+# shell
+.zshrc.local
+
 # .emacs.d
 *.cache
 *.elc

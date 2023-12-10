@@ -309,4 +309,5 @@ vterm_printf(){
 # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# Welcome Messageは/etc/motdに書く
+# 環境依存の設定を読み込む
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
