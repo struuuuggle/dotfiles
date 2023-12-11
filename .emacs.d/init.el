@@ -441,8 +441,8 @@
 
 (leaf cus-fonte
   :config
-  (set-frame-font "-*-Fira Code-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
-  (set-fontset-font t 'japanese-jisx0208 "-*-Noto Sans-normal-normal-normal-*-13-*-*-*-p-0-fontset-auto4"))
+  (set-frame-font "-*-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
+  (set-fontset-font t 'japanese-jisx0208 "-*-Noto Sans-normal-normal-normal-*-14-*-*-*-p-0-fontset-auto4"))
 
 (leaf fira-code-mode
   :when window-system
