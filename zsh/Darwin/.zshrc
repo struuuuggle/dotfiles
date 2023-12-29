@@ -100,9 +100,6 @@ setopt interactive_comments
 # ディレクトリ名だけでcdする
 setopt auto_cd
 
-# cd したら自動的にpushdする
-setopt auto_pushd
-
 # 重複したディレクトリを追加しない
 setopt pushd_ignore_dups
 
@@ -129,6 +126,9 @@ setopt auto_param_slash
 
 # ファイル名の展開でディレクトリにマッチした場合 末尾に / を付加
 setopt mark_dirs
+
+# コマンドをtypoしたときに正しいコマンドを提案する
+setopt correct
 
 ########################################
 # キーバインド
@@ -159,9 +159,6 @@ alias e='emacsclient -nw -a ""'
 alias ee='emacs &'
 alias ekill='emacsclient -e "(kill-emacs)"'
 
-# tmux
-alias tk='tmux kill-session'
-
 # git
 alias gs='git status'
 alias gl='git log'
@@ -183,12 +180,11 @@ alias c='(){git switch -c $1}'
 alias gdhead="git diff origin/$(git config init.defaultBranch)...HEAD"
 
 # Xcode
-alias derived='rm -rf ~/Library/Developer/Xcode/DerivedData'
+alias derived='rm -rf ~/Library/Developer/Xcode/DerivedData/*'
 alias rec='xcrun simctl io booted recordVideo $(date "+%Y%m%d-%H:%M:%S").mp4'
 
 # グローバルエイリアス
 alias -g C='| pbcopy'
-alias -g P='pbpaste >'
 
 # jq
 alias jq='jq -C'
