@@ -23,12 +23,13 @@ bindkey -e
 # %~          : カレントディクトリ(ホームディレクトリ以下全て表示)
 # %n          : ユーザー名
 # %m          : ホスト名
-local p_dir="%F{yellow}[@%~]%f"
-local p_mark="%B%(?,%F{green},%F{red})%(!,#,>)%f%b"
+local p_dir="%F{cyan}[%n@%~]%f"
+local p_mark="%B%(?,%F{green},%F{red})%(!,#,$)%f%b"
 # 1行表示
 #PROMPT="$p_dir $p_mark "
 # 2行表示
-PROMPT="$p_dir\n$p_mark "
+PROMPT='$p_dir $vcs_info_msg_0_
+$p_mark '
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -37,6 +38,20 @@ select-word-style default
 # / も区切りと扱うので、^W でディレクトリ１つ分を削除できる
 zstyle ':zle:*' word-chars " /=;@:{},|"
 zstyle ':zle:*' word-style unspecified
+
+########################################
+# VCS
+
+autoload -Uz vcs_info
+setopt prompt_subst
+
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
+zstyle ':vcs_info:*' formats "%F{green}%c%u(%b)%f"
+zstyle ':vcs_info:*' actionformats '(%b|%a)'
+
+precmd () { vcs_info }
 
 ##############nn##########################
 # 補完
