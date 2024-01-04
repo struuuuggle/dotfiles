@@ -134,25 +134,41 @@ alias sudo='sudo '
 
 alias la='ls -a'
 alias ll='ls -l'
+alias lla='ls -la'
 alias rm='rm -i'
 alias cp='cp -i'
 alias mv='mv -i'
 alias mkdir='mkdir -p'
+alias du='du -h'
 
 # GNU commands
 alias grep='grep --color=always'
 alias ls='ls --color=always'
 
-# tmux
-alias tk='tmux kill-session'
+# Editor
+alias e='emacsclient -nw -a ""'
+alias ee='emacs &'
+alias ekill='emacsclient -e "(kill-emacs)"'
 
 # git
 alias gs='git status'
-alias gp='git push'
 alias gl='git log'
+alias glp='git log --pretty=fuller'
 alias ga='git add'
+alias gb='git switch $(git branch | sed -r "s/^[ \*]+//" | peco)'
+alias gbrm='git branch --merged|egrep -v "\*|develop|master|main"|xargs git branch -d'
 alias gc='git commit'
+alias gcm='git commit -m'
+alias gsw='git switch'
 alias gd='git diff'
+alias gdw='git diff --word-diff'
+alias gdc='git diff --cached'
+alias gdcw='git diff --cached --word-diff'
+alias gr='git restore'
+alias grs='git restore --staged'
+alias gp='git push origin $(git branch --contains=HEAD | cut -d" " -f2-)'
+alias c='(){git switch -c $1}'
+alias gdhead="git diff origin/$(git config init.defaultBranch)...HEAD"
 
 ########################################
 # function
