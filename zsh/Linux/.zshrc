@@ -175,3 +175,27 @@ alias gdhead="git diff origin/$(git config init.defaultBranch)...HEAD"
 
 # cdの後にlsを実行
 chpwd() { ls -a }
+
+# コマンド履歴でpecoる
+# https://qiita.com/tmsanrinsha/items/72cebab6cd448704e366
+_peco-select-history() {
+    # historyを番号なし、逆順、最初から表示。
+    # 順番を保持して重複を削除。
+    # カーソルの左側の文字列をクエリにしてpecoを起動
+    # \nを改行に変換
+    BUFFER="$(history -nr 1 | awk '!a[$0]++' | peco --query "$LBUFFER" | sed 's/\\n/\n/')"
+    CURSOR=$#BUFFER             # カーソルを文末に移動
+    zle -R -c                   # refresh
+}
+zle -N _peco-select-history
+bindkey '^R' _peco-select-history
+
+# emacs daemonが起動していなければ、ホームディレクトリで`emacs --daemon`を実行する
+estart() {
+  if ! emacsclient -e 0 > /dev/null 2>&1; then
+    cd > /dev/null 2>&1
+    emacs --daemon
+    cd - > /dev/null 2>&1
+  fi
+}
+estart
