@@ -232,9 +232,7 @@
 (defun struuuuggle/toggle-opacity ()
   "Toggle the opacity of the entire window."
   (interactive)
-  (if (< (frame-parameter nil 'alpha) 100)
-      (set-frame-parameter nil 'alpha 100)
-    (set-frame-parameter nil 'alpha 85)))
+  (set-frame-parameter nil 'alpha (if (< (if (frame-parameter nil 'alpha) (frame-parameter nil 'alpha) 0) 100) 100 85)))
 (global-set-key (kbd "s-u") 'struuuuggle/toggle-opacity)
 
 
@@ -600,7 +598,8 @@
   ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
   (org-babel-after-execute-hook . (lambda ()
                                     (when org-inline-image-overlays
-                                      (org-redisplay-inline-images))))
+                                      (org-redisplay-inline-images))
+                                    (display-line-numbers-mode -1)))
   :custom
   ;; dでタスクをDONEにする
   (org-speed-commands-user . '(("d" org-todo "DONE")))
@@ -694,6 +693,8 @@
   :doc "Make org-mode stars a little more super"
   :url "https://github.com/integral-dw/org-superstar-mode"
   :ensure t
+  :custom
+  (org-superstar-headline-bullets-list . '("#" "○" "+" "-" ">" "<"))
   :config
   (add-hook 'org-mode-hook
             (lambda nil
@@ -774,7 +775,7 @@
   (vterm-shell . "/bin/zsh")
   (vterm-kill-buffer-on-exit . t)
   (vterm-vterm-buffer-name-string . "vterm: %s")
-  (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o"))
+  (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o" "M-x"))
   :config
   (leaf vterm-toggle
     :ensure t
