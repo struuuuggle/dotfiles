@@ -164,7 +164,6 @@ alias gs='git status'
 alias gl='git log'
 alias glp='git log --pretty=fuller'
 alias ga='git add'
-alias gb='git branch'
 alias gbrm='git branch --merged|egrep -v "\*|develop|master|main"|xargs git branch -d'
 alias gc='git commit'
 alias gcm='git commit -m'
@@ -223,19 +222,18 @@ _down-line-or-history-ignoring() {
 zle -N _down-line-or-history-ignoring
 bindkey '^N' _down-line-or-history-ignoring
 
-# コマンド履歴でpecoる
-# https://qiita.com/tmsanrinsha/items/72cebab6cd448704e366
-_peco-select-history() {
+select-history() {
     # historyを番号なし、逆順、最初から表示。
     # 順番を保持して重複を削除。
-    # カーソルの左側の文字列をクエリにしてpecoを起動
+    # カーソルの左側の文字列をクエリにしてfzfを起動
     # \nを改行に変換
-    BUFFER="$(history -nr 1 | awk '!a[$0]++' | peco --query "$LBUFFER" | sed 's/\\n/\n/')"
+    BUFFER="$(history -nr 1 | awk '!a[$0]++' | fzf +m --reverse -e --query "$LBUFFER" | sed 's/\\n/\n/')"
     CURSOR=$#BUFFER             # カーソルを文末に移動
-    zle -R -c                   # refresh
+    # zle -R -c                   # refresh
+    zsh -R
 }
-zle -N _peco-select-history
-bindkey '^R' _peco-select-history
+zle -N select-history
+bindkey '^R' select-history
 
 # emacs daemonが起動していなければ、ホームディレクトリで`emacs --daemon`を実行する
 estart() {
@@ -247,9 +245,8 @@ estart() {
 }
 estart
 
-# `ghq root`内のリポジトリをpecoってcdする
 ghq-list() {
-  REPOSITORY_PATH="$(ghq list | peco)"
+  REPOSITORY_PATH="$(ghq list | fzf +m --reverse -e)"
   if [ -z $REPOSITORY_PATH ]; then
     zle send-break
   fi
@@ -260,42 +257,47 @@ ghq-list() {
 zle -N ghq-list
 bindkey '^]' ghq-list
 
-# git branchをpecoる
-peco-select-git-branch() {
+gb() {
   if [ ! -d ".git" ]; then
     echo "\nError: Directory .git/ not found" 1>&2
     BUFFER="$ZLE_LINE_ABORTED"
-    zle send-break
+    exit 1
   fi
 
-  BUFFER="git branch -a --sort=-authordate | cut -c 3- | grep -v origin | peco | xargs git switch"
-  zle accept-line
+  git branch -a --sort=-authordate \
+      | cut -c 3- \
+      | grep -v origin \
+      | fzf \
+      | xargs git switch
 }
-# zle -N peco-select-git-branch
-# bindkey '^J' peco-select-git-branch
 
-# カレントディレクトリ配下のファイルをpecoってEmacsで開く
-peco-tree-emacs() {
-  local SELECTED_FILE=$(ag -g . | peco | xargs echo)
-  if [ -z $SELECTED_FILE ]; then
-    zle send-break
+ff() {
+    local file=$(ag -g . | fzf --preview "bat --color always {}" --preview-window up | xargs echo)
+    e $file
+}
+
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+fkill() {
+  local pid
+  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
   fi
-  BUFFER="e $SELECTED_FILE"
-  zle accept-line
 }
-zle -N peco-tree-emacs
-bindkey '^X^F' peco-tree-emacs
 
-function peco-checkout-pull-request () {
-    local selected_pr_id=$(gh pr list | peco | awk '{ print $1 }')
-    if [ -n "$selected_pr_id" ]; then
-        BUFFER="gh pr checkout ${selected_pr_id}"
-        zle accept-line
-    fi
-    zle clear-screen
+ghpr() {
+    GH_FORCE_TTY=100% gh pr list \
+        | fzf +m --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window up --header-lines 3 \
+        | awk '{print $1}' \
+        | xargs gh pr checkout
 }
-zle -N peco-checkout-pull-request
-bindkey "^[^J" peco-checkout-pull-request
 
 # https://github.com/akermu/emacs-libvterm#shell-side-configuration
 vterm_printf(){

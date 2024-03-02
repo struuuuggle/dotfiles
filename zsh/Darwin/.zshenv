@@ -34,9 +34,6 @@ SAVEHIST=100000
 ########################################
 #PATH
 
-# Disable Loading Global Profiles
-setopt no_global_rcs
-
 if [[ `uname -m` == 'arm64' ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
@@ -103,6 +100,7 @@ export CPPFLAGS="-I$OPENSSL_ROOT/include"
 export PKG_CONFIG_PATH="$OPENSSL_ROOT/lib/pkgconfig"
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$OPENSSL_ROOT"
 export BAT_THEME="Dracula"
+export FZF_DEFAULT_OPTS="--inline-info"
 
 # 重複パスを登録しない
 typeset -U path cdpath fpath manpath
