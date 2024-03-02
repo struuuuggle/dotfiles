@@ -12,9 +12,17 @@ export LANG=ja_JP.UTF-8
 export LC_ALL=$LANG
 export TERM="xterm-256color"
 
-export LESS='-I -M -R'
-export LESSOPEN='| src-hilite-lesspipe.sh %s'
+export LESS='-I -M -R -j.5'
+export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
 export LESSHISTFILE='/dev/null'
+# see `man terminfo`
+export LESS_TERMCAP_mb=$(tput bold)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 4) # fg: blue
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_se=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setab 7; tput setaf 0) # bg: white, fg: black
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput setaf 2) # green
 export PAGER=less
 export EDITOR='emacsclient -nw'
 
