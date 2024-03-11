@@ -3,6 +3,8 @@
 ########################################
 # General
 
+[[ -e ~/.zshenv.local ]] && . ~/.zshenv.local
+
 # Compile .zshrc automatically
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
     zcompile ~/.zshrc
