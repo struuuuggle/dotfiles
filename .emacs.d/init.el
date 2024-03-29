@@ -132,7 +132,13 @@
            (tool-bar-mode . nil)
            (truncate-lines . nil)
            (make-backup-files . nil)
-           (auto-save-draft . nil)))
+           (backup-inhibited . nil)
+           (create-lockfiles . nil)
+           (auto-save-draft . nil)
+           (tab-bar-mode . 1)
+           (show-trailing-whiespace . t)
+           (use-short-answers . t)
+           (process-adaptive-read-buffering . t)))
 
 (when (and (memq window-system '(ns nil))
            (fboundp 'mac-get-current-input-source))
@@ -652,6 +658,40 @@
   ("C-c m" . 'open-memo)
   ;; task.orgを開く
   ("C-c t" . 'open-task))
+
+;; (leaf org-modern
+;;   :doc "🦄 Modern Org Style"
+;;   :url "https://github.com/minad/org-modern"
+;;   :ensure t)
+
+(use-package org-modern
+  :after org
+  :init
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-taesgs-column 0
+   org-fold-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
+
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers t
+   org-pretty-entities t
+   org-ellipsis "…"
+
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "⭠ now ─────────────────────────────────────────────────")
+
+  :config
+  (global-org-modern-mode +1))
 
 (leaf org-indent
   :tag "builtin"
