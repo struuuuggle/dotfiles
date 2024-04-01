@@ -6,6 +6,7 @@
 
 # .emacs.d
 .emacs.d/mine/init.el
+org-persist/
 *.cache
 *.elc
 *~

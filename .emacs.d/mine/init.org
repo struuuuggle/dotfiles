@@ -751,6 +751,7 @@
     :doc "A simple org-mode based journaling mode"
     :ensure t
     :custom
+    (org-journal-dir . "~/Documents/Org/journal")
     (org-journal-date-format . "%A, %d %B %Y"))
 
   (defun org-journal-find-location ()
