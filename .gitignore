@@ -5,6 +5,7 @@
 .zshrc.local
 
 # .emacs.d
+.emacs.d/mine/init.el
 *.cache
 *.elc
 *~
