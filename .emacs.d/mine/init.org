@@ -1,5 +1,5 @@
 * set up leaf.el
-#+begin_src elisp :lexical no  
+#+begin_src emacs-lisp :lexical no  
 (eval-and-compile
   (customize-set-variable
    'package-archives '(("org" . "https://orgmode.org/elpa/")
@@ -37,9 +37,8 @@
     :config (beacon-mode 1))
 #+end_src
 
-
 ** dashboard
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
   (leaf dashboard
     :ensure t
     :require t
@@ -52,12 +51,14 @@
     ;; 1, 2 or 3: which displays one of the text banners
     ;; "path/to/your/image.png" which displays whatever image you would prefer
     (dashboard-startup-banner . 'logo)
+    (dashboard-set-heading-icons . t)
+    (dashboard-set-file-icons . t)
     (dashboard-center-content . t)
     (dashboard-items . '((recents . 10)
                          (projects . 5)
                          (agenda . 10)))
     (initial-buffer-choice . (lambda nil
-                               (get-buffer "*dashboard*")))
+             (get-buffer "*dashboard*")))
     :config
     (dashboard-setup-startup-hook))
 
@@ -65,7 +66,7 @@
 #+end_src
 
 *** which-key
-#+begin_src elisp :lexical no  
+#+begin_src emacs-lisp :lexical no  
 (leaf which-key
     :doc "Emacs package that displays available keybindings in popup"
     :ensure t
@@ -85,82 +86,100 @@
 
 
 * config:
-#+begin_src elisp :lexical no
+** 音を鳴らさない
+#+begin_src emacs-lisp :lexical no
+  (setq ring-bell-function 'ignore)
+#+end_src
+
+**  "y" or "n" instead of "yes" or "no"
+#+begin_src emacs-lisp :lexical no
+  (setq use-short-answers t)
+#+end_src
+** history関連
+#+begin_src emacs-lisp :lexical no
   (setq history-delete-duplicates t)
   (setq history-length 1000)
+#+end_src
+
+** スムーズにスクロールする
+#+begin_src emacs-lisp :lexical no
+(setq scroll-conservatively 1)
+(setq mouse-wheel-scroll-amount '(1 ((control) 5)))
+(setq scroll-preserve-screen-position t)
+  #+end_src
+
+#+begin_src emacs-lisp :lexical no
   (setq select-enable-cliboard t)
   (setq indent-tabs-mode nil)
   (setq display-line-numbers t)
-  (setq scroll-conservatively 1)
-  (setq mouse-wheel-scroll-amount '(1 ((control) 5)))
   (setq scroll-bar-mode nil)
-  (setq scroll-preserve-screen-position t)
   (setq truncate-lines nil)
   (setq make-backup-files nil)
   (setq backup-inhibited nil)
   (setq create-lockfiles nil)
   (setq auto-save-draft nil)
   (setq show-trailing-whiespace t)  
-  (setq use-short-answers t) ;; "y" or "n" instead of "yes" or "no"
   (setq process-adaptive-read-buffering t)
-  (setq ring-bell-function 'ignore)
-#+end_src
 
-#+begin_src elisp :lexical no
-    (when (and (memq window-system '(ns nil))
-         (fboundp 'mac-get-current-input-source))
-      (when (version< "27.0" emacs-version)
-        ;; Required for some cases when auto detection is failed or the locale is "en".
-        (custom-set-variables
-         '(mac-default-input-source "com.google.inputmethod.Japanese.base")))
-      ;; supress `'Warning: the function ‘mac-input-method-mode’ is not known to be defined.`'
-      (declare-function mac-input-method-mode "mac-input-method-mode")
-      (mac-input-method-mode 1))
+  (when (and (memq window-system '(ns nil))
+             (fboundp 'mac-get-current-input-source))
+    (when (version< "27.0" emacs-version)
+      ;; Required for some cases when auto detection is failed or the locale is "en".
+      (custom-set-variables
+       '(mac-default-input-source "com.google.inputmethod.Japanese.base")))
+    ;; supress `'Warning: the function ‘mac-input-method-mode’ is not known to be defined.`'
+    (declare-function mac-input-method-mode "mac-input-method-mode")
+    (mac-input-method-mode 1))
 
-    (leaf cus-edit
-      :doc "tools for customizing Emacs and Lisp packages"
-      :tag "builtin" "faces" "help"
-      :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
+  (leaf cus-edit
+    :doc "tools for customizing Emacs and Lisp packages"
+    :tag "builtin" "faces" "help"
+    :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
-    (leaf autorevert
-      :doc "revert buffers when files on disk change"
-      :tag "builtin"
-      :custom ((auto-revert-interval . 0.1))
-      :global-minor-mode global-auto-revert-mode)
+  (leaf autorevert
+    :doc "revert buffers when files on disk change"
+    :tag "builtin"
+    :custom ((auto-revert-interval . 0.1))
+    :global-minor-mode global-auto-revert-mode)
 
-    (leaf delsel
-      :doc "delete selection if you insert"
-      :tag "builtin"
-      :global-minor-mode delete-selection-mode)
+  (leaf delsel
+    :doc "delete selection if you insert"
+    :tag "builtin"
+    :global-minor-mode delete-selection-mode)
 
-    (leaf paren
-      :doc "highlight matching paren"
-      :tag "builtin"
-      :global-minor-mode show-paren-mode)
+  (leaf paren
+    :doc "highlight matching paren"
+    :tag "builtin"
+    :global-minor-mode show-paren-mode)
 
-    (leaf elec-pair
-      :tag "builtin"
-      :config
-      ;; When enabled, typing an open parenthesis automatically inserts the corresponding closing parenthesis, and vice versa.
-      (electric-pair-mode)
-      :custom
-      (electric-pair-delete-adjacent-pairs . t))
+  (leaf elec-pair
+    :tag "builtin"
+    :config
+    ;; When enabled, typing an open parenthesis automatically inserts the corresponding closing parenthesis, and vice versa.
+    (electric-pair-mode)
+    :custom
+    (electric-pair-delete-adjacent-pairs . t))
 
-    (leaf simple
-      :tag "builtin"
-      :custom
-      ;; do not show line numbers in the mode line
-      (line-number-mode . nil)
-      ;; do not show column numbers in the mode line
-      (column-number-mode . nil))
+  (leaf simple
+    :tag "builtin"
+    :custom
+    ;; do not show line numbers in the mode line
+    (line-number-mode . nil)
+    ;; do not show column numbers in the mode line
+    (column-number-mode . nil))
 
-    (leaf eldoc
-      :tag "builtin"
-      :blackout t)
+  (leaf eldoc
+    :tag "builtin"
+    :blackout t)
  #+end_src
-
+** dired
+*** human-readable file sizes
+#+begin_src emacs-lisp :lexical no
+  (setq dired-listing-switches "-lha")
+#+end_src
+ 
 * theme
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
   (leaf doom-themes
     :ensure t
     :custom-face
@@ -220,7 +239,7 @@
 #+end_src
 
 * window
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 (leaf ace-window
   :ensure t
   :custom
@@ -233,17 +252,17 @@
 
 * indent:
 ** タブ幅をスペース2つ分にする
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 (setq-default tab-width 2)  
 #+end_src
 ** タブ文字ではなくスペースを使う
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
   (setq-default tab-width 2)
   (setq-default indent-tabs-mode nil)
 #+end_src
 
 ** GUIのみindent-guidesを有効化
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 (leaf highlight-indent-guides
   :if (window-system)
   :blackout
@@ -257,7 +276,7 @@
 #+end_src
 
 * flycheck:
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 (leaf flycheck
   :doc "On-the-fly syntax checking"
   :emacs>= 24.3
@@ -265,8 +284,8 @@
   :ensure t
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
-  :custom ((flycheck-emacs-lisp-initialize-packages . t))
-  :hook (emacs-lisp-mode-hook lisp-interaction-mode-hook)
+  :custom ((flycheck-elisp-initialize-packages . t))
+  :hook (elisp-mode-hook lisp-interaction-mode-hook)
   :config
   (leaf flycheck-package
     :doc "A Flycheck checker for elisp package authors"
@@ -285,7 +304,7 @@
 #+end_src
 
 * ivy:
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
   (leaf ivy
     :doc "Incremental Vertical completYon"
     :req "emacs-24.5"
@@ -360,7 +379,7 @@
 #+end_src
 
 * company:
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 (leaf company
   :doc "Modular text completion framework"
   :req "emacs-24.3"
@@ -391,7 +410,7 @@
 
 * git:
 ** magit
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
   (leaf magit
     :ensure t
     :bind
@@ -422,7 +441,7 @@
 #+end_src
 
 * font:
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 
 ;; 表示確認用:
 ;; 0123456789012345678901234567890123456789
@@ -467,14 +486,25 @@
 #+end_src
 
 * lsp
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
+  ;; (leaf eglot
+  ;;   :ensure t
+  ;;   :commands eglot-ensure
+  ;;   :hook ((swift-mode-hook . eglot-ensure))
+  ;;   :config
+  ;;   (with-eval-after-load 'eglot
+  ;;     (message "warning: `jsonrpc--log-event' is ignored.")
+  ;;     (fset #'jsonrpc--log-event #'ignore)
+  ;;     (add-to-list 'eglot-server-programs
+  ;;                  '(swift-mode "/Applications/Xcode-15.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))))
+
   (leaf lsp-mode
     :require t
     :ensure t
     :hook
     (swift-mode-hook . lsp)
     (ruby-mode-hook . lsp)
-    (emacs-lisp-mode-hook . lsp)
+    (elisp-mode-hook . lsp)
     :config
     (leaf lsp-ui
       :require t
@@ -486,8 +516,8 @@
         (interactive)
         (if lsp-ui-doc-mode
             (progn
-            (lsp-ui-doc-mode -1)
-            (lsp-ui-doc--hide-frame))
+              (lsp-ui-doc-mode -1)
+              (lsp-ui-doc--hide-frame))
           (progn
             (lsp-ui-doc-mode 1)
             (lsp-ui-doc-show))))
@@ -515,37 +545,37 @@
       ;; never, on-demand, or always
       (lsp-ui-peek-fontify . 'always))
 
-  (leaf smart-jump
-    :ensure t
-    :bind
-    ("s-b" . smart-jump-go)
-    ("M-," . smart-jump-back))
+    (leaf smart-jump
+      :ensure t
+      :bind
+      ("s-b" . smart-jump-go)
+      ("M-," . smart-jump-back)))
 #+end_src
 
 ** lsp-sourcekit
 #+begin_src emacs-lisp :lexical no
-      (leaf lsp-sourcekit
-        :url "https://github.com/emacs-lsp/lsp-sourcekit"
-        :require t
-        :ensure t
-        :if (= 0 (call-process "which" nil nil nil "xcrun"))
-        :after lsp-mode    
-        :custom
-        ;; configure the package to point to the sourcekit-lsp executable
-        `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
-        (lsp-sourcekit-extra-args . `("-Xswiftc"
-                                      "-sdk"
-                                      "-Xswiftc"
-                                      "/Applications/Xcode-14.3.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
-                                      "-Xswiftc"
-                                      "-target"
-                                      "-Xswiftc"
-                                      "arm64-apple-ios16.4-simulator"))))
+  (leaf lsp-sourcekit
+    :url "https://github.com/emacs-lsp/lsp-sourcekit"
+    :require t
+    :ensure t
+    :if (= 0 (call-process "which" nil nil nil "xcrun"))
+    :after eglot-mode
+    :custom
+    ;; configure the package to point to the sourcekit-lsp executable
+    `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
+    (lsp-sourcekit-extra-args . `("-Xswiftc"
+                                  "-sdk"
+                                  "-Xswiftc"
+                                  "/Applications/Xcode-15.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+                                  "-Xswiftc"
+                                  "-target"
+                                  "-Xswiftc"
+                                  "arm64-apple-ios-simulator")))
 #+end_src
 
 * languages:
 ** Swift
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
   (leaf swift-mode
     :require t
     :ensure t
@@ -592,91 +622,79 @@
 #+end_src
 
 * org-mode:
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 
-    (leaf org-mode
-      :defvar org-inline-image-overlays
-      :defun (org-redisplay-inline-images)
-      :hook
-      ;; org-inline-image-overlays
-      ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
-      (org-babel-after-execute-hook . (lambda ()
-                                        (when org-inline-image-overlays
-                                          (org-redisplay-inline-images))
-                                        (display-line-numbers-mode -1)))
-      :custom
-      ;; スピードコマンドを有効化
-      (org-use-speed-commands . t)
-      ;; dでタスクをDONEにする
-      (org-speed-commands-user . '(("d" org-todo "DONE")))
-      ;; org-babelに使用できる言語を追加する
-      (org-babel-load-languages . '((shell . t)
-                                    (swift . t)
-                                    (haskell . t)
-                                    (python . t)
-                                    (ruby . t)
-                                    (emacs-lisp . t)))
-      ;; コードブロック実行前に確認を求めない
-      (org-confirm-babel-evaluate . nil)
-      ;; 行を折り返す
-      (org-startup-truncated . nil)
-      ;; 画像をインラインで表示
-      (org-startup-with-inline-images . t)
-      ;; 見出しの余分な*を消す
-      (org-hide-leading-stars . t)
-      (org-todo-keywords . '((sequence "TODO" "DOING" "|" "DONE")))
-      ;; ファイルの場所
-      (org-directory . "~/Documents/Org/")
-      ;; Org-captureのテンプレート
-      ;;
-      ;; Template expansion
-      ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
-      ;;
-      ;; %t: タイムスタンプ(日付のみ)
-      ;; %T: タイムスタンプ(日付と時刻)
-      ;; %u: 非アクティブなタイムスタンプ(日付のみ) 非アクティブなタイムスタンプはagendaに影響しない
-      ;; %U: 非アクティブなタイムスタンプ(日付と時刻)
-      ;; %?: テンプレートを補完した後のカーソルの位置
-      ;; %i: リージョンがアクティブな状態でcaptureが呼び出されたときに、挿入されるリージョン
-      (org-capture-templates .
-                             '(("t" "✅ Todo" entry (file+headline "~/Documents/Org/task.org" "Tasks")
-                                "* TODO %?\n   %U\n  %i\n  ")
-                               ("m" "💡 Memo" entry (file+datetree "~/Documents/Org/memo.org")
-                                "* %?\nEntered on %U\n  %i\n  ")
-                               ("j" "🗓  Journal entry" entry (function org-journal-find-location)
-                                "* TODO %^{Title}\n%i%?")))
-      :bind
-      ;; org-mode
-      ;; (global-set-key (kbd "C-c p") 'org-preview-html-mode)
-      ;; Org-captureを呼び出す
-      ("C-c c" . 'org-capture)
-      ;; Org-agendaを呼び出す
-      ("C-c a" . 'org-agenda)
-      ;; memo.orgを開く
-      ("C-c m" . 'open-memo)
-      ;; task.orgを開く
-      ("C-c t" . 'open-task)
-      ("C-c j" . 'org-journal-new-entry))
+  (leaf org-mode
+    :defvar org-inline-image-overlays
+    :defun (org-redisplay-inline-images)
+    :hook
+    ;; org-inline-image-overlays
+    ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
+    (org-babel-after-execute-hook . (lambda ()
+                                      (when org-inline-image-overlays
+                                        (org-redisplay-inline-images))
+                                      (display-line-numbers-mode -1)))
+    :custom
+    ;; スピードコマンドを有効化
+    (org-use-speed-commands . t)
+    ;; dでタスクをDONEにする
+    (org-speed-commands-user . '(("d" org-todo "DONE")))
+    ;; org-babelに使用できる言語を追加する
+    (org-babel-load-languages . '((shell . t)
+                                  (swift . t)
+                                  (haskell . t)
+                                  (python . t)
+                                  (ruby . t)
+                                  (emacs-lisp . t)))
+    ;; コードブロック実行前に確認を求めない
+    (org-confirm-babel-evaluate . nil)
+    ;; 行を折り返す
+    (org-startup-truncated . nil)
+    ;; 画像をインラインで表示
+    (org-startup-with-inline-images . t)
+    ;; 見出しの余分な*を消す
+    (org-hide-leading-stars . t)
+    (org-todo-keywords . '((sequence "TODO" "DOING" "|" "DONE")))
+    ;; ファイルの場所
+    (org-directory . "~/Documents/Org/")
+    ;; Org-captureのテンプレート
+    ;;
+    ;; Template expansion
+    ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
+    ;;
+    ;; %t: タイムスタンプ(日付のみ)
+    ;; %T: タイムスタンプ(日付と時刻)
+    ;; %u: 非アクティブなタイムスタンプ(日付のみ) 非アクティブなタイムスタンプはagendaに影響しない
+    ;; %U: 非アクティブなタイムスタンプ(日付と時刻)
+    ;; %?: テンプレートを補完した後のカーソルの位置
+    ;; %i: リージョンがアクティブな状態でcaptureが呼び出されたときに、挿入されるリージョン
+    (org-capture-templates .
+                             '(("m" "💡 Memo" entry (file+datetree "~/Documents/Org/memo.org")
+                              "* %?\nEntered on %U\n  %i\n  ")
+                             ("j" "🗓  Journal entry" entry (function org-journal-find-location)
+                              "* TODO %^{Title}\n%i%?")))
+    :bind
+    ;; org-mode
+    ;; (global-set-key (kbd "C-c p") 'org-preview-html-mode)
+    ;; Org-captureを呼び出す
+    ("C-c c" . 'org-capture)
+    ;; Org-agendaを呼び出す
+    ("C-c a" . 'org-agenda)
+    ;; memo.orgを開く
+    ("C-c m" . (lambda ()
+                 (interactive)
+                 (show-org-buffer "memo.org")))
+    ("C-c j" . 'org-journal-new-entry))
 
 
-    (defun show-org-buffer (file)
-      "Show an org-file FILE on the current buffer."
-      (interactive)
-      (if (get-buffer file)
-          (let ((buffer (get-buffer file)))
-            (switch-to-buffer buffer)
-            (message "%s" file))
-        (find-file (concat "~/Documents/Org/" file))))
-
-    (defun open-memo ()
-      "Show an memo.org."
-      (interactive)
-      (show-org-buffer "memo.org"))
-
-    (defun open-task ()
-      "Show an task.org."
-      (interactive)
-      (show-org-buffer "task.org"))
+  (defun show-org-buffer (file)
+    "Show an org-file FILE on the current buffer."
+    (interactive)
+    (if (get-buffer file)
+        (let ((buffer (get-buffer file)))
+          (switch-to-buffer buffer)
+          (message "%s" file))
+      (find-file (concat "~/Documents/Org/" file))))
 #+end_src
 
 ** rich UI
@@ -752,7 +770,7 @@
     :ensure t
     :custom
     (org-journal-dir . "~/Documents/Org/journal")
-    (org-journal-date-format . "%A, %d %B %Y"))
+    (org-journal-date-format . "%Y-%m-%d"))
 
   (defun org-journal-find-location ()
     "Quoted from `https://www.mhatta.org/wp/2019/02/25/org-mode-101-8/`."
@@ -785,7 +803,7 @@
 #+end_src
 
 * projectile:
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 (leaf projectile
   :ensure t
   :blackout t
@@ -803,7 +821,7 @@
 
 * shell
 ** 環境変数
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
 (leaf exec-path-from-shell
   :ensure t
   :when (memq window-system
@@ -815,46 +833,47 @@
 
 ** vterm
 #+begin_src emacs-lisp :lexical no
-(leaf vterm
-  :ensure t
-  :hook (vterm-mode-hook . (lambda () (display-line-numbers-mode -1)))
-  :defun (send-backspace vterm-send-key)
-  :preface
-  (defun send-backspace nil
-    "Send a backspace character to vterm process."
-    (interactive)
-    (vterm-send-key (kbd "C-h")))
-  :custom
-  (vterm-shell . "/bin/zsh")
-  (vterm-kill-buffer-on-exit . t)
-  (vterm-vterm-buffer-name-string . "vterm: %s")
-  (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o" "M-x"))
-  :config
-  (leaf vterm-toggle
+  (leaf vterm
     :ensure t
+    :hook (vterm-mode-hook . (lambda () (display-line-numbers-mode -1)))
+    :defun (send-backspace vterm-send-key)
+    :preface
+    (defun send-backspace nil
+      "Send a backspace character to vterm process."
+      (interactive)
+      (vterm-send-key (kbd "C-h")))
     :custom
-    (vterm-toggle-scope . 'project)
-    :bind ((kbd "s-t") . vterm-toggle))
-  (add-hook 'vterm-mode-hook (lambda nil (local-set-key (kbd "C-h") #'send-backspace)))
-  ;; (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
-  )
+    (vterm-shell . "/bin/zsh")
+    (vterm-kill-buffer-on-exit . t)
+    (vterm-vterm-buffer-name-string . "vterm: %s")
+    (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o" "M-x"))
+    :config
+    (leaf vterm-toggle
+      :ensure t
+      :custom
+      (vterm-toggle-scope . 'project)
+      :config
+      (define-key global-map (kbd "s-t") 'vterm-toggle))
+    (add-hook 'vterm-mode-hook (lambda nil (local-set-key (kbd "C-h") #'send-backspace)))
+    ;; (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
+    )
 #+end_src
 
 * tramp
-#+begin_src elisp :lexical no
-
+#+begin_src emacs-lisp :lexical no
 (leaf tramp
   :ensure t)
 #+end_src
 
 * keybind
-#+begin_src elisp :lexical no
+#+begin_src emacs-lisp :lexical no
   (global-set-key "\C-h" 'delete-backward-char)  
   ;; alias of "M-g M-g"
   (global-set-key "\M-g" 'goto-line)
   (global-set-key (kbd "s-/") 'comment-line)
   (global-set-key "\M-;" 'comment-line)
   (global-set-key "\C-c\C-x" 'eval-buffer)
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
 #+end_src
 
 * deinit
