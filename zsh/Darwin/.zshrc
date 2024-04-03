@@ -188,6 +188,9 @@ alias -g C='| pbcopy'
 # jq
 alias jq='jq -C'
 
+# ag
+alias ag='ag --stats --pager "less -F"'
+
 ########################################
 # function
 
@@ -227,7 +230,7 @@ select-history() {
     # 順番を保持して重複を削除。
     # カーソルの左側の文字列をクエリにしてfzfを起動
     # \nを改行に変換
-    BUFFER="$(history -nr 1 | awk '!a[$0]++' | fzf +m --reverse -e --query "$LBUFFER" | sed 's/\\n/\n/')"
+    BUFFER="$(history -nr 1 | awk '!a[$0]++' | fzf +m --no-sort --reverse -e --query "$LBUFFER" | sed 's/\\n/\n/')"
     CURSOR=$#BUFFER             # カーソルを文末に移動
     # zle -R -c                   # refresh
     zsh -R
