@@ -763,6 +763,14 @@
                      (company-mode 1))))
 #+end_src
 
+
+** org-modeのテーブル縦線を揃える
+#+begin_src emacs-lisp :lexical no
+(leaf valign
+:ensure t
+:hook org-mode-hook)
+#+end_src
+
 ** journal
 #+begin_src emacs-lisp :lexical no
 (leaf org-journal
