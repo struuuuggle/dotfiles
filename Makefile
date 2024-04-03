@@ -37,6 +37,10 @@ brew: flag
 zsh-autosuggestions: flag zsh
 	bin/zsh-autosuggestions.sh
 
+
+compile:
+	emacs --batch -f batch-byte-compile ~/.emacs.d/early-init.el ~/.emacs.d/init.el ~/.emacs.d/mine/init.el
+
 define make_symlink
 	ln -sf $1 ~
 endef
