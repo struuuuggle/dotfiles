@@ -27,7 +27,7 @@
 
 * faces:
 ** beacon
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf beacon
   :ensure t
   :if (window-system)
@@ -38,7 +38,7 @@
 #+end_src
 
 ** dashboard
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf dashboard
   :ensure t
   :require t
@@ -66,7 +66,7 @@
 #+end_src
 
 *** which-key
-#+begin_src emacs-lisp :lexical no  
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf which-key
     :doc "Emacs package that displays available keybindings in popup"
     :ensure t
@@ -87,29 +87,29 @@
 
 * config:
 ** 音を鳴らさない
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq ring-bell-function 'ignore)
 #+end_src
 
 **  "y" or "n" instead of "yes" or "no"
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq use-short-answers t)
 #+end_src
 
 ** history関連
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq history-delete-duplicates t)
 (setq history-length 1000)
 #+end_src
 
 ** スムーズにスクロールする
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq scroll-conservatively 1)
 (setq mouse-wheel-scroll-amount '(1 ((control) 5)))
 (setq scroll-preserve-screen-position t)
   #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq select-enable-cliboard t)
 (setq indent-tabs-mode nil)
 (setq display-line-numbers t)
@@ -175,12 +175,12 @@
  #+end_src
 ** dired
 *** human-readable file sizes
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq dired-listing-switches "-lha")
 #+end_src
  
 * theme
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf doom-themes
   :ensure t
   :custom-face
@@ -193,7 +193,7 @@
 #+end_src
 
 ** mode-line
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf doom-modeline
   :ensure t
   :hook (after-init-hook)
@@ -204,7 +204,7 @@
 #+end_src
 
 ** CUI
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (when (not window-system)
   ;; linum
   (set-face-attribute 'line-number nil
@@ -220,18 +220,18 @@
 #+end_src
 
 ** line number
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (set-face-attribute 'line-number-current-line nil
                     :foreground (doom-color 'green))
 #+end_src
 
 ** cursor
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (set-cursor-color (doom-color 'green))
 #+end_src
 
 ** toggle opacity
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (defun struuuuggle/toggle-opacity ()
   "Toggle the opacity of the entire window."
   (interactive)
@@ -240,7 +240,7 @@
 #+end_src
 
 * window
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf ace-window
   :ensure t
   :custom
@@ -253,17 +253,17 @@
 
 * indent:
 ** タブ幅をスペース2つ分にする
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq-default tab-width 2)  
 #+end_src
 ** タブ文字ではなくスペースを使う
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 #+end_src
 
 ** GUIのみindent-guidesを有効化
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf highlight-indent-guides
   :if (window-system)
   :blackout
@@ -277,7 +277,7 @@
 #+end_src
 
 * flycheck:
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf flycheck
   :doc "On-the-fly syntax checking"
   :emacs>= 24.3
@@ -305,7 +305,7 @@
 #+end_src
 
 * ivy:
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf ivy
   :doc "Incremental Vertical completYon"
   :req "emacs-24.5"
@@ -367,7 +367,7 @@
 #+end_src
 
 ** prescient
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf prescient
   :doc "Better sorting and filtering"
   :req "emacs-25.1"
@@ -380,7 +380,7 @@
 #+end_src
 
 * company:
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf company
   :doc "Modular text completion framework"
   :req "emacs-24.3"
@@ -411,7 +411,7 @@
 
 * git:
 ** magit
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf magit
   :ensure t
   :bind
@@ -419,7 +419,7 @@
 #+end_src
 
 ** git-gutter
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf git-gutter
   :ensure t
   :custom
@@ -441,7 +441,7 @@
 #+end_src
 
 * font:
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 
 ;; 表示確認用:
 ;; 0123456789012345678901234567890123456789
@@ -466,7 +466,7 @@
 #+end_src
 
 ** icons
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf all-the-icons
   :doc "A utility package to collect various Icon Fonts and propertize them within Emacs."
   :if (display-graphic-p)
@@ -486,7 +486,7 @@
 #+end_src
 
 * lsp
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 ;; (leaf eglot
 ;;   :ensure t
 ;;   :commands eglot-ensure
@@ -553,7 +553,7 @@
 #+end_src
 
 ** lsp-sourcekit
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf lsp-sourcekit
   :url "https://github.com/emacs-lsp/lsp-sourcekit"
   :require t
@@ -576,7 +576,7 @@
 
 * languages:
 ** Swift
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf swift-mode
   :require t
   :ensure t
@@ -594,7 +594,7 @@
 #+end_src
 
 ** json
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf json-mode
   :doc "Major mode for editing JSON files with emacs"
   :ensure t
@@ -608,13 +608,13 @@
 #+end_src
 
 ** YML
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf yaml-mode
   :ensure t)
 #+end_src
 
 ** Ruby
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf leaf-convert
   :defvar lsp-solargraph-use-bundler
   :hook ((ruby-mode-hook . lsp))
@@ -623,7 +623,7 @@
 #+end_src
 
 * org-mode:
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 
 (leaf org-mode
   :defvar org-inline-image-overlays
@@ -711,7 +711,7 @@
 #+end_src
 
 ** rich UI
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 ;; (leaf org-modern
 ;;   :doc "🦄 Modern Org Style"
 ;;   :url "https://github.com/minad/org-modern"
@@ -758,7 +758,7 @@
 
   #+end_src
 
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf org-indent
   :tag "builtin"
   :custom
@@ -777,14 +777,14 @@
 
 
 ** org-modeのテーブル縦線を揃える
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf valign
 :ensure t
 :hook org-mode-hook)
 #+end_src
 
 ** journal
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf org-journal
   :doc "A simple org-mode based journaling mode"
   :ensure t
@@ -799,7 +799,7 @@
 #+end_src
 
 ** org-babel
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf ob-swift
   :doc "org-babel functions for swift evaluation"
   :url "https://github.com/zweifisch/ob-swift"
@@ -824,7 +824,7 @@
 #+end_src
 
 * projectile:
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf projectile
   :ensure t
   :blackout t
@@ -842,7 +842,7 @@
 
 * shell
 ** 環境変数
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf exec-path-from-shell
   :ensure t
   :when (memq window-system
@@ -853,7 +853,7 @@
 #+end_src
 
 ** vterm
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf vterm
   :ensure t
   :hook (vterm-mode-hook . (lambda () (display-line-numbers-mode -1)))
@@ -879,13 +879,13 @@
 #+end_src
 
 * tramp
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf tramp
   :ensure t)
 #+end_src
 
 * keybind
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (global-set-key "\C-h" 'delete-backward-char)  
 ;; alias of "M-g M-g"
 (global-set-key "\M-g" 'goto-line)
@@ -899,6 +899,6 @@
 #+end_src
 
 * deinit
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (setq gc-cons-threshold 16777216) ; 16MB
 #+end_src
