@@ -34,7 +34,7 @@
   :blackout t
   :custom
   (beacon-color . "#62f992")
-  :config (beacon-mode 1))
+  :global-minor-mode beacon-mode)
 #+end_src
 
 ** dashboard
@@ -86,6 +86,11 @@
 
 
 * config:
+** Not to report warnings and errors from asynchronous native compilation.
+#+begin_src emacs-lisp :lexical no :results silent
+(setq native-comp-async-report-warnings-errors nil)
+#+end_src
+
 ** 音を鳴らさない
 #+begin_src emacs-lisp :lexical no :results silent
 (setq ring-bell-function 'ignore)
@@ -430,8 +435,7 @@
   (git-gutter:modified . '((t (:background "#ffb86c"))))
   (git-gutter:added    . '((t (:background "#50fa7b"))))
   (git-gutter:deleted  . '((t (:background "#ff79c6"))))
-  :config
-  (global-git-gutter-mode +1))
+  :global-minor-mode global-git-gutter-mode)
 
 ;; シンボリックリンクの読み込みを許可
 (setq vc-follow-symlinks t)
@@ -442,7 +446,6 @@
 
 * font:
 #+begin_src emacs-lisp :lexical no :results silent
-
 ;; 表示確認用:
 ;; 0123456789012345678901234567890123456789
 ;; 一二三四五六一二三四五六一二三四五六一二三四五六
@@ -741,9 +744,7 @@
      " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
    org-agenda-current-time-string
    "⭠ now ─────────────────────────────────────────────────")
-
-  :config
-  (global-org-modern-mode +1))
+  :hook (org-mode-hook . org-modern-mode))
 
 (leaf org-superstar
   :doc "Make org-mode stars a little more super"
@@ -751,11 +752,7 @@
   :ensure t
   :custom
   (org-superstar-headline-bullets-list . '("#" "○" "+" "-" ">" "<"))
-  :config
-  (add-hook 'org-mode-hook
-            (lambda nil
-              (org-superstar-mode 1))))
-
+  :hook (org-mode-hook . org-superstar-mode))
   #+end_src
 
 #+begin_src emacs-lisp :lexical no :results silent
@@ -775,7 +772,11 @@
                      (company-mode 1))))
 #+end_src
 
-
+** org-pomodoro
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf org-pomodoro
+  :ensure t)
+#+end_src
 ** org-modeのテーブル縦線を揃える
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf valign
