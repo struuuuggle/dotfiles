@@ -635,6 +635,18 @@
                                     (when org-inline-image-overlays
                                       (org-redisplay-inline-images))
                                     (display-line-numbers-mode -1)))
+  (org-clock-in-hook . (lambda nil
+                         "Clock in したときにステータスをDOINGに変更"
+                         (when (equal
+                                (org-get-todo-state)
+                                "TODO")
+                           (org-todo "DOING"))))
+  (org-clock-out-hook . (lambda nil
+                         "Clock out したときにステータスをDONEに変更"
+                         (when (equal
+                                (org-get-todo-state)
+                                "DOING")
+                           (org-todo "DONE"))))
   :custom
   ;; スピードコマンドを有効化
   (org-use-speed-commands . t)
