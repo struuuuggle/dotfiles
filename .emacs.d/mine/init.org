@@ -625,6 +625,13 @@
   :setq ((lsp-solargraph-use-bundler . t)))
 #+end_src
 
+
+** Dockerfile
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf dockerfile-mode
+  :ensure t)
+#+end_src
+
 * org-mode:
 #+begin_src emacs-lisp :lexical no :results silent
 
