@@ -419,8 +419,12 @@
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf magit
   :ensure t
+  :after t
   :bind
-  ("C-x g" . magit-status))
+  ("C-x g" . magit-status)
+  :config
+  ;; disable "--force" option
+  (transient-remove-suffix 'magit-push "-F"))
 #+end_src
 
 ** git-gutter
