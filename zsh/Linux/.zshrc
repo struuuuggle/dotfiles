@@ -171,6 +171,9 @@ alias gp='git push origin $(git branch --contains=HEAD | cut -d" " -f2-)'
 alias c='(){git switch -c $1}'
 alias gdhead="git diff origin/$(git config init.defaultBranch)...HEAD"
 
+# Rails
+alias r='bin/rails'
+
 ########################################
 # function
 

@@ -188,6 +188,9 @@ alias jq='jq -C'
 # ag
 alias ag='ag --stats --pager "less -F"'
 
+# Rails
+alias r='bin/rails'
+
 ########################################
 # function
 
