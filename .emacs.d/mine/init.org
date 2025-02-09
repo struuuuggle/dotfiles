@@ -700,6 +700,7 @@
                             "* %?\nEntered on %U\n  %i\n  ")
                            ("j" "🗓  Journal entry" entry (function org-journal-find-location)
                             "* TODO %^{Title}\n%i%?")))
+  (org-journal-file-header . "#+OPTIONS: ^:nil\n")
   :bind
   ;; org-mode
   ;; (global-set-key (kbd "C-c p") 'org-preview-html-mode)
