@@ -45,18 +45,24 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-16.jdk/Contents/Home"
 
 export GOPATH="$HOME/go"
 
+export OPENSSL_ROOT=$(brew --prefix openssl)
+export LDFLAGS="-L$OPENSSL_ROOT/lib"
+export CPPFLAGS="-I$OPENSSL_ROOT/include"
+export PKG_CONFIG_PATH="$OPENSSL_ROOT/lib/pkgconfig"
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$OPENSSL_ROOT"
+
 path=(
     # $JAVA_HOME/bin(N-/)
     # X11
     /usr/X11/bin(N-/)
     # GNU
     /usr/local/opt/coreutils/libexec/gnubin(N-/)
+    # openssl
+    $OPENSSL_ROOT/bin(N-/)
     # rbenv
     $HOME/.rbenv/shims(N-/)
     # pyenv
-    $HOME/.pyenv/shims(N-/)
-    # nodebrew
-    $HOME/.nodebrew/current/bin(N-/)
+    # $HOME/.pyenv/shims(N-/)
     # stack(Haskell)
     $HOME/.local/bin(N-/)
     # Rust
@@ -75,6 +81,7 @@ path=(
     /usr/local/sbin(N-/)
     # Homebrew(M1)
     /opt/homebrew/bin(N-/)
+    /opt/homebrew/sbin(N-/)
     # Mint
     $MINT_LINK_PATH(N-/)
     # Java
@@ -83,24 +90,19 @@ path=(
     $GOPATH/bin/(N-/)
 )
 
-# rbenv
 if command -v rbenv 1>/dev/null 2>&1; then
    eval "$(rbenv init -)"
 fi
 
-# pyenv
-# if command -v pyenv 1>/dev/null 2>&1; then
-#     eval "$(pyenv init -)"
-# fi
+# 重複パスを登録しない
+typeset -U path cdpath fpath manpath
 
-export OPENSSL_ROOT=$(brew --prefix openssl)
-export PATH="$OPENSSL_ROOT/bin:$PATH"
-export LDFLAGS="-L$OPENSSL_ROOT/lib"
-export CPPFLAGS="-I$OPENSSL_ROOT/include"
-export PKG_CONFIG_PATH="$OPENSSL_ROOT/lib/pkgconfig"
-export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$OPENSSL_ROOT"
+#############################################
+# Additional settings
+
 export BAT_THEME="Dracula"
 export FZF_DEFAULT_OPTS="--inline-info"
 
-# 重複パスを登録しない
-typeset -U path cdpath fpath manpath
+if command -v gh 1>/dev/null 2>&1; then
+   eval "$(gh copilot alias -- zsh)"
+fi
