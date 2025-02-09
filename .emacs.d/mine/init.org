@@ -88,7 +88,7 @@
 * config:
 ** Not to report warnings and errors from asynchronous native compilation.
 #+begin_src emacs-lisp :lexical no :results silent
-(setq native-comp-async-report-warnings-errors nil)
+(setq native-comp-async-report-warnings-errors 'silent)
 #+end_src
 
 ** 音を鳴らさない
@@ -480,11 +480,13 @@
   :require t
   :ensure t
   :config
-  (leaf all-the-icons-ivy-rich
-    :ensure t
-    :init
-    (all-the-icons-ivy-rich-mode 1)
-    :require t)
+  ;; opt out it because there's a problem with native-comp
+  ;;
+  ;; (leaf all-the-icons-ivy-rich
+  ;;   :ensure t
+  ;;   :init
+  ;;   (all-the-icons-ivy-rich-mode 1)
+  ;;   :require t)
   
   (leaf all-the-icons-dired
     :doc "Adds dired support to all-the-icons"
