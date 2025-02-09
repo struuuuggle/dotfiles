@@ -1,11 +1,10 @@
-# .gitconfig ###################################################
 [user]
 	name = struuuuggle
 	email = struuuuggle@gmail.com
 [core]
 	editor = emacsclient -nw
 [color]
-  ui = true
+	ui = true
 [pager]
 	branch = false
 [init]
@@ -17,5 +16,14 @@
 	# ログをグラフ表示
 	graph = log --graph --decorate --name-status
 	stat = "!git --no-pager diff --stat origin/$(git remote show origin | grep 'HEAD branch' | awk '{print $NF}') HEAD"
+[branch]
+	sort = -committerdate
+[diff]
+	renameLimit = 999
+	renames = true
 [pager]
-        difftool = true
+	difftool = true
+[rerere]
+	enabled = true
+[include]
+	path = ~/.gitconfig.local

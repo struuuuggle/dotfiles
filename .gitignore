@@ -1,8 +1,6 @@
 # General
 .DS_Store
-
-# shell
-.zshrc.local
+*.local
 
 # .emacs.d
 .emacs.d/mine/init.el

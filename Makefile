@@ -10,9 +10,10 @@ flag:
 	set $(COMMON_FLAGS)
 
 git: flag
-	git config --global core.excludesfile $(realpath git/.gitignore_global)
-	git config --global commit.template $(realpath git/.commit_template)
 	$(call make_symlink, $(realpath git/.gitconfig))
+	$(call make_symlink, $(realpath git/.gitconfig.local))
+	git config --file ~/.gitconfig.local core.excludesfile $(realpath git/.gitignore_global)
+	git config --file ~/.gitconfig.local commit.template $(realpath git/.commit_template)
 
 zsh: flag
 	$(call make_symlink, $(realpath zsh/$(shell uname)/.zshenv))
