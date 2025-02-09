@@ -26,8 +26,6 @@ SAVEHIST=100000
 # Disable Loading Global Profiles
 setopt no_global_rcs
 
-export PYENV_ROOT="$HOME/.pyenv"
-
 path=(
     # 雑用スクリプト
     $HOME/bin(N-/)

@@ -91,7 +91,7 @@ path=(
 )
 
 if command -v rbenv 1>/dev/null 2>&1; then
-   eval "$(rbenv init -)"
+   eval "$(rbenv init --no-rehash -)"
 fi
 
 # 重複パスを登録しない

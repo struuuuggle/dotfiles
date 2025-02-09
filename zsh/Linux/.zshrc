@@ -229,9 +229,11 @@ ghpr() {
 # emacs daemonが起動していなければ、ホームディレクトリで`emacs --daemon`を実行する
 estart() {
   if ! emacsclient -e 0 > /dev/null 2>&1; then
-    cd > /dev/null 2>&1
-    emacs --daemon
-    cd - > /dev/null 2>&1
+    ({
+      cd
+      emacs --daemon
+      cd -
+    } > /dev/null 2>&1 & )
   fi
 }
 estart
