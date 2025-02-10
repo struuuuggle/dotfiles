@@ -71,17 +71,17 @@ path=(
     /usr/local/go/bin(N-/)
     # 雑用スクリプト
     $HOME/.local/bin(N-/)
+    # Homebrew's sbin
+    /usr/local/sbin(N-/)
+    # Homebrew(M1)
+    /opt/homebrew/bin(N-/)
+    /opt/homebrew/sbin(N-/)
     # /etc/paths に書いてあるもの
     /usr/local/bin(N-/)
     /usr/bin(N-/)
     /bin(N-/)
     /usr/sbin(N-/)
     /sbin(N-/)
-    # Homebrew's sbin
-    /usr/local/sbin(N-/)
-    # Homebrew(M1)
-    /opt/homebrew/bin(N-/)
-    /opt/homebrew/sbin(N-/)
     # Mint
     $MINT_LINK_PATH(N-/)
     # Java
