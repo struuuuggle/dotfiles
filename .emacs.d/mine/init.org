@@ -1,5 +1,5 @@
 * set up leaf.el
-#+begin_src emacs-lisp :lexical no  
+#+begin_src emacs-lisp :lexical no :results silent
 (eval-and-compile
   (customize-set-variable
    'package-archives '(("org" . "https://orgmode.org/elpa/")
