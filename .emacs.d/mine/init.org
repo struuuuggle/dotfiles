@@ -441,7 +441,8 @@
   ("C-x g" . magit-status)
   :config
   ;; disable "--force" option
-  (transient-remove-suffix 'magit-push "-F"))
+  (transient-remove-suffix 'magit-push "-F")
+  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 #+end_src
 
 ** git-gutter
