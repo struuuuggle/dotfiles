@@ -375,7 +375,14 @@
     :global-minor-mode t))
 
 #+end_src
-
+** ivy-postframe
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf ivy-posframe
+  :ensure t
+  :config
+  :setq (ivy-posframe-display-functions-alist quote ((t . ivy-posframe-display)))
+  :global-minor-mode ivy-posframe-mode)
+#+end_src
 ** prescient
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf prescient
