@@ -203,9 +203,8 @@
   (doom-themes-org-config)
   (custom-set-faces
    `(default									((t :background ,(doom-color 'base1))))
-   `(fringe										((t (:background nil))))
-   `(line-number							((t :background nil :foreground ,(doom-color 'grey))))
-   `(line-number-current-line ((t :background nil :foreground ,(doom-color 'green))))
+   `(line-number							((t :foreground ,(doom-color 'grey))))
+   `(line-number-current-line ((t :foreground ,(doom-color 'green))))
    `(mode-line								((t :background ,(doom-color 'base3))))
    `(font-lock-comment-face		((t :foreground ,(doom-color 'doc-comments))))
    `(org-block-begin-line			((t :background ,(doom-color 'base2) :foreground ,(doom-color 'doc-comments))))
