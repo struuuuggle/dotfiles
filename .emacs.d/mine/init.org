@@ -83,6 +83,13 @@
     :global-minor-mode t)
 #+end_src
 
+** line-number
+#+begin_src emacs-lisp :lexical no
+(leaf display-line-numbers
+  :blackout t
+  :config
+  (global-display-line-numbers-mode t))
+#+end_src
 
 * config:
 ** Not to report warnings and errors from asynchronous native compilation.
@@ -116,7 +123,6 @@
 #+begin_src emacs-lisp :lexical no :results silent
 (setq select-enable-cliboard t)
 (setq indent-tabs-mode nil)
-(setq display-line-numbers t)
 (setq scroll-bar-mode nil)
 (setq truncate-lines nil)
 (setq make-backup-files nil)
@@ -644,6 +650,7 @@
   :defvar org-inline-image-overlays
   :defun (org-redisplay-inline-images)
   :hook
+  (org-mode-hook . (lambda nil (display-line-numbers-mode -1)))
   ;; org-inline-image-overlays
   ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
   (org-babel-after-execute-hook . (lambda ()
