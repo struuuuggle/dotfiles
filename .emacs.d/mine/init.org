@@ -875,16 +875,9 @@
 #+end_src
 
 * shell
-** 環境変数
-#+begin_src emacs-lisp :lexical no :results silent
-(leaf exec-path-from-shell
-  :ensure t
-  :when (memq window-system
-              '(mac ns x))
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
-#+end_src
+** PATH
+We don't have to use [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] anymore.
+See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#injected-path][homebrew-emacs-plus#README]].
 
 ** vterm
 #+begin_src emacs-lisp :lexical no :results silent
