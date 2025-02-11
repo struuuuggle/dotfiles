@@ -902,7 +902,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
   :custom
   (vterm-shell . "/bin/zsh")
   (vterm-kill-buffer-on-exit . t)
-  (vterm-vterm-buffer-name-string . "vterm: %s")
+  (vterm-buffer-name-string . "vterm: %s")
   (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o" "M-x"))
   :config
   (leaf vterm-toggle

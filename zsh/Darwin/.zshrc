@@ -194,12 +194,6 @@ alias r='bin/rails'
 ########################################
 # function
 
-# cdの後にlsを実行
-chpwd() {
-  ls -a
-  echo -ne "\033]0;$(pwd | rev | awk -F \/ '{print $1}'| rev)\007"
-}
-
 #fgとbgを完全に無視したC-p
 #https://qiita.com/aosho235/items/83e338989b901b99fe35
 _up-line-or-history-ignoring() {
@@ -304,25 +298,23 @@ ghpr() {
         | xargs gh pr checkout
 }
 
-# https://github.com/akermu/emacs-libvterm#shell-side-configuration
-vterm_printf(){
-    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
-        # Tell tmux to pass the escape sequences through
-        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-    elif [ "${TERM%%-*}" = "screen" ]; then
-        # GNU screen (screen, screen-256color, screen-256color-bce)
-        printf "\eP\e]%s\007\e\\" "$1"
-    else
-        printf "\e]%s\e\\" "$1"
-    fi
-}
-
 #############################################
 # Additional settings
 
 # zsh-autosuggestions
 # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Emacs - vterm
+# https://github.com/akermu/emacs-libvterm?tab=readme-ov-file#shell-side-configuration-files
+if [[ "$INSIDE_EMACS" = 'vterm' ]] \
+    && [[ -n ${EMACS_VTERM_PATH} ]] \
+    && [[ -f ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
+	source ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
+fi
+
+# emacs-vterm-zshの中で定義しているchpwdを上書きする
+chpwd () { ls -a; print -Pn "\e]2;%m\a" }
 
 # 環境依存の設定を読み込む
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
