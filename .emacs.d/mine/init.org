@@ -597,13 +597,15 @@
   :if
   (= 0 (call-process "which" nil nil nil "xcrun"))
   :after eglot-mode
+  :init
+  (defvar xcode-path (string-trim (shell-command-to-string "xcode-select --print-path")))
   :custom
   ;; configure the package to point to the sourcekit-lsp executable
   `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
   (lsp-sourcekit-extra-args . `("-Xswiftc"
                                 "-sdk"
                                 "-Xswiftc"
-                                "/Applications/Xcode-15.2.0.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+                                ,(concat xcode-path "/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk")
                                 "-Xswiftc"
                                 "-target"
                                 "-Xswiftc"
