@@ -129,7 +129,7 @@
 (setq select-enable-cliboard t)
 (setq indent-tabs-mode nil)
 (setq scroll-bar-mode nil)
-(setq truncate-lines nil)
+(setq truncate-lines t)
 (setq make-backup-files nil)
 (setq backup-inhibited nil)
 (setq create-lockfiles nil)
@@ -482,8 +482,8 @@
 
 (leaf cus-font
   :config
-  (set-frame-font "-*-Fira Code-normal-normal-normal-*-14-*-*-*-m-0-iso10646-1")
-  (set-fontset-font t 'japanese-jisx0208 "-*-Noto Sans-normal-normal-normal-*-14-*-*-*-p-0-fontset-auto4"))
+  (set-frame-font "-*-Fira Code-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
+  (set-fontset-font t 'japanese-jisx0208 "-*-Noto Sans-normal-normal-normal-*-16-*-*-*-p-0-fontset-auto4"))
 
 (leaf fira-code-mode
   :when window-system
