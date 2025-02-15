@@ -266,7 +266,8 @@
   (aw-ignore-current . t)
   (aw-minibuffer-flag . nil)
   :bind ("C-o" . ace-window)
-  :custom-face (aw-leading-char-face . '((t (:height 4.0 :foreground "#999999")))))
+  :custom-face (aw-leading-char-face . '((t (:height 4.0 :foreground "#999999"))))
+  :global-minor-mode ace-window-posframe-mode)
 #+end_src
 
 * indent:
