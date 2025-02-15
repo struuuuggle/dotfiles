@@ -522,69 +522,92 @@
 
 * lsp
 #+begin_src emacs-lisp :lexical no :results silent
-;; (leaf eglot
-;;   :ensure t
-;;   :commands eglot-ensure
-;;   :hook ((swift-mode-hook . eglot-ensure))
-;;   :config
-;;   (with-eval-after-load 'eglot
-;;     (message "warning: `jsonrpc--log-event' is ignored.")
-;;     (fset #'jsonrpc--log-event #'ignore)
-;;     (add-to-list 'eglot-server-programs
-;;                  '(swift-mode "/Applications/Xcode-15.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))))
-
-(leaf lsp-mode
-  :require t
+(leaf eglot
   :ensure t
-  :hook
-  (swift-mode-hook . lsp)
-  (ruby-mode-hook . lsp)
-  (elisp-mode-hook . lsp)
+  :commands eglot-ensure
+  :hook ((swift-mode-hook . eglot-ensure))
   :config
-  (leaf lsp-ui
-    :require t
-    :ensure t
-    :defun (lsp-ui-doc--hide-frame lsp-ui-doc-show lsp-ui-doc-mode)
-    :defvar (lsp-ui-doc-mode)
+  (message "warning: `jsonrpc--log-event' is ignored.")
+  (fset #'jsonrpc--log-event #'ignore)
+  (add-to-list 'eglot-server-programs
+               '(swift-mode "xcrun" "sourcekit-lsp"))
+  (leaf eldoc-box
+    :commands eldoc-box-hover-mode
+    :hook ((eglot-managed-mode-hook . eldoc-box-hover-mode))
     :preface
-    (defun struuuuggle/toggle-lsp-ui-doc ()
+    (defun struuuuggle/toggle-doc ()
       (interactive)
-      (if lsp-ui-doc-mode
+      (if eldoc-mode
           (progn
-            (lsp-ui-doc-mode -1)
-            (lsp-ui-doc--hide-frame))
+            (eldoc-mode -1)
+            (eldoc-box-quit-frame))
         (progn
-          (lsp-ui-doc-mode 1)
-          (lsp-ui-doc-show))))
+          (eldoc-mode 1)
+          (eldoc-box-help-at-point))))
     :bind
-    (:lsp-mode-map
-     ("C-j" . struuuuggle/toggle-lsp-ui-doc))
-    ("M-s-0" . imenu-list-smart-toggle)
+    (eglot-mode-map
+     ("C-j" . struuuuggle/toggle-doc))
     :custom
-    ;; lsp-ui-doc
-    (lsp-ui-doc-enable . t)
-    (lsp-ui-doc-position . 'at-point) ;; top, bottom, or at-point
-    (lsp-ui-doc-max-width . 200) ;; Original value is 150
-    (lsp-ui-doc-max-height . 30) ;; Original value is 13
-    (lsp-ui-doc-use-childframe . t)
-    (lsp-ui-doc-use-webkit . t)
-    ;; lsp-ui-flycheck
-    (lsp-ui-flycheck-enable . nil)
-    ;; lsp-ui-imenu
-    (lsp-ui-imenu-enable . nil)
-    (lsp-ui-imenu-kind-position . 'top)
-    ;; lsp-ui-peek
-    (lsp-ui-peek-enable . t)
-    (lsp-ui-peek-peek-height . 30)
-    (lsp-ui-peek-list-width . 8)
-    ;; never, on-demand, or always
-    (lsp-ui-peek-fontify . 'always))
+    (eldoc-box-only-multi-line . t)))
 
-  (leaf smart-jump
-    :ensure t
-    :bind
-    ("s-b" . smart-jump-go)
-    ("M-," . smart-jump-back)))
+;; (leaf lsp-mode
+;;   :require t
+;;   :ensure t
+;;   :hook
+;;   (swift-mode-hook . lsp)
+;;   (ruby-mode-hook . lsp)
+;;   (elisp-mode-hook . lsp)
+;;   :config
+;;   (leaf lsp-ui
+;;     :require t
+;;     :ensure t
+;;     :defun (lsp-ui-doc--hide-frame lsp-ui-doc-show lsp-ui-doc-mode)
+;;     :defvar (lsp-ui-doc-mode)
+;;     :preface
+;;     (defun struuuuggle/toggle-lsp-ui-doc ()
+;;       (interactive)
+;;       (if lsp-ui-doc-mode
+;;           (progn
+;;             (lsp-ui-doc-mode -1)
+;;             (lsp-ui-doc--hide-frame))
+;;         (progn
+;;           (lsp-ui-doc-mode 1)
+;;           (lsp-ui-doc-show))))
+;;     :bind
+;;     (:lsp-mode-map
+;;      ("C-j" . struuuuggle/toggle-lsp-ui-doc))
+;;     ("M-s-0" . imenu-list-smart-toggle)
+;;     :custom
+;;     ;; lsp-ui-doc
+;;     (lsp-ui-doc-enable . t)
+;;     (lsp-ui-doc-position . 'at-point) ;; top, bottom, or at-point
+;;     (lsp-ui-doc-max-width . 200) ;; Original value is 150
+;;     (lsp-ui-doc-max-height . 30) ;; Original value is 13
+;;     (lsp-ui-doc-use-childframe . t)
+;;     (lsp-ui-doc-use-webkit . t)
+;;     ;; lsp-ui-flycheck
+;;     (lsp-ui-flycheck-enable . nil)
+;;     ;; lsp-ui-imenu
+;;     (lsp-ui-imenu-enable . nil)
+;;     (lsp-ui-imenu-kind-position . 'top)
+;;     ;; lsp-ui-peek
+;;     (lsp-ui-peek-enable . t)
+;;     (lsp-ui-peek-peek-height . 30)
+;;     (lsp-ui-peek-list-width . 8)
+;;     ;; never, on-demand, or always
+;;     (lsp-ui-peek-fontify . 'always)
+;;     (lsp-ui-doc-use-childframe . (featurep 'xwidget-internal))
+;;     (lsp-ui-doc-use-webkit . (featurep 'xwidget-internal)))
+;;   (leaf smart-jump
+;;     :ensure t
+;;     :bind
+;;     ("s-b" . smart-jump-go)
+;;     ("M-," . smart-jump-back)
+;;     :config
+;;     (smart-jump-setup-default-registers)
+;;     ;; smart-jump-simple-find-referencesのためにagが必要
+;;     (leaf ag
+;;       :ensure t)))
 #+end_src
 
 ** lsp-sourcekit
@@ -611,23 +634,38 @@
                                 "arm64-apple-ios-simulator")))
 #+end_src
 
+** smart-jump
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf smart-jump
+  :ensure t
+  :bind
+  ("s-b" . smart-jump-go)
+  ("C-s-<left>" . smart-jump-back)
+  :config
+  (leaf ag
+    :doc "smart-jump-simple-find-referencesのためにagが必要"
+    :ensure t)
+  (leaf dumb-jump
+    :ensure t
+    :hook (xref-backend-functions . dumb-jump-xref-activate)
+    :custom
+    (xref-show-definitions-function . #'xref-show-definitions-completing-read)))
+#+end_src
 * languages:
 ** Swift
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf swift-mode
-  :require t
-  :ensure t
-  :hook (swift-mode-hook . flycheck-swift3-setup)
-  :defvar company-backends
-  :config
-  (add-to-list 'company-backends '(company-sourcekit))
-  (leaf company-sourcekit
+  (leaf swift-mode
     :ensure t
-    :url "https://github.com/nathankot/company-sourcekit"
-    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"
-    :doc "First install SourceKittenDaemon. Make sure that it's in the exec-path of your Emacs.")
-  (leaf flycheck-swift3
-    :ensure t))
+    :hook (swift-mode-hook . flycheck-swift3-setup)
+    :config
+    (leaf flycheck-swift
+      :ensure t
+      :init
+      (defvar xcode-path (string-trim (shell-command-to-string "xcode-select --print-path")))
+      :custom
+      (flycheck-swift-target . "arm64-apple-ios-simulator")
+      :config
+      (setq flycheck-swift-sdk-path (concat xcode-path "/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk"))))
 #+end_src
 
 ** json
@@ -877,9 +915,10 @@
   :config
   (leaf projectile-rails
     :ensure t)
+  (leaf projectile-ripgrep
+    :ensure t)
   (projectile-mode +1)
-  :bind ((projectile-mode-map
-          ("s-p" . projectile-command-map))))
+  :bind ("s-p" . projectile-command-map))
 #+end_src
 
 * shell
