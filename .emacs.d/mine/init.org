@@ -774,37 +774,17 @@
 
 ** rich UI
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-modern
-  :doc "🦄 Modern Org Style"
-  :url "https://github.com/minad/org-modern"
-  :ensure t
-  :after org
-  :custom
-  ;; Edit settings
-  (org-auto-align-tags . nil)
-  (org-tags-column . 0)
-  (org-fold-catch-invisible-edits . 'show-and-error)
-  (org-insert-heading-respect-content . t)
-  ;; Org styling, hide markup etc.
-  (org-hide-emphasis-markers . t)
-  (org-pretty-entities . t)
-  (org-ellipsis . "⤵")
-     ;; Agenda styling
-  (org-agenda-tags-column . 0)
-  (org-agenda-block-separator . ?─)
-  (org-agenda-time-grid .
-  '((daily today require-timed)
-    (800 1000 1200 1400 1600 1800 2000)
-    " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
-  (org-agenda-current-time-string . "⭠ now ─────────────────────────────────────────────────")
-  :hook (org-mode-hook . org-modern-mode))
-
 (leaf org-superstar
   :doc "Make org-mode stars a little more super"
   :url "https://github.com/integral-dw/org-superstar-mode"
   :ensure t
   :custom
-  (org-superstar-headline-bullets-list . '("#" "○" "+" "-" ">" "<"))
+  (org-superstar-headline-bullets-list . '("#" "○" "●" "○" "●" "○"))
+  (org-superstar-special-todo-items . t)
+  :config
+  (set-face-attribute 'org-level-3 nil :inherit 'org-level-8 :height 1.2)
+  (set-face-attribute 'org-level-2 nil :inherit 'org-level-8 :height 1.4)
+  (set-face-attribute 'org-level-1 nil :inherit 'org-level-8 :height 1.4)
   :hook (org-mode-hook . org-superstar-mode))
   #+end_src
 
