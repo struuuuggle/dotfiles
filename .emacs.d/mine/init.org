@@ -451,7 +451,11 @@
   :config
   ;; disable "--force" option
   (transient-remove-suffix 'magit-push "-F")
-  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
+  ;; see also: https://magit.vc/manual/magit/Performance.html#Refs-Buffer-Performance-1
+  (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
+  :custom
+  (magit-revision-insert-related-refs . nil)
+  (magit-display-buffer-function . #'magit-display-buffer-fullframe-status-v1))
 #+end_src
 
 ** git-gutter
