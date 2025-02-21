@@ -1,4 +1,4 @@
-* set up leaf.el
+* leaf.el
 #+begin_src emacs-lisp :lexical no :results silent
 (eval-and-compile
   (customize-set-variable
@@ -40,11 +40,12 @@
 ** dashboard
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf dashboard
+  :url "https://github.com/emacs-dashboard/emacs-dashboard"
   :ensure t
   :require t
   :when (< (length command-line-args) 2)
+  :mode ("\\*dashboard*\\'" . dashboard-mode)
   :custom
-  (dashboard-banner-logo-title . "Welcome to Emacs!")
   ;; Value can be
   ;; 'official: which displays the official emacs logo
   ;; 'logo:     which displays an alternative emacs logo
@@ -54,14 +55,13 @@
   (dashboard-set-heading-icons . t)
   (dashboard-set-file-icons . t)
   (dashboard-center-content . t)
+  (dashboard-vertically-center-content . t)
   (dashboard-items . '((recents . 10)
                        (projects . 5)))
   (initial-buffer-choice . (lambda nil
-           (get-buffer "*dashboard*")))
+                             (get-buffer "*dashboard*")))
   :config
   (dashboard-setup-startup-hook))
-
-(add-to-list 'auto-mode-alist '("\\*dashboard*\\'" . dashboard-mode))  
 #+end_src
 
 *** which-key
@@ -202,7 +202,7 @@
 #+begin_src emacs-lisp :lexical no :results silent
 (setq dired-listing-switches "-lha")
 #+end_src
- 
+
 * theme
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf doom-themes
@@ -282,7 +282,7 @@
 * indent:
 ** タブ幅をスペース2つ分にする
 #+begin_src emacs-lisp :lexical no :results silent
-(setq-default tab-width 2)  
+(setq-default tab-width 2)
 #+end_src
 ** タブ文字ではなくスペースを使う
 #+begin_src emacs-lisp :lexical no :results silent
@@ -530,7 +530,7 @@
   ;;   :init
   ;;   (all-the-icons-ivy-rich-mode 1)
   ;;   :require t)
-  
+
   (leaf all-the-icons-dired
     :doc "Adds dired support to all-the-icons"
     :ensure t
@@ -641,6 +641,7 @@
   (add-to-list 'company-backends '(company-sourcekit))
   (leaf company-sourcekit
     :ensure t
+    :if (eq system-type 'darwin)
     :url "https://github.com/nathankot/company-sourcekit"
     :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"
     :doc "First install SourceKittenDaemon. Make sure that it's in the exec-path of your Emacs.")
@@ -675,8 +676,10 @@
   :hook ((ruby-mode-hook . lsp))
   :require lsp-mode
   :setq ((lsp-solargraph-use-bundler . t)))
-#+end_src
 
+(leaf ruby-mode
+  :mode "Fastfile$" "Gymfile$")
+#+end_src
 
 ** Dockerfile
 #+begin_src emacs-lisp :lexical no :results silent
@@ -857,9 +860,11 @@
                '("swiftui" . swift)))
 #+end_src
 
-* projectile:
+* projectile
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf projectile
+  :doc "Project Interaction Library for Emacs"
+  :url "https://github.com/bbatsov/projectile"
   :ensure t
   :blackout t
   :custom
@@ -869,7 +874,7 @@
   :config
   (leaf projectile-rails
     :ensure t)
-  (projectile-mode +1)
+  :global-minor-mode projectile-mode
   :bind ((projectile-mode-map
           ("s-p" . projectile-command-map))))
 #+end_src
@@ -913,7 +918,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 
 * keybind
 #+begin_src emacs-lisp :lexical no :results silent
-(global-set-key "\C-h" 'delete-backward-char)  
+(global-set-key "\C-h" 'delete-backward-char)
 ;; alias of "M-g M-g"
 (global-set-key "\M-g" 'goto-line)
 (global-set-key (kbd "s-/") 'comment-line)
