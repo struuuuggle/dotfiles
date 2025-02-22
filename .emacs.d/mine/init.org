@@ -218,9 +218,32 @@
   :blackout t)
  #+end_src
 ** dired
-*** human-readable file sizes
 #+begin_src emacs-lisp :lexical no :results silent
-(setq dired-listing-switches "-lha")
+(leaf dired
+  :tag "builtin"
+  :preface
+  (defun struuuuggle/setup-dired nil
+    "Hide permissions"
+    (dired-hide-details-mode 1))
+  :hook (dired-mode-hook . struuuuggle/setup-dired)
+  :custom
+  ;; human-readable file sizes
+  ;; (dired-listing-switches . "-lha")
+  ;; Automatically revert Dired buffers on revisiting their directory.
+  (dired-auto-revert-buffer . t)
+  ;; Make dired always use the same buffer
+  (dired-kill-when-opening-new-dired-buffer . t))
+#+end_src
+** dired-sidebar
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf dired-sidebar
+  :ensure t
+  :commands dired-sidebar-toggle-sidebar
+  :bind
+  ("s-1" . dired-sidebar-toggle-sidebar)
+  :custom
+  (dired-sidebar-use-custom-modeline . nil)
+  (dired-sidebar-use-custom-font . t))
 #+end_src
 
 * theme
@@ -232,6 +255,7 @@
   (doom-themes-org-config)
   (custom-set-faces
    `(default									((t :background ,(doom-color 'base1))))
+   `(dired-directory					((t :foreground ,(doom-color 'cyan))))
    `(line-number							((t :foreground ,(doom-color 'grey))))
    `(line-number-current-line ((t :foreground ,(doom-color 'green))))
    `(mode-line								((t :background ,(doom-color 'base3))))
@@ -564,7 +588,7 @@
   (leaf all-the-icons-dired
     :doc "Adds dired support to all-the-icons"
     :ensure t
-    :hook ((dired-mode-hook . all-the-icons-dired-mode))))
+    :hook (dired-mode-hook . all-the-icons-dired-mode)))
 #+end_src
 
 * lsp
@@ -973,6 +997,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-{") (lambda () (interactive) (other-window -1)))
 (global-set-key (kbd "s-}") (lambda () (interactive) (other-window 1)))
 (global-set-key (kbd "s-t") 'vterm-toggle)
+(global-set-key (kbd "s-w") ' kill-current-buffer)
 #+end_src
 
 * deinit
