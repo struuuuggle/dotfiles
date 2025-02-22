@@ -689,8 +689,8 @@
 
 * org-mode:
 #+begin_src emacs-lisp :lexical no :results silent
-
-(leaf org-mode
+(leaf org
+  :tag "builtin"
   :defvar org-inline-image-overlays
   :defun (org-redisplay-inline-images)
   :hook
@@ -721,8 +721,7 @@
                                 (swift . t)
                                 (haskell . t)
                                 (python . t)
-                                (ruby . t)
-                                (emacs-lisp . t)))
+                                (ruby . t)))
   ;; コードブロック実行前に確認を求めない
   (org-confirm-babel-evaluate . nil)
   ;; 行を折り返す
@@ -734,6 +733,29 @@
   (org-todo-keywords . '((sequence "TODO" "DOING" "|" "DONE")))
   ;; ファイルの場所
   (org-directory . "~/Documents/Org/")
+  :bind
+  ;; org-mode
+  ;; (global-set-key (kbd "C-c p") 'org-preview-html-mode)
+  ;; memo.orgを開く
+  ("C-c m" . (lambda ()
+               (interactive)
+               (show-org-buffer "memo.org"))))
+
+(defun show-org-buffer (file)
+  "Show an org-file FILE on the current buffer."
+  (interactive)
+  (if (get-buffer file)
+      (let ((buffer (get-buffer file)))
+        (switch-to-buffer buffer)
+        (message "%s" file))
+    (find-file (concat "~/Documents/Org/" file))))
+#+end_src
+
+** org-capture
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf org-capture
+  :tag "builtin"
+  :custom
   ;; Org-captureのテンプレート
   ;;
   ;; Template expansion
@@ -747,32 +769,9 @@
   ;; %i: リージョンがアクティブな状態でcaptureが呼び出されたときに、挿入されるリージョン
   (org-capture-templates .
                            '(("m" "💡 Memo" entry (file+datetree "~/Documents/Org/memo.org")
-                            "* %?\nEntered on %U\n  %i\n  ")
-                           ("j" "🗓  Journal entry" entry (function org-journal-find-location)
-                            "* TODO %^{Title}\n%i%?")))
-  (org-journal-file-header . "#+OPTIONS: ^:nil\n")
+                            "* %?\nEntered on %U\n  %i\n  ")))
   :bind
-  ;; org-mode
-  ;; (global-set-key (kbd "C-c p") 'org-preview-html-mode)
-  ;; Org-captureを呼び出す
-  ("C-c c" . 'org-capture)
-  ;; Org-agendaを呼び出す
-  ("C-c a" . 'org-agenda)
-  ;; memo.orgを開く
-  ("C-c m" . (lambda ()
-               (interactive)
-               (show-org-buffer "memo.org")))
-  ("C-c j" . 'org-journal-new-entry))
-
-
-(defun show-org-buffer (file)
-  "Show an org-file FILE on the current buffer."
-  (interactive)
-  (if (get-buffer file)
-      (let ((buffer (get-buffer file)))
-        (switch-to-buffer buffer)
-        (message "%s" file))
-    (find-file (concat "~/Documents/Org/" file))))
+  ("C-c c" . 'org-capture))
 #+end_src
 
 ** rich UI
@@ -808,26 +807,27 @@
                      (company-mode 1))))
 #+end_src
 
-** org-pomodoro
+** org-agenda
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-pomodoro
-  :ensure t)
+(leaf org-agenda
+  :tag "builtin"
+  :custom
+  ;; (org-agenda-files . '("~/Documents/Org/agenda.org"))
+  (org-agenda-diary-file . "~/Documents/Org/agenda.org")
+  :bind
+  ("C-c a" . 'org-agenda))
 #+end_src
-** org-modeのテーブル縦線を揃える
-#+begin_src emacs-lisp :lexical no :results silent
-(leaf valign
-:ensure t
-:hook org-mode-hook)
-#+end_src
-
-** journal
+** org-journal
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf org-journal
   :doc "A simple org-mode based journaling mode"
   :ensure t
   :custom
   (org-journal-dir . "~/Documents/Org/journal")
-  (org-journal-date-format . "%Y-%m-%d"))
+  (org-journal-date-format . "%Y-%m-%d")
+  (org-journal-file-header . "#+OPTIONS: ^:nil\n")
+  :bind
+  ("C-c j" . 'org-journal-new-entry))
 
 (defun org-journal-find-location ()
   "Quoted from `https://www.mhatta.org/wp/2019/02/25/org-mode-101-8/`."
@@ -860,6 +860,17 @@
                '("swiftui" . swift)))
 #+end_src
 
+** org-pomodoro
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf org-pomodoro
+  :ensure t)
+#+end_src
+** org-modeのテーブル縦線を揃える
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf valign
+:ensure t
+:hook org-mode-hook)
+#+end_src
 * projectile
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf projectile
