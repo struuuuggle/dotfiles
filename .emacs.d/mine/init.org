@@ -26,6 +26,14 @@
 #+end_src
 
 * faces:
+** window
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf window
+  :tag "builtin"
+  :custom
+  ;; 左右に並びやすくする
+  (split-width-threshold . 60))
+#+end_src
 ** beacon
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf beacon
@@ -84,11 +92,18 @@
 #+end_src
 
 ** line-number
-#+begin_src emacs-lisp :lexical no
+#+begin_src emacs-lisp :lexical no :results silent
 (leaf display-line-numbers
   :blackout t
+  :global-minor-mode global-display-line-numbers-mode
   :config
-  (global-display-line-numbers-mode t))
+  (dolist (mode '(dired-mode-hook
+                  dired-sidebar-mode-hook
+                  magit-mode-hook
+                  vterm-mode-hook))
+    (add-hook mode
+              (lambda nil
+                (display-line-numbers-mode -1)))))
 #+end_src
 
 * config:
@@ -112,6 +127,11 @@
 **  "y" or "n" instead of "yes" or "no"
 #+begin_src emacs-lisp :lexical no :results silent
 (setq use-short-answers t)
+#+end_src
+
+** Do not delete files actually
+#+begin_src emacs-lisp :lexical no :results silent
+(setq delete-by-moving-to-trash t)
 #+end_src
 
 ** history関連
@@ -459,12 +479,14 @@
   :bind
   ("C-x g" . magit-status)
   :defvar magit-display-buffer-function
-  :defun magit-display-buffer-fullframe-status-v1
+  :defun
+  (magit-display-buffer-fullframe-status-v1 magit-disable-section-inserter)
   :config
   ;; disable "--force" option
   (transient-remove-suffix 'magit-push "-F")
   ;; see also: https://magit.vc/manual/magit/Performance.html#Refs-Buffer-Performance-1
   (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
+  (magit-disable-section-inserter 'magit-insert-tags-header)
   :custom
   (magit-revision-insert-related-refs . nil)
   (magit-display-buffer-function . #'magit-display-buffer-fullframe-status-v1))
@@ -491,6 +513,14 @@
 ;; (setq auto-revert-check-vc-info t)
 #+end_src
 
+** ediff
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf ediff
+  :tag "builtin"
+  :custom
+  ;; Split WINDOW-TO-SPLIT into two side-by-side windows.
+  (ediff-split-window-function . 'split-window-horizontally))
+#+end_src
 * font:
 #+begin_src emacs-lisp :lexical no :results silent
 ;; 表示確認用:
@@ -828,11 +858,6 @@
   (org-journal-file-header . "#+OPTIONS: ^:nil\n")
   :bind
   ("C-c j" . 'org-journal-new-entry))
-
-(defun org-journal-find-location ()
-  "Quoted from `https://www.mhatta.org/wp/2019/02/25/org-mode-101-8/`."
-  (org-journal-new-entry t)
-  (goto-char (point-min)))
 #+end_src
 
 ** org-babel
