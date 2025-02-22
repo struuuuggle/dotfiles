@@ -26,6 +26,7 @@ tramp
 transient/
 var/
 request/
+.yas-compiled-snippets.el
 
 # karabiner
 automatic_backups/

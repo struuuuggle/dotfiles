@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: code-block
+# key: ```
+# condition: (string-equal "init.org" (file-name-nondirectory (buffer-file-name)))
+# --
+#+begin_src emacs-lisp :lexical no :results silent
+$0
+#+end_src
