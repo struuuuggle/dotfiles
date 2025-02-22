@@ -26,14 +26,6 @@
 #+end_src
 
 * faces:
-** window
-#+begin_src emacs-lisp :lexical no :results silent
-(leaf window
-  :tag "builtin"
-  :custom
-  ;; 左右に並びやすくする
-  (split-width-threshold . 60))
-#+end_src
 ** beacon
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf beacon
@@ -444,12 +436,17 @@
   :ensure t
   :defvar ivy-posframe-display-functions-alist ivy-posframe-parameters
   :setq
-  (ivy-posframe-display-functions-alist quote ((t . ivy-posframe-display)))
+  ;; (ivy-posframe-display-functions-alist quote ((t . ivy-posframe-display)))
   (ivy-posframe-parameters . '((internal-border-width . 10)))
   :config
   (setq ivy-posframe-parameters
       '((left-fringe . 8)
         (right-fringe . 8)))
+  (setq ivy-posframe-display-functions-alist
+      '((swiper							. ivy-display-function-fallback)
+        (counsel-M-x				. ivy-posframe-display-at-frame-center)
+        (counsel-recentf		. ivy-posframe-display-at-frame-center)
+        (t									. ivy-posframe-display)))
   :global-minor-mode ivy-posframe-mode)
 #+end_src
 ** prescient
@@ -1007,7 +1004,6 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf vterm
   :ensure t
-  :hook (vterm-mode-hook . (lambda () (display-line-numbers-mode -1)))
   :defun (send-backspace vterm-send-key)
   :preface
   (defun send-backspace nil
@@ -1056,7 +1052,9 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-{") (lambda () (interactive) (other-window -1)))
 (global-set-key (kbd "s-}") (lambda () (interactive) (other-window 1)))
 (global-set-key (kbd "s-t") 'vterm-toggle)
-(global-set-key (kbd "s-w") ' kill-current-buffer)
+(global-set-key (kbd "s-w") 'kill-current-buffer)
+(global-set-key (kbd "s-z") 'undo)
+(global-set-key (kbd "s-Z") 'undo-redo)
 #+end_src
 
 * deinit
