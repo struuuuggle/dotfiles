@@ -316,5 +316,7 @@ fi
 # emacs-vterm-zshの中で定義しているchpwdを上書きする
 chpwd () { ls -a; print -Pn "\e]2;%m\a" }
 
-# 環境依存の設定を読み込む
-[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+# # 環境依存の設定を読み込む
+if [ -f ~/.zshrc.local ]; then
+   source ~/.zshrc.local
+fi
