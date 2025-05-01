@@ -330,6 +330,7 @@
 ** GUIのみindent-guidesを有効化
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf highlight-indent-guides
+  :ensure t
   :if (window-system)
   :blackout
   :hook
