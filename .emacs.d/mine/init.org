@@ -879,8 +879,7 @@
 (leaf org-agenda
   :tag "builtin"
   :custom
-  (org-agenda-files . '("~/Documents/Org/"
-                        "~/Documents/Org/journal/"))
+  (org-agenda-files . '("~/Documents/Org/"))
   (calendar-holidays . nil)
   (org-agenda-format-date . "%+4Y/%0m/%0d (%a)")
   :bind
