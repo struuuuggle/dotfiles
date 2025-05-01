@@ -734,6 +734,12 @@
   :mode "Fastfile$" "Gymfile$")
 #+end_src
 
+** Kotlin
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf kotlin-mode
+  :ensure t)
+#+end_src
+
 ** Dockerfile
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf dockerfile-mode
