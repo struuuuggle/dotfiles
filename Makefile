@@ -2,12 +2,15 @@ SHELL := /bin/zsh
 
 COMMON_FLAGS := -euo pipefail
 
-.PHONY: flag git zsh bash vim misc source brew zsh-autosuggestions
+.PHONY: flag brwe git zsh bash vim misc source zsh-autosuggestions
 
-all: flag git zsh bash vim misc source brew zsh-autosuggestions
+all: flag brew git zsh bash vim misc source zsh-autosuggestions
 
 flag:
 	set $(COMMON_FLAGS)
+
+brew: flag
+	bin/brew.sh
 
 git: flag
 	$(call make_symlink, $(realpath git/.gitconfig))
@@ -31,9 +34,6 @@ emacs: flag
 
 source: flag
 	source ~/.zshenv && source ~/.zshrc
-
-brew: flag
-	bin/brew.sh
 
 zsh-autosuggestions: flag zsh
 	bin/zsh-autosuggestions.sh
