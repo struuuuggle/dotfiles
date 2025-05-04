@@ -22,9 +22,6 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(ns-transparent-titlebar . t) default-frame-alist)
 (push '(vertical-scroll-bars . nil) default-frame-alist)
-;; No Titlebar
-;; https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#emacs-29-1
-;; (add-to-list 'default-frame-alist '(undecorated-round . t))
 
 ;; 直接編集画面へ遷移する
 (setq inhibit-splash-screen t)
