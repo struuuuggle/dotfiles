@@ -5,6 +5,12 @@
 
 ;;; Code:
 
+;; workaround:
+;; https://github.com/d12frosted/homebrew-emacs-plus/issues/733
+(let ((shell-path (string-trim (shell-command-to-string "echo $PATH"))))
+  (setenv "PATH" shell-path)
+  (setq exec-path (split-string shell-path path-separator)))
+
 ;; 起動処理中にGCを走らせない
 ;; init.elの最後でもとに戻す必要がある
 (setq gc-cons-threshold most-positive-fixnum)
