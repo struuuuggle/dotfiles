@@ -878,6 +878,7 @@
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf org-agenda
   :tag "builtin"
+  :if (eq system-type 'gnu/linux)
   :custom
   (org-agenda-files . '("~/Documents/Org/"))
   (calendar-holidays . nil)
