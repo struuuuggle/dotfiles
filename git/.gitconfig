@@ -27,3 +27,5 @@
 	enabled = true
 [include]
 	path = ~/.gitconfig.local
+[fetch]
+	auto = true
