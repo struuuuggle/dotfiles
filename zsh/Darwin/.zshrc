@@ -173,6 +173,7 @@ alias gr='git restore'
 alias grs='git restore --staged'
 alias gp='git push origin $(git branch --contains=HEAD | cut -d" " -f2-)'
 alias c='(){git switch -c $1}'
+alias cc='claude'
 alias gdhead="git diff origin/$(git config init.defaultBranch)...HEAD"
 
 # Xcode
@@ -186,7 +187,7 @@ alias -g C='| pbcopy'
 alias jq='jq -C'
 
 # ag
-alias ag='ag --stats --pager "less -F"'
+alias ag='ag --pager "less -F"'
 
 # Rails
 alias r='bin/rails'
@@ -314,9 +315,12 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]] \
 fi
 
 # emacs-vterm-zshの中で定義しているchpwdを上書きする
-chpwd () { ls -a; print -Pn "\e]2;%m\a" }
+chpwd () { ls -a; print -Pn "\e]2;%2~\a" }
 
-# # 環境依存の設定を読み込む
-if [ -f ~/.zshrc.local ]; then
-   source ~/.zshrc.local
+# 環境依存の設定を読み込む
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
+
+# gwq
+if command -v gwq 1>/dev/null 2>&1; then
+    source <(gwq completion zsh)
 fi

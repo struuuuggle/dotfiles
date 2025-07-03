@@ -67,8 +67,6 @@ path=(
     $HOME/.local/bin(N-/)
     # Rust
     $HOME/.cargo/bin(N-/)
-    # Go
-    /usr/local/go/bin(N-/)
     # 雑用スクリプト
     $HOME/.local/bin(N-/)
     # Homebrew's sbin
