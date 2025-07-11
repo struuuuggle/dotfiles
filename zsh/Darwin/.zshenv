@@ -41,8 +41,6 @@ fi
 export MINT_PATH="$HOME/.mint"
 export MINT_LINK_PATH="$MINT_PATH/bin"
 
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/zulu-16.jdk/Contents/Home"
-
 export GOPATH="$HOME/go"
 
 export OPENSSL_ROOT=$(brew --prefix openssl)
@@ -52,7 +50,6 @@ export PKG_CONFIG_PATH="$OPENSSL_ROOT/lib/pkgconfig"
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$OPENSSL_ROOT"
 
 path=(
-    # $JAVA_HOME/bin(N-/)
     # X11
     /usr/X11/bin(N-/)
     # GNU
