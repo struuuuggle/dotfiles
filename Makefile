@@ -22,8 +22,8 @@ zsh: flag
 	@ln -sf $(realpath zsh/$(shell uname)/.zshrc) ~
 
 bash: flag
-	@ln -sf $(realpath bash/.bash_profile) ~
-	@ln -sf $(realpath bash/.bashrc) ~
+	@ln -sf $(realpath bash/$(shell uname)/.bashrc) ~
+	@ln -sf $(realpath bash/$(shell uname)/.bash_profile) ~
 
 vim: flag
 	@ln -sf $(realpath vim/.vimrc) ~
