@@ -9,9 +9,6 @@ all: flag brew git zsh bash vim misc source zsh-autosuggestions
 flag:
 	@set $(COMMON_FLAGS)
 
-brew: flag
-	bin/brew.sh
-
 git: flag
 	@ln -sf $(realpath git/.gitconfig) ~
 	@if [ -f git/.gitconfig.local ]; then \
