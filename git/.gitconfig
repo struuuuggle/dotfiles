@@ -3,6 +3,10 @@
 	email = struuuuggle@gmail.com
 [core]
 	editor = emacsclient -nw
+  # Enable parallel index preload for operations
+  preloadIndex = true
+  # Windows and macOS only
+  fsmonitor = true
 [color]
 	ui = true
 [pager]
