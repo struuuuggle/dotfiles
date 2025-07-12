@@ -85,6 +85,10 @@
   :blackout t
   :global-minor-mode global-display-line-numbers-mode
   :config
+  (set-face-attribute 'line-number nil
+                      :height 0.7)
+  (set-face-attribute 'line-number-current-line nil
+                      :height 0.7)
   (dolist (mode '(dired-mode-hook
                   dired-sidebar-mode-hook
                   magit-mode-hook
