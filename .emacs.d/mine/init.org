@@ -1,3 +1,9 @@
+* Header
+#+begin_src emacs-lisp :lexical no :results silent
+;;; -*- lexical-binding: t -*-
+
+#+end_src
+
 * leaf.el
 #+begin_src emacs-lisp :lexical no :results silent
 (eval-and-compile
