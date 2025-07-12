@@ -98,6 +98,14 @@
                 (display-line-numbers-mode -1)))))
 #+end_src
 
+** tab-bar-mode
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf tab-bar-mode
+  :tag "builtin"
+  :hook (after-init-hook)
+  :custom
+  (tab-bar-new-tab-choice . "*dashboard*"))
+#+end_src
 * config:
 ** Not to report warnings and errors from asynchronous native compilation.
 #+begin_src emacs-lisp :lexical no :results silent
@@ -249,17 +257,19 @@
   (load-theme 'doom-dracula t)
   (doom-themes-org-config)
   (custom-set-faces
-   `(default									((t :background ,(doom-color 'base1))))
-   `(dired-directory					((t :foreground ,(doom-color 'cyan))))
-   `(line-number							((t :foreground ,(doom-color 'grey))))
-   `(line-number-current-line ((t :foreground ,(doom-color 'green))))
-   `(mode-line								((t :background ,(doom-color 'base3))))
+   `(default				((t :background ,(doom-color 'base1))))
+   `(dired-directory			((t :foreground ,(doom-color 'cyan))))
+   `(line-number			((t :foreground ,(doom-color 'grey))))
+   `(line-number-current-line 	((t :foreground ,(doom-color 'green))))
+   `(mode-line			((t :background ,(doom-color 'base3))))
    `(font-lock-comment-face		((t :foreground ,(doom-color 'doc-comments))))
-   `(org-block-begin-line			((t :background ,(doom-color 'base2) :foreground ,(doom-color 'doc-comments))))
-   `(org-block								((t :background ,(doom-color 'base2) :foreground ,(doom-color 'fg-alt))))
-   `(org-block-end-line				((t :background ,(doom-color 'base2))))
-   `(ivy-posframe							((t :background ,(doom-color 'base2))))
-   `(ivy-posframe-border			((t :background ,(doom-color 'green)))))
+   `(org-block-begin-line		((t :background ,(doom-color 'base2) :foreground ,(doom-color 'doc-comments))))
+   `(org-block			((t :background ,(doom-color 'base2) :foreground ,(doom-color 'fg-alt))))
+   `(org-block-end-line		((t :background ,(doom-color 'base2))))
+   `(ivy-posframe			((t :background ,(doom-color 'base2))))
+   `(ivy-posframe-border		((t :background ,(doom-color 'green))))
+   `(tab-bar-tab			((t :background ,(doom-color 'base6) :foreground ,(doom-color 'bg-alt) :weight bold))) ;; active tab
+   `(tab-bar-tab-inactive		((t :background ,(doom-color 'base1)))))
   (set-face-foreground 'vertical-border (doom-color 'base5))
   (set-cursor-color (doom-color 'green))
   :custom
@@ -275,6 +285,8 @@
   :if (window-system)
   :custom
   (doom-modeline-icon . t)
+  (doom-modeline-project-detection . nil)
+  (doom-modeline-workspace-name . nil)
   (doom-modeline-height . 30)
   (doom-modeline-buffer-file-name-style 'truncate-nil)
   (doom-modeline-buffer-encoding . nil))
@@ -512,8 +524,15 @@
   ;; disable "--force" option
   (transient-remove-suffix 'magit-push "-F")
   ;; see also: https://magit.vc/manual/magit/Performance.html#Refs-Buffer-Performance-1
-  (remove-hook 'magit-refs-sections-hook 'magit-insert-tags)
-  (magit-disable-section-inserter 'magit-insert-tags-header)
+  (remove-hook 'magit-status-sections-hook 'magit-insert-tags-header)
+  (defun magit-pr-review (&optional range)
+    "Review a Pull Request by diffing against the default branch.
+If RANGE is not provided, defaults to `origin/main...HEAD`."
+    (interactive
+     (let* ((default "origin/main...HEAD")
+            (input (read-string (format "Diff range (%s): " default))))
+       (list (if (string-empty-p input) default input))))
+    (magit-diff-range range))
   :custom
   (magit-revision-insert-related-refs . nil)
   (magit-display-buffer-function . #'magit-display-buffer-fullframe-status-v1))
@@ -983,7 +1002,12 @@
   :blackout t
   :defun projectile-project-name
   :custom
-  (projectile-switch-project-action . 'magit-status)
+  (projectile-switch-project-action
+   . (lambda ()
+       (let ((tab-bar-new-tab-choice nil)) ;; 一時的に dashboard 起動を抑制
+         (tab-new))
+       (tab-bar-rename-tab (projectile-project-name))
+       (magit-status)))
   (projectile-project-search-path . '("~/sandbox/" ("~/ghq/" . 3)))
   (projectile-completion-system . 'ivy)
   :config
@@ -1054,6 +1078,8 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-w") 'kill-current-buffer)
 (global-set-key (kbd "s-z") 'undo)
 (global-set-key (kbd "s-Z") 'undo-redo)
+(global-set-key (kbd "s-{") 'tab-bar-switch-to-prev-tab)
+(global-set-key (kbd "s-}") 'tab-bar-switch-to-next-tab)
 #+end_src
 
 * deinit
