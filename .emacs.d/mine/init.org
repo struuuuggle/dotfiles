@@ -144,6 +144,8 @@
 
 (leaf files
   :tag "builtin"
+  :hook
+  (before-save-hook . delete-trailing-whitespace)
   :custom
   (make-backup-files . nil)
   (backup-inhibited . nil))
