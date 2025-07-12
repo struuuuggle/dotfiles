@@ -211,6 +211,7 @@
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf dired
   :tag "builtin"
+  :defun dired-hide-details-mode
   :preface
   (defun struuuuggle/setup-dired nil
     "Hide permissions"
@@ -304,6 +305,7 @@
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf ace-window
   :ensure t
+  :after ivy-posframe
   :custom
   (aw-keys . '(?j ?k ?h ?l ?a ?s ?d ?f ?g))
   (aw-ignore-current . t)
@@ -431,6 +433,7 @@
 ** ivy-postframe
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf ivy-posframe
+  :when window-system
   :ensure t
   :defvar ivy-posframe-display-functions-alist ivy-posframe-parameters
   :setq
@@ -653,32 +656,6 @@
     ("s-b" . smart-jump-go)
     ("M-," . smart-jump-back)))
 #+end_src
-
-** lsp-sourcekit
-#+begin_src emacs-lisp :lexical no :results silent
-(leaf lsp-sourcekit
-  :url "https://github.com/emacs-lsp/lsp-sourcekit"
-  :require t
-  :ensure t
-  :if
-  (= 0 (call-process "which" nil nil nil "xcrun"))
-  :after eglot-mode
-  :defvar xcode-path
-  :init
-  (defvar xcode-path (string-trim (shell-command-to-string "xcode-select --print-path")))
-  :custom
-  ;; configure the package to point to the sourcekit-lsp executable
-  `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
-  (lsp-sourcekit-extra-args . `("-Xswiftc"
-                                "-sdk"
-                                "-Xswiftc"
-                                ,(concat xcode-path "/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk")
-                                "-Xswiftc"
-                                "-target"
-                                "-Xswiftc"
-                                "arm64-apple-ios-simulator")))
-#+end_src
-
 * languages:
 ** Swift
 #+begin_src emacs-lisp :lexical no :results silent
@@ -686,17 +663,30 @@
   :require t
   :ensure t
   :hook (swift-mode-hook . flycheck-swift3-setup)
-  :defvar company-backends
   :config
-  (add-to-list 'company-backends '(company-sourcekit))
-  (leaf company-sourcekit
-    :ensure t
-    :if (eq system-type 'darwin)
-    :url "https://github.com/nathankot/company-sourcekit"
-    :doc "Completion for Swift projects via SourceKit with the help of SourceKitten"
-    :doc "First install SourceKittenDaemon. Make sure that it's in the exec-path of your Emacs.")
   (leaf flycheck-swift3
-    :ensure t))
+    :ensure t)
+  (leaf lsp-sourcekit
+    :url "https://github.com/emacs-lsp/lsp-sourcekit"
+    :require t
+    :ensure t
+    :if
+    (= 0 (call-process "which" nil nil nil "xcrun"))
+    :after eglot-mode
+    :defvar xcode-path
+    :init
+    (defvar xcode-path (string-trim (shell-command-to-string "xcode-select --print-path")))
+    :custom
+    ;; configure the package to point to the sourcekit-lsp executable
+    `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
+    (lsp-sourcekit-extra-args . `("-Xswiftc"
+                                  "-sdk"
+                                  "-Xswiftc"
+                                  ,(concat xcode-path "/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneOS.sdk")
+                                  "-Xswiftc"
+                                  "-target"
+                                  "-Xswiftc"
+                                  "arm64-apple-ios18.2-simulator"))))
 #+end_src
 
 ** json
@@ -748,7 +738,7 @@
 (leaf org
   :tag "builtin"
   :defvar org-inline-image-overlays
-  :defun (org-redisplay-inline-images)
+  :defun org-redisplay-inline-images org-todo org-get-todo-state
   :hook
   ;; org-inline-image-overlays
   ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
@@ -885,7 +875,7 @@
 
 (leaf org-super-agenda
   :ensure t
-  :global-minor-mode org-super-agenda-mode
+  :hook (org-mode-hook . org-super-agenda-mode)
   :custom
   ;; https://github.com/alphapapa/org-super-agenda/blob/master/examples.org#zaen323
   (org-agenda-time-grid quote
@@ -957,7 +947,7 @@
   :require t
   :doc "Evaluate SwiftUI snippets using Emacs org babel."
   :url "https://github.com/xenodium/ob-swiftui"
-  :defvar org-babel-tangle-lang-exts org-babel-load-languages org-src-lang-modes
+  :defvar org-edit-src-content-indentation org-babel-tangle-lang-exts org-babel-load-languages org-src-lang-modes
   :after ob-tangle
   :config
   (setq org-edit-src-content-indentation 0)
@@ -987,6 +977,7 @@
   :url "https://github.com/bbatsov/projectile"
   :ensure t
   :blackout t
+  :defun projectile-project-name
   :custom
   (projectile-switch-project-action . 'magit-status)
   (projectile-project-search-path . '("~/sandbox/" ("~/ghq/" . 3)))
