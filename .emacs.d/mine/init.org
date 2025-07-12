@@ -1054,7 +1054,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
   :url "https://github.com/joaotavora/yasnippet"
   :doc "A template system for Emacs"
   :ensure t
-  :global-minor-mode yas-global-mode)
+  :hook (prog-mode-hook . yas-minor-mode))
 #+end_src
 
 * tramp
