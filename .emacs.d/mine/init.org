@@ -26,17 +26,6 @@
 #+end_src
 
 * faces:
-** beacon
-#+begin_src emacs-lisp :lexical no :results silent
-(leaf beacon
-  :ensure t
-  :if (window-system)
-  :blackout t
-  :custom
-  (beacon-color . "#62f992")
-  :global-minor-mode beacon-mode)
-#+end_src
-
 ** dashboard
 #+begin_src emacs-lisp :lexical no :results silent
 (leaf dashboard
