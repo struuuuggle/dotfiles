@@ -1011,6 +1011,12 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   (projectile-project-search-path . '("~/sandbox/" ("~/ghq/" . 3)))
   (projectile-completion-system . 'ivy)
   :config
+  (leaf ag
+    :if (executable-find "ag")
+    :ensure t
+    :custom
+    (ag-reuse-buffers . t)
+    (ag-highlight-search . t))
   (leaf projectile-rails
     :ensure t)
   :global-minor-mode projectile-mode
