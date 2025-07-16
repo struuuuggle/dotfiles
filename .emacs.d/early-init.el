@@ -27,6 +27,9 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Implied-Frame-Resizing.html
+(setq frame-inhibit-implied-resize t)
+
 ;; Use plists for deserialization
 ;; https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
 (setenv "LSP_USE_PLISTS" "true")

@@ -1,7 +1,7 @@
 * Header
 #+begin_src emacs-lisp :lexical no :results silent
 ;;; -*- lexical-binding: t -*-
-
+(setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
 * leaf.el
@@ -85,10 +85,6 @@
   :blackout t
   :global-minor-mode global-display-line-numbers-mode
   :config
-  (set-face-attribute 'line-number nil
-                      :height 0.7)
-  (set-face-attribute 'line-number-current-line nil
-                      :height 0.7)
   (dolist (mode '(dired-mode-hook
                   dired-sidebar-mode-hook
                   magit-mode-hook
@@ -259,8 +255,8 @@
   (custom-set-faces
    `(default				((t :background ,(doom-color 'base1))))
    `(dired-directory			((t :foreground ,(doom-color 'cyan))))
-   `(line-number			((t :foreground ,(doom-color 'grey))))
-   `(line-number-current-line 	((t :foreground ,(doom-color 'green))))
+   `(line-number			((t :height 0.7 :foreground ,(doom-color 'grey))))
+   `(line-number-current-line 	((t :height 0.7 :foreground ,(doom-color 'green))))
    `(mode-line			((t :background ,(doom-color 'base3))))
    `(font-lock-comment-face		((t :foreground ,(doom-color 'doc-comments))))
    `(org-block-begin-line		((t :background ,(doom-color 'base2) :foreground ,(doom-color 'doc-comments))))
@@ -282,12 +278,14 @@
 (leaf doom-modeline
   :ensure t
   :hook (after-init-hook)
-  :if (window-system)
+  :defvar doom-modeline-icon
+  :config
+  (setq doom-modeline-icon (window-system))
   :custom
-  (doom-modeline-icon . t)
   (doom-modeline-project-detection . nil)
   (doom-modeline-workspace-name . nil)
-  (doom-modeline-height . 30)
+  (doom-modeline-percent-position . nil)
+  (doom-modeline-vcs-max-length . 45) ;; default: 15
   (doom-modeline-buffer-file-name-style 'truncate-nil)
   (doom-modeline-buffer-encoding . nil))
 #+end_src
@@ -547,9 +545,9 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   (git-gutter:added-sign    . " ")
   (git-gutter:deleted-sign  . " ")
   :custom-face
-  (git-gutter:modified . '((t (:background "#ffb86c"))))
-  (git-gutter:added    . '((t (:background "#50fa7b"))))
-  (git-gutter:deleted  . '((t (:background "#ff79c6"))))
+  `(git-gutter:modified	. '((t (:background ,(doom-color 'yellow)))))
+  `(git-gutter:added	. '((t (:background ,(doom-color 'green)))))
+  `(git-gutter:deleted	. '((t (:background ,(doom-color 'magenta)))))
   :global-minor-mode global-git-gutter-mode)
 
 ;; シンボリックリンクの読み込みを許可
@@ -573,10 +571,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 ;; 0123456789012345678901234567890123456789
 ;; 一二三四五六一二三四五六一二三四五六一二三四五六
 
-(leaf cus-font
-  :config
-  (set-frame-font "-*-Fira Code-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
-  (set-fontset-font t 'japanese-jisx0208 "-*-Noto Sans-normal-normal-normal-*-16-*-*-*-p-0-fontset-auto4"))
+(set-face-attribute 'default nil :family "Fira Code" :weight 'light :height 140)
 
 (leaf fira-code-mode
   :when window-system
@@ -585,6 +580,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :ensure t
   :config
   (global-fira-code-mode)
+  (fira-code-mode-set-font)
   :custom
   (fira-code-mode-disabled-ligatures '("[]" "x"))
   (fira-code-mode-enable-hex-literal . nil)
@@ -599,14 +595,11 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :require t
   :ensure t
   :config
-  ;; opt out it because there's a problem with native-comp
-  ;;
-  ;; (leaf all-the-icons-ivy-rich
-  ;;   :ensure t
-  ;;   :init
-  ;;   (all-the-icons-ivy-rich-mode 1)
-  ;;   :require t)
-
+  (leaf all-the-icons-ivy-rich
+    :ensure t
+    :init
+    (all-the-icons-ivy-rich-mode 1)
+    :require t)
   (leaf all-the-icons-dired
     :doc "Adds dired support to all-the-icons"
     :ensure t
@@ -633,6 +626,10 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   (swift-mode-hook . lsp)
   (ruby-mode-hook . lsp)
   (elisp-mode-hook . lsp)
+  (sh-mode-hook . lsp)
+  :defvar lsp-disabled-clients
+  :setq
+  (lsp-disabled-clients quote (rubocop-ls ruby-ls))
   :config
   (leaf lsp-ui
     :require t
@@ -651,7 +648,8 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
           (lsp-ui-doc-show))))
     :bind
     (:lsp-mode-map
-     ("C-j" . struuuuggle/toggle-lsp-ui-doc))
+     ("C-j" . struuuuggle/toggle-lsp-ui-doc)
+     ("M-RET" . lsp-execute-code-action))
     ("M-s-0" . imenu-list-smart-toggle)
     :custom
     ;; lsp-ui-doc
@@ -770,14 +768,14 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 
 ** Ruby
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf leaf-convert
-  :defvar lsp-solargraph-use-bundler
-  :hook ((ruby-mode-hook . lsp))
-  :require lsp-mode
-  :setq ((lsp-solargraph-use-bundler . t)))
+;; (leaf leaf-convert
+;;   :defvar lsp-solargraph-use-bundler
+;;   :hook ((ruby-mode-hook . lsp))
+;;   :require lsp-mode
+;;   :setq ((lsp-solargraph-use-bundler . t)))
 
 (leaf ruby-mode
-  :mode "Fastfile$" "Gymfile$")
+  :mode "Fastfile$" "Gymfile$" "Dangerfile")
 #+end_src
 
 ** Kotlin
@@ -791,6 +789,14 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 (leaf dockerfile-mode
   :ensure t)
 #+end_src
+** sh
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf flymake-shellcheck
+  :ensure t
+  :commands flymake-shellcheck-load
+  :hook ((sh-mode-hook . flymake-shellcheck-load)))
+#+end_src
+
 
 * org-mode:
 #+begin_src emacs-lisp :lexical no :results silent
@@ -1056,8 +1062,10 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   (leaf projectile-rails
     :ensure t)
   :global-minor-mode projectile-mode
-  :bind ((projectile-mode-map
-          ("s-p" . projectile-command-map))))
+  :bind
+  (projectile-mode-map
+   ("s-p" . projectile-command-map)
+   ("s-O" . projectile-find-file)))
 #+end_src
 
 * shell
@@ -1096,7 +1104,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
   :url "https://github.com/joaotavora/yasnippet"
   :doc "A template system for Emacs"
   :ensure t
-  :hook (prog-mode-hook . yas-minor-mode))
+  :hook ((prog-mode-hook org-mode-hook) . yas-minor-mode))
 #+end_src
 
 * tramp
