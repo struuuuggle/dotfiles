@@ -27,5 +27,9 @@
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 
+;; Use plists for deserialization
+;; https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
+(setenv "LSP_USE_PLISTS" "true")
+
 (provide 'early-init)
 ;;; early-init.el ends here
