@@ -271,27 +271,6 @@ gb() {
       | xargs git switch
 }
 
-ff() {
-    local file=$(ag -g . | fzf --preview "bat --color always {}" --preview-window up | xargs echo)
-    e $file
-}
-
-fe() {
-  local files
-  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
-  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
-}
-
-fkill() {
-  local pid
-  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-
-  if [ "x$pid" != "x" ]
-  then
-    echo $pid | xargs kill -${1:-9}
-  fi
-}
-
 ghpr() {
     GH_FORCE_TTY=100% gh pr list \
         | fzf +m --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window up --header-lines 3 \
@@ -324,3 +303,7 @@ chpwd () { ls -a; print -Pn "\e]2;%2~\a" }
 if command -v gwq 1>/dev/null 2>&1; then
     source <(gwq completion zsh)
 fi
+
+# fzf
+# https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
+source <(fzf --zsh)
