@@ -195,19 +195,6 @@ alias r='bin/rails'
 ########################################
 # function
 
-select-history() {
-    # historyを番号なし、逆順、最初から表示。
-    # 順番を保持して重複を削除。
-    # カーソルの左側の文字列をクエリにしてfzfを起動
-    # \nを改行に変換
-    BUFFER="$(history -nr 1 | awk '!a[$0]++' | fzf +m --no-sort --reverse -e --query "$LBUFFER" | sed 's/\\n/\n/')"
-    CURSOR=$#BUFFER             # カーソルを文末に移動
-    # zle -R -c                   # refresh
-    zsh -R
-}
-zle -N select-history
-bindkey '^R' select-history
-
 # emacs daemonが起動していなければ、ホームディレクトリで`emacs --daemon`を実行する
 estart() {
   if ! emacsclient -e 0 > /dev/null 2>&1; then
