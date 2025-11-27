@@ -1,53 +1,57 @@
 SHELL := /bin/zsh
 
-COMMON_FLAGS := -euo pipefail
+.SHELLFLAGS := -euo pipefail -c
+.DEFAULT_GOAL := help
 
-.PHONY: flag brwe git zsh bash vim misc source zsh-autosuggestions
+.PHONY: help
 
-all: flag brew git zsh bash vim misc source zsh-autosuggestions
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
 
-flag:
-	@set $(COMMON_FLAGS)
+symlink: ## Create symbolic links(git, zsh, bash, vim, emacs)
 
-git: flag
-	@ln -sf $(realpath git/.gitconfig) ~
+	ln -sf $(realpath git/.gitconfig) ~
 	@if [ -f git/.gitconfig.local ]; then \
 		ln -sf $(realpath git/.gitconfig.local) ~; \
 	fi
-	@git config --file ~/.gitconfig.local core.excludesfile $(realpath git/.gitignore_global)
-	@git config --file ~/.gitconfig.local commit.template $(realpath git/.commit_template)
+	git config --file ~/.gitconfig.local core.excludesfile $(realpath git/.gitignore_global)
+	git config --file ~/.gitconfig.local commit.template $(realpath git/.commit_template)
 
-zsh: flag
-	@ln -sf $(realpath zsh/$(shell uname)/.zshenv) ~
-	@ln -sf $(realpath zsh/$(shell uname)/.zshrc) ~
+	@if [ -f zsh/$(shell uname)/.zshenv ]; then \
+		ln -sf $(realpath zsh/$(shell uname)/.zshenv) ~; \
+	fi
+	@if [ -f zsh/$(shell uname)/.zshrc ]; then \
+		ln -sf $(realpath zsh/$(shell uname)/.zshrc) ~; \
+	fi
 
-bash: flag
-	@ln -sf $(realpath bash/$(shell uname)/.bashrc) ~
-	@ln -sf $(realpath bash/$(shell uname)/.bash_profile) ~
+	@if [ -f bash/$(shell uname)/.bashrc ]; then \
+		ln -sf $(realpath bash/$(shell uname)/.bashrc) ~; \
+	fi
+	@if [ -f bash/$(shell uname)/.bash_profile ]; then \
+		ln -sf $(realpath bash/$(shell uname)/.bash_profile) ~; \
+	fi
 
-vim: flag
-	@ln -sf $(realpath vim/.vimrc) ~
+	ln -sf $(realpath vim/.vimrc) ~
 
-emacs: flag
-	@ln -sf $(realpath .emacs.d) ~
+	ln -sf $(realpath .emacs.d) ~
 
-source: flag
-	@source ~/.zshenv && source ~/.zshrc
-
-brew: flag
+brew: ## Set up HomeBrew
 	@if [[ `uname` == "Darwin" ]]; then \
-		if ! which brew >/dev/null 2>&1 ; then \
-			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
+		@if ! which brew >/dev/null 2>&1 ; then \
+			/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 		fi; \
 		brew bundle --file Brewfile; \
 	fi
 
-zsh-autosuggestions: flag zsh
+zsh-autosuggestions: ## Set up zsh-autosuggestions
 	@if [ ! -d ~/.zsh/zsh-autosuggestions ]; then \
-			git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions; \
+		git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions; \
 	fi
-	@source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-compile:
+compile-emacs: ## Compile init.el(s)
 	@emacs --batch -l .emacs.d/init.el
 	@emacs --batch -f batch-byte-compile-if-not-done .emacs.d/early-init.el .emacs.d/init.el .emacs.d/mine/init.el
+
+reinstall-emacs: ## Reinstall emacs via homebrew-emacs-plus
+	brew uninstall emacs-plus
+	brew install emacs-plus --with-imagemagick --with-xwidgets
