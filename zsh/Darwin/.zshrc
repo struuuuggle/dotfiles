@@ -195,31 +195,6 @@ alias r='bin/rails'
 ########################################
 # function
 
-#fgとbgを完全に無視したC-p
-#https://qiita.com/aosho235/items/83e338989b901b99fe35
-_up-line-or-history-ignoring() {
-    zle up-line-or-history
-    case "$BUFFER" in
-        fg|bg)
-            zle up-line-or-history
-            ;;
-    esac
-}
-zle -N _up-line-or-history-ignoring
-bindkey '^P' _up-line-or-history-ignoring
-
-#同様にfgとbgを完全に無視したC-n
-_down-line-or-history-ignoring() {
-    zle down-line-or-history
-    case "$BUFFER" in
-        fg|bg)
-            zle down-line-or-history
-            ;;
-    esac
-}
-zle -N _down-line-or-history-ignoring
-bindkey '^N' _down-line-or-history-ignoring
-
 select-history() {
     # historyを番号なし、逆順、最初から表示。
     # 順番を保持して重複を削除。
