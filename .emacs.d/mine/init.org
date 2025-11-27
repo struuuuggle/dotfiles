@@ -257,7 +257,8 @@
    `(dired-directory			((t :foreground ,(doom-color 'cyan))))
    `(line-number			((t :height 0.7 :foreground ,(doom-color 'grey))))
    `(line-number-current-line 	((t :height 0.7 :foreground ,(doom-color 'green))))
-   `(mode-line			((t :background ,(doom-color 'base3))))
+   `(mode-line			((t :background ,(doom-blend (doom-color 'green) (doom-color 'bg) 0.3) :foreground ,(doom-color 'fg))))
+   ;; `(mode-line-inactive		((t :background ,(doom-color 'base))))
    `(font-lock-comment-face		((t :foreground ,(doom-color 'doc-comments))))
    `(org-block-begin-line		((t :background ,(doom-color 'base2) :foreground ,(doom-color 'doc-comments))))
    `(org-block			((t :background ,(doom-color 'base2) :foreground ,(doom-color 'fg-alt))))
@@ -313,6 +314,18 @@
   (interactive)
   (set-frame-parameter nil 'alpha (if (< (if (frame-parameter nil 'alpha) (frame-parameter nil 'alpha) 0) 100) 100 85)))
 (global-set-key (kbd "s-u") 'struuuuggle/toggle-opacity)
+#+end_src
+
+** カーソル行ハイライト
+#+begin_src emacs-lisp :lexical no :results silent
+(leaf hl-line
+  :tag "builtin"
+  :global-minor-mode global-hl-line-mode
+  :custom-face
+  `(hl-line . '((t (:background ,(doom-blend (doom-color 'green) (doom-color 'bg) 0.15)))))
+  :config
+  (set-face-attribute 'hl-line nil
+                      :background (doom-blend (doom-color 'green) (doom-color 'bg) 0.15)))
 #+end_src
 
 * window
@@ -830,6 +843,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   ;; org-babelに使用できる言語を追加する
   (org-babel-load-languages . '((shell . t)
                                 (swift . t)
+                                (kotlin . t)
                                 (haskell . t)
                                 (python . t)
                                 (ruby . t)))
@@ -995,6 +1009,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   (org-journal-dir . "~/Documents/Org/journal")
   (org-journal-date-format . "%Y-%m-%d.org")
   (org-journal-file-header . "#+OPTIONS: ^:nil\n")
+  (org-journal-time-prefix . "** TODO ")
   :bind
   ("C-c j" . 'org-journal-new-entry))
 #+end_src
@@ -1022,6 +1037,9 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                '((swiftui . t)))
   (add-to-list 'org-src-lang-modes
                '("swiftui" . swift)))
+
+(leaf ob-kotlin
+  :ensure t)
 #+end_src
 
 ** org-pomodoro
@@ -1088,6 +1106,8 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
   (vterm-kill-buffer-on-exit . t)
   (vterm-buffer-name-string . "vterm: %s")
   (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o" "M-x"))
+  ;; Emacs終了時にvtermプロセスの確認を求めない
+  (confirm-kill-processes . nil)
   :config
   (leaf vterm-toggle
     :ensure t
