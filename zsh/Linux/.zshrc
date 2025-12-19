@@ -147,10 +147,11 @@ alias du='du -h'
 alias grep='grep --color=always'
 alias ls='ls --color=always'
 
-# Editor
+# Emacs
 alias e='emacsclient -nw -a ""'
 alias ee='emacs &'
 alias ekill='emacsclient -e "(kill-emacs)"'
+alias magit='emacs -e "(magit)"'
 
 # git
 alias gs='git status'

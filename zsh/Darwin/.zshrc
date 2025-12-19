@@ -151,10 +151,11 @@ alias grep='ggrep --color=always'
 alias ls='gls --color=always'
 alias sed='gsed'
 
-# Editor
+# Emacs
 alias e='emacsclient -nw -a ""'
 alias ee='emacs &'
 alias ekill='emacsclient -e "(kill-emacs)"'
+alias magit='emacs -e "(magit)"'
 
 # git
 alias gs='git status'
