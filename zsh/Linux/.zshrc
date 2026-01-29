@@ -238,3 +238,6 @@ estart() {
   fi
 }
 estart
+
+# codex
+eval "$(codex completion zsh)"

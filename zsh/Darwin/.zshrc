@@ -270,3 +270,6 @@ fi
 # fzf
 # https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
 source <(fzf --zsh)
+
+# codex
+eval "$(codex completion zsh)"
