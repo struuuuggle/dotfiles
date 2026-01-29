@@ -1,1 +1,9 @@
-# Ghostty config
+theme = Dracula
+font-family = "FiraCode Nerd Font Mono Ret"
+macos-option-as-alt = true
+macos-titlebar-style = tabs
+# Emacs -nw: map Cmd+P to Super+P (s-p) via C-x @ s.
+keybind = super+p=text:\x18@sp
+# Emacs -nw: map Cmd+Shift+[ or ] to Super+[ / Super+] via C-x @ s.
+keybind = super+shift+left_bracket=text:\x18@s[
+keybind = super+shift+right_bracket=text:\x18@s]
