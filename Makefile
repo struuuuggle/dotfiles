@@ -35,6 +35,11 @@ symlink: ## Create symbolic links(git, zsh, bash, vim, emacs)
 
 	ln -sf $(realpath .emacs.d) ~
 
+	@if [[ `uname` == "Darwin" ]]; then \
+		mkdir -p "$$HOME/Library/Application Support/com.mitchellh.ghostty"; \
+		ln -sf $(realpath ghostty/config) "$$HOME/Library/Application Support/com.mitchellh.ghostty/config"; \
+	fi
+
 brew: ## Set up HomeBrew
 	@if [[ `uname` == "Darwin" ]]; then \
 		@if ! which brew >/dev/null 2>&1 ; then \
