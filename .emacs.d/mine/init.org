@@ -281,7 +281,7 @@
   :hook (after-init-hook)
   :defvar doom-modeline-icon
   :config
-  (setq doom-modeline-icon (window-system))
+  (setq doom-modeline-icon t)
   :custom
   (doom-modeline-project-detection . nil)
   (doom-modeline-workspace-name . nil)
@@ -292,19 +292,11 @@
 #+end_src
 
 ** CUI
+Use a box-drawing glyph for vertical splits in terminal Emacs.
 #+begin_src emacs-lisp :lexical no :results silent
-(when (not window-system)
-  ;; linum
-  (set-face-attribute 'line-number nil
-                      :foreground "#999999")
-  ;; background
-  (set-face-background 'region "#565A6D")
-  ;; comment & doc (see also 'font-lock-string-face)
-  (set-face-foreground 'font-lock-comment-face "#8292c4")
-  (set-face-foreground 'font-lock-doc-face "#8292c4")
-  ;; 背景色をターミナルのそれに合わせる
-  ;; `printf "\x1b]11;?\x1b\\"`を実行することでターミナルの背景色を取得できる
-  (set-face-background 'default "2F23318C3FD1"))
+(when (not (display-graphic-p))
+  (setq standard-display-table (or standard-display-table (make-display-table)))
+  (set-display-table-slot standard-display-table 'vertical-border ?\u2502))
 #+end_src
 
 ** toggle opacity
@@ -1068,9 +1060,13 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
          (tab-new))
        (tab-bar-rename-tab (projectile-project-name))
        (magit-status)))
-  (projectile-project-search-path . '("~/sandbox/" ("~/ghq/" . 3)))
+  (projectile-verbose . nil)
   (projectile-completion-system . 'ivy)
   :config
+  (defvar projectile-project-search-path)
+  (if noninteractive
+      (setq projectile-project-search-path nil)
+    (setq projectile-project-search-path '("~/sandbox/" ("~/ghq/" . 3))))
   (leaf ag
     :if (executable-find "ag")
     :ensure t
@@ -1148,6 +1144,8 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-w") 'kill-current-buffer)
 (global-set-key (kbd "s-z") 'undo)
 (global-set-key (kbd "s-Z") 'undo-redo)
+(global-set-key (kbd "s-[") 'tab-bar-switch-to-prev-tab)
+(global-set-key (kbd "s-]") 'tab-bar-switch-to-next-tab)
 (global-set-key (kbd "s-{") 'tab-bar-switch-to-prev-tab)
 (global-set-key (kbd "s-}") 'tab-bar-switch-to-next-tab)
 #+end_src
