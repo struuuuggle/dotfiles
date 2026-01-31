@@ -97,8 +97,9 @@ typeset -U path cdpath fpath manpath
 
 export BAT_THEME="Dracula"
 
+# Keep background colors unset in theme customizations.
 # https://draculatheme.com/fzfk
-export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 --color=fg+:#f8f8f2,bg+:#44475a,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
+export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,hl:#bd93f9 --color=fg+:#f8f8f2,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
 export FZF_CTRL_R_OPTS="--with-nth=2.."
 
 if command -v gh 1>/dev/null 2>&1; then
