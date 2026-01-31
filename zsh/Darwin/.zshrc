@@ -12,6 +12,20 @@ fi
 autoload -Uz colors
 colors
 
+# less
+export LESS='-I -M -R -j.5'
+export LESSOPEN="|/opt/homebrew/bin/lesspipe.sh %s"
+export LESSHISTFILE='/dev/null'
+# see `man terminfo`
+export LESS_TERMCAP_mb=$(tput bold)
+export LESS_TERMCAP_md=$(tput bold; tput setaf 4) # fg: blue
+export LESS_TERMCAP_me=$(tput sgr0)
+export LESS_TERMCAP_se=$(tput sgr0)
+export LESS_TERMCAP_so=$(tput bold; tput setab 7; tput setaf 0) # bg: white, fg: black
+export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
+export LESS_TERMCAP_us=$(tput smul; tput setaf 2) # green
+export PAGER=less
+
 # emacs 風キーバインドにする
 bindkey -e
 
@@ -30,6 +44,18 @@ local p_mark="%B%(?,%F{green},%F{red})%(!,#,$)%f%b"
 # 2行表示
 PROMPT='$p_dir $vcs_info_msg_0_
 $p_mark '
+
+# Theme & tools
+export BAT_THEME="Dracula"
+
+# Keep background colors unset in theme customizations.
+# https://draculatheme.com/fzfk
+export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,hl:#bd93f9 --color=fg+:#f8f8f2,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
+export FZF_CTRL_R_OPTS="--with-nth=2.."
+
+if command -v gh 1>/dev/null 2>&1; then
+   eval "$(gh copilot alias -- zsh)"
+fi
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
