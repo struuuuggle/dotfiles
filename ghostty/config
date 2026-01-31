@@ -7,3 +7,13 @@ keybind = super+p=text:\x18@sp
 # Emacs -nw: map Cmd+Shift+[ or ] to Super+[ / Super+] via C-x @ s.
 keybind = super+shift+left_bracket=text:\x18@s[
 keybind = super+shift+right_bracket=text:\x18@s]
+# Hide tab shortcut labels by unbinding default Cmd+1..9 goto-tab keybinds.
+keybind = cmd+1=unbind
+keybind = cmd+2=unbind
+keybind = cmd+3=unbind
+keybind = cmd+4=unbind
+keybind = cmd+5=unbind
+keybind = cmd+6=unbind
+keybind = cmd+7=unbind
+keybind = cmd+8=unbind
+keybind = cmd+9=unbind
