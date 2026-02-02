@@ -1092,5 +1092,10 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 
 * deinit
 #+begin_src emacs-lisp :lexical no :results silent
-(setq gc-cons-threshold 16777216) ; 16MB
+(defun my/reset-gc-threshold ()
+  "Restore GC settings after startup."
+  (setq gc-cons-threshold 16777216
+        gc-cons-percentage 0.1)
+  (garbage-collect))
+(add-hook 'emacs-startup-hook #'my/reset-gc-threshold)
 #+end_src
