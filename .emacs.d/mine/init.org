@@ -528,9 +528,8 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :if window-system
   :blackout t
   :ensure t
-  :config
-  (global-fira-code-mode)
-  (fira-code-mode-set-font)
+  :hook ((after-init . global-fira-code-mode)
+         (after-init . fira-code-mode-set-font))
   :custom
   (fira-code-mode-disabled-ligatures '("[]" "x"))
   (fira-code-mode-enable-hex-literal nil)
@@ -541,17 +540,20 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package all-the-icons
   :if (display-graphic-p)
-  :demand t
+  :defer t
   :ensure t
-  :config
-  (use-package all-the-icons-ivy-rich
-    :ensure t
-    :init
-    (all-the-icons-ivy-rich-mode 1)
-    :demand t)
-  (use-package all-the-icons-dired
-    :ensure t
-    :hook (dired-mode . all-the-icons-dired-mode)))
+  )
+
+(use-package all-the-icons-ivy-rich
+  :if (display-graphic-p)
+  :ensure t
+  :after (ivy all-the-icons)
+  :hook (ivy-mode . all-the-icons-ivy-rich-mode))
+
+(use-package all-the-icons-dired
+  :if (display-graphic-p)
+  :ensure t
+  :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
 * lsp
