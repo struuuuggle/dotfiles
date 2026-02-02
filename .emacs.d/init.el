@@ -20,16 +20,27 @@
   (require 'org)
   (org-babel-tangle-file my-config-org my-config-el))
 
-(when (and (file-exists-p my-config-org)
-           (file-exists-p my-config-el)
-           (file-newer-than-file-p my-config-org my-config-el))
-  (message "init.org is newer than init.el; run M-x my/tangle-init-org to update."))
+(defun my/load-init-config ()
+  "Load pre-tangled init.el/init.elc, or fall back to init.org."
+  (cond
+   ((or (file-exists-p my-config-el) (file-exists-p my-config-elc))
+    (when (and (file-exists-p my-config-org)
+               (file-exists-p my-config-el)
+               (file-newer-than-file-p my-config-org my-config-el))
+      (message "init.org is newer than init.el; run M-x my/tangle-init-org to update."))
+    (let ((config-to-load (if (and (file-exists-p my-config-elc)
+                                   (or (not (file-exists-p my-config-el))
+                                       (file-newer-than-file-p my-config-elc my-config-el)))
+                              my-config-elc
+                            my-config-el)))
+      (load config-to-load nil 'nomessage)))
+   ((file-exists-p my-config-org)
+    (require 'org)
+    (org-babel-load-file my-config-org))
+   (t
+    (message "No init.org/init.el found in %s" my-config-dir))))
 
-(let ((config-to-load (if (and (file-exists-p my-config-elc)
-                               (file-newer-than-file-p my-config-elc my-config-el))
-                          my-config-elc
-                        my-config-el)))
-  (load config-to-load nil 'nomessage))
+(my/load-init-config)
 
 ; (profiler-report)
 ; (profiler-stop)
