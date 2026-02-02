@@ -163,7 +163,7 @@
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
 (use-package autorevert
-  :custom (auto-revert-interval 0.1)
+  :custom (auto-revert-interval 1.0)
   :hook (after-init . global-auto-revert-mode))
 
 (use-package delsel
