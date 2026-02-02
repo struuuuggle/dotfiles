@@ -67,9 +67,9 @@ TRAPWINCH() { _set_delta_features_by_width }
 export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,hl:#bd93f9 --color=fg+:#f8f8f2,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
 export FZF_CTRL_R_OPTS="--with-nth=2.."
 
-if command -v gh 1>/dev/null 2>&1; then
-   eval "$(gh copilot alias -- zsh)"
-fi
+# if command -v gh 1>/dev/null 2>&1; then
+#    eval "$(gh copilot alias -- zsh)"
+# fi
 
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
@@ -243,10 +243,9 @@ estart() {
       cd
       emacs --daemon
       cd -
-    } > /dev/null 2>&1 & )
+    } > /dev/null 2>&1 )
   fi
 }
-estart
 
 ghq-list() {
   REPOSITORY_PATH="$(ghq list | fzf +m --reverse -e)"
@@ -286,7 +285,7 @@ ghpr() {
 
 # zsh-autosuggestions
 # https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Emacs - vterm
 # https://github.com/akermu/emacs-libvterm?tab=readme-ov-file#shell-side-configuration-files
@@ -309,7 +308,11 @@ fi
 
 # fzf
 # https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
-source <(fzf --zsh)
+if command -v fzf 1>/dev/null 2>&1; then
+    source <(fzf --zsh)
+fi
 
 # codex
-eval "$(codex completion zsh)"
+if command -v codex 1>/dev/null 2>&1; then
+    eval "$(codex completion zsh)"
+fi
