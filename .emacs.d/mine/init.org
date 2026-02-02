@@ -46,8 +46,9 @@
   (dashboard-items '((agenda . 10)
                        (projects . 5)
                        (recents . 5)))
-  (initial-buffer-choice (lambda nil
-                             (get-buffer "*dashboard*"))))
+  (initial-buffer-choice (lambda ()
+                           (or (get-buffer "*dashboard*")
+                               (get-buffer-create "*scratch*")))))
 #+end_src
 
 *** which-key
