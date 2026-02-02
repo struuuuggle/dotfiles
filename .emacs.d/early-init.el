@@ -7,9 +7,24 @@
 
 ;; workaround:
 ;; https://github.com/d12frosted/homebrew-emacs-plus/issues/733
-(let ((shell-path (string-trim (shell-command-to-string "echo $PATH"))))
-  (setenv "PATH" shell-path)
-  (setq exec-path (split-string shell-path path-separator)))
+(let* ((cache-file (locate-user-emacs-file ".cache/exec-path"))
+       (cached-path (when (file-exists-p cache-file)
+                      (with-temp-buffer
+                        (insert-file-contents cache-file)
+                        (buffer-string))))
+       (shell-path (if (and cached-path (> (length cached-path) 0))
+                       cached-path
+                     (replace-regexp-in-string
+                      "[ \t\n\r]+\\'" ""
+                      (shell-command-to-string "echo $PATH")))))
+  (when (and (not (file-exists-p cache-file))
+             (> (length shell-path) 0))
+    (make-directory (file-name-directory cache-file) t)
+    (with-temp-file cache-file
+      (insert shell-path)))
+  (when (> (length shell-path) 0)
+    (setenv "PATH" shell-path)
+    (setq exec-path (split-string shell-path path-separator))))
 
 ;; 起動処理中にGCを走らせない
 ;; init.elの最後でもとに戻す必要がある
@@ -17,6 +32,9 @@
 
 ;; Emacsの起動時にパッケージを自動的に読み込まない
 (setq package-enable-at-startup nil)
+;; Prefer quickstart cache when available.
+(defvar package-quickstart)
+(setq package-quickstart t)
 
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
