@@ -58,5 +58,7 @@ compile-emacs: ## Compile init.el(s)
 	@emacs --batch -f batch-byte-compile-if-not-done .emacs.d/early-init.el .emacs.d/init.el .emacs.d/mine/init.el
 
 reinstall-emacs: ## Reinstall emacs via homebrew-emacs-plus
-	brew uninstall emacs-plus
-	brew install emacs-plus --with-imagemagick --with-xwidgets
+	@brew list --formula emacs-plus >/dev/null 2>&1 && brew uninstall emacs-plus || true
+	@if [[ -e /Applications/Emacs.app ]]; then rm -rf /Applications/Emacs.app; fi
+	@if [[ -e /Applications/Emacs\ Client.app ]]; then rm -rf /Applications/Emacs\ Client.app; fi
+	brew install --cask emacs-plus-app
