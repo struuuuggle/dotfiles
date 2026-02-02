@@ -1,7 +1,15 @@
 theme = Dracula
+
 font-family = "FiraCode Nerd Font Mono Ret"
+
+cursor-style = block
+cursor-color = green
+
+split-divider-color = gray
+
 macos-option-as-alt = true
 macos-titlebar-style = tabs
+
 # Emacs -nw: map Cmd+P to Super+P (s-p) via C-x @ s.
 keybind = super+p=text:\x18@sp
 # Emacs -nw: map Cmd+Shift+[ or ] to Super+[ / Super+] via C-x @ s.
