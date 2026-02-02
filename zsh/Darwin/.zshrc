@@ -65,8 +65,15 @@ TRAPWINCH() { _set_delta_features_by_width }
 export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
 # Keep background colors unset in theme customizations.
 # https://draculatheme.com/fzfk
-export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,hl:#bd93f9 --color=fg+:#f8f8f2,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
+export FZF_DEFAULT_OPTS='
+  --color=fg:#f8f8f2,hl:#bd93f9
+  --color=fg+:#f8f8f2,hl+:#bd93f9
+  --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6
+  --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'
+export FZF_COMPLETION_PATH_OPTS="--preview 'bat --style=-numbers --color=always {}'"
 export FZF_CTRL_R_OPTS="--with-nth=2.."
+export FZF_CTRL_T_OPTS="$FZF_COMPLETION_PATH_OPTS"
+export FZF_ALT_C_OPTS="--preview 'tree -C {}'"
 
 # if command -v gh 1>/dev/null 2>&1; then
 #    eval "$(gh copilot alias -- zsh)"
@@ -249,7 +256,7 @@ estart() {
 }
 
 ghq-list() {
-  REPOSITORY_PATH="$(ghq list | fzf +m --reverse -e)"
+  REPOSITORY_PATH="$(ghq list | fzf +m -e --reverse --preview 'bat --style=-numbers --color=always $(ghq root)/{}/README*')"
   if [ -z $REPOSITORY_PATH ]; then
     zle send-break
   fi
@@ -270,7 +277,7 @@ gb() {
   git branch -a --sort=-authordate \
       | cut -c 3- \
       | grep -v origin \
-      | fzf \
+      | fzf --height=50% \
       | xargs git switch
 }
 
