@@ -48,6 +48,20 @@ $p_mark '
 # Theme & tools
 export BAT_THEME="Dracula"
 
+# delta: use side-by-side when terminal is wide enough
+_set_delta_features_by_width() {
+    local min_columns=160
+    local -a feature_list
+    feature_list=(${=DELTA_FEATURES})
+    feature_list=(${feature_list:#side-by-side})
+    if [[ -n ${COLUMNS-} && $COLUMNS -ge $min_columns ]]; then
+        feature_list+=(side-by-side)
+    fi
+    export DELTA_FEATURES="${(j: :)feature_list}"
+}
+_set_delta_features_by_width
+TRAPWINCH() { _set_delta_features_by_width }
+
 # Keep background colors unset in theme customizations.
 # https://draculatheme.com/fzfk
 export FZF_DEFAULT_OPTS='--color=fg:#f8f8f2,hl:#bd93f9 --color=fg+:#f8f8f2,hl+:#bd93f9 --color=info:#ffb86c,prompt:#50fa7b,pointer:#ff79c6 --color=marker:#ff79c6,spinner:#ffb86c,header:#6272a4'

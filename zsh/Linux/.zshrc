@@ -33,6 +33,20 @@ local p_mark="%B%(?,%F{green},%F{red})%(!,#,$)%f%b"
 PROMPT='$p_dir $vcs_info_msg_0_
 $p_mark '
 
+# delta: use side-by-side when terminal is wide enough
+_set_delta_features_by_width() {
+    local min_columns=160
+    local -a feature_list
+    feature_list=(${=DELTA_FEATURES})
+    feature_list=(${feature_list:#side-by-side})
+    if [[ -n ${COLUMNS-} && $COLUMNS -ge $min_columns ]]; then
+        feature_list+=(side-by-side)
+    fi
+    export DELTA_FEATURES="${(j: :)feature_list}"
+}
+_set_delta_features_by_width
+TRAPWINCH() { _set_delta_features_by_width }
+
 # 単語の区切り文字を指定する
 autoload -Uz select-word-style
 select-word-style default

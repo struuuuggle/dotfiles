@@ -3,10 +3,11 @@
 	email = struuuuggle@gmail.com
 [core]
 	editor = emacsclient -nw
-  # Enable parallel index preload for operations
-  preloadIndex = true
-  # Windows and macOS only
-  fsmonitor = true
+	# Enable parallel index preload for operations
+	preloadIndex = true
+	# Windows and macOS only
+	fsmonitor = true
+	pager = delta
 [color]
 	ui = true
 [pager]
@@ -27,6 +28,14 @@
 	renames = true
 [pager]
 	difftool = true
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	line-numbers = true
+	navigate = true
+	file-style = normal
+	file-decoration-style = ul
+	hunk-header-style = syntax
 [rerere]
 	enabled = true
 [include]
