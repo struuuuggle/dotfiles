@@ -4,7 +4,7 @@
 (setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
-* leaf.el
+* use-package
 #+begin_src emacs-lisp :lexical no :results silent
 (eval-and-compile
   (customize-set-variable
@@ -12,33 +12,25 @@
                        ("melpa" . "https://melpa.org/packages/")
                        ("gnu" . "https://elpa.gnu.org/packages/")))
   (package-initialize)
-  (unless (package-installed-p 'leaf)
+  (unless (package-installed-p 'use-package)
     (package-refresh-contents)
-    (package-install 'leaf))
+    (package-install 'use-package))
+  (require 'use-package))
 
-  (leaf leaf-keywords
-    :ensure t
-    :init
-    ;; optional packages if you want to use :hydra, :el-get, :blackout,,,
-    (leaf hydra :ensure t)
-    (leaf blackout :ensure t)
+(use-package hydra
+  :ensure t)
 
-    :config
-    ;; initialize leaf-keywords.el
-    (leaf-keywords-init)))
-
-(leaf leaf-tree :ensure t)
-(leaf leaf-convert :ensure t)
+(use-package blackout
+  :ensure t)
 #+end_src
 
 * faces:
 ** dashboard
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf dashboard
-  :url "https://github.com/emacs-dashboard/emacs-dashboard"
+(use-package dashboard
   :ensure t
-  :require t
-  :when (< (length command-line-args) 2)
+  :demand t
+  :if (< (length command-line-args) 2)
   :mode ("\\*dashboard*\\'" . dashboard-mode)
   :custom
   ;; Value can be
@@ -46,15 +38,15 @@
   ;; 'logo:     which displays an alternative emacs logo
   ;; 1, 2 or 3: which displays one of the text banners
   ;; "path/to/your/image.png" which displays whatever image you would prefer
-  (dashboard-startup-banner . 'logo)
-  (dashboard-set-heading-icons . t)
-  (dashboard-set-file-icons . t)
-  (dashboard-center-content . t)
-  (dashboard-vertically-center-content . t)
-  (dashboard-items . '((agenda . 10)
+  (dashboard-startup-banner 'logo)
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  (dashboard-center-content t)
+  (dashboard-vertically-center-content t)
+  (dashboard-items '((agenda . 10)
                        (projects . 5)
                        (recents . 5)))
-  (initial-buffer-choice . (lambda nil
+  (initial-buffer-choice (lambda nil
                              (get-buffer "*dashboard*")))
   :config
   (dashboard-setup-startup-hook))
@@ -62,29 +54,24 @@
 
 *** which-key
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf which-key
-    :doc "Emacs package that displays available keybindings in popup"
+(use-package which-key
     :ensure t
     :blackout t
-    :hook (after-init-hook)
-    :bind (which-key-mode-map
-           ("C-x TAB" . which-key-C-h-dispatch))
+    :hook (after-init . which-key-mode)
+    :bind (:map which-key-mode-map
+                ("C-x TAB" . which-key-C-h-dispatch))
     :custom
     ;; Set the time delay (in seconds) for the which-key popup to appear. A value of
     ;; zero might cause issues so a non-zero value is recommended.
-    (which-key-idle-delay . 0.3)
-    :config
-    ;; 画面幅に応じて右端または下部に表示
-    ;; (which-key-setup-side-window-right-bottom)
-    :global-minor-mode t)
+    (which-key-idle-delay 0.3))
 #+end_src
 
 ** line-number
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf display-line-numbers
+(use-package display-line-numbers
   :blackout t
-  :global-minor-mode global-display-line-numbers-mode
-  :config
+  :hook (after-init . global-display-line-numbers-mode)
+  :init
   (dolist (mode '(dired-mode-hook
                   dired-sidebar-mode-hook
                   magit-mode-hook
@@ -96,18 +83,18 @@
 
 ** tab-bar-mode
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf tab-bar-mode
-  :tag "builtin"
-  :hook (after-init-hook)
+(use-package tab-bar
+  :hook (after-init . tab-bar-mode)
   :custom
-  (tab-bar-new-tab-choice . "*dashboard*"))
+  (tab-bar-new-tab-choice "*dashboard*"))
 #+end_src
 * config:
 ** Not to report warnings and errors from asynchronous native compilation.
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf comp
-  :defvar native-comp-async-report-warnings-errors
-  :setq (native-comp-async-report-warnings-errors quote silent))
+(use-package comp
+  :init
+  (defvar native-comp-async-report-warnings-errors)
+  (setq native-comp-async-report-warnings-errors 'silent))
 #+end_src
 
 ** clickable URL
@@ -144,9 +131,11 @@
   #+end_src
 
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf convert
-  :defvar select-enable-clipboard auto-save-draft show-trailing-whitespace
-  :config
+(use-package emacs
+  :init
+  (defvar select-enable-clipboard)
+  (defvar auto-save-draft)
+  (defvar show-trailing-whitespace)
   (setq select-enable-clipboard t)
   (setq indent-tabs-mode nil)
   (setq scroll-bar-mode nil)
@@ -156,13 +145,11 @@
   (setq show-trailing-whitespace t)
   (setq process-adaptive-read-buffering t))
 
-(leaf files
-  :tag "builtin"
-  :hook
-  (before-save-hook . delete-trailing-whitespace)
+(use-package files
+  :hook (before-save-hook . delete-trailing-whitespace)
   :custom
-  (make-backup-files . nil)
-  (backup-inhibited . nil))
+  (make-backup-files nil)
+  (backup-inhibited nil))
 
 (when (and (memq window-system '(ns nil))
            (fboundp 'mac-get-current-input-source))
@@ -174,80 +161,66 @@
   (declare-function mac-input-method-mode "mac-input-method-mode")
   (mac-input-method-mode 1))
 
-(leaf cus-edit
-  :doc "tools for customizing Emacs and Lisp packages"
-  :tag "builtin" "faces" "help"
+(use-package cus-edit
   :custom `((custom-file . ,(locate-user-emacs-file "custom.el"))))
 
-(leaf autorevert
-  :doc "revert buffers when files on disk change"
-  :tag "builtin"
-  :custom ((auto-revert-interval . 0.1))
-  :global-minor-mode global-auto-revert-mode)
+(use-package autorevert
+  :custom (auto-revert-interval 0.1)
+  :hook (after-init . global-auto-revert-mode))
 
-(leaf delsel
-  :doc "delete selection if you insert"
-  :tag "builtin"
-  :global-minor-mode delete-selection-mode)
+(use-package delsel
+  :hook (after-init . delete-selection-mode))
 
-(leaf paren
-  :doc "highlight matching paren"
-  :tag "builtin"
-  :global-minor-mode show-paren-mode)
+(use-package paren
+  :hook (after-init . show-paren-mode))
 
-(leaf elec-pair
-  :tag "builtin"
-  :config
-  ;; When enabled, typing an open parenthesis automatically inserts the corresponding closing parenthesis, and vice versa.
-  (electric-pair-mode)
+(use-package elec-pair
+  :hook (after-init . electric-pair-mode)
   :custom
-  (electric-pair-delete-adjacent-pairs . t))
+  (electric-pair-delete-adjacent-pairs t))
 
-(leaf simple
-  :tag "builtin"
+(use-package simple
   :custom
   ;; do not show line numbers in the mode line
-  (line-number-mode . nil)
+  (line-number-mode nil)
   ;; do not show column numbers in the mode line
-  (column-number-mode . nil))
+  (column-number-mode nil))
 
-(leaf eldoc
-  :tag "builtin"
+(use-package eldoc
   :blackout t)
  #+end_src
 ** dired
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf dired
-  :tag "builtin"
-  :defun dired-hide-details-mode
+(use-package dired
   :preface
+  (declare-function dired-hide-details-mode "dired")
   (defun struuuuggle/setup-dired nil
     "Hide permissions"
     (dired-hide-details-mode 1))
-  :hook (dired-mode-hook . struuuuggle/setup-dired)
+  :hook (dired-mode . struuuuggle/setup-dired)
   :custom
   ;; human-readable file sizes
   ;; (dired-listing-switches . "-lha")
   ;; Automatically revert Dired buffers on revisiting their directory.
-  (dired-auto-revert-buffer . t)
+  (dired-auto-revert-buffer t)
   ;; Make dired always use the same buffer
-  (dired-kill-when-opening-new-dired-buffer . t))
+  (dired-kill-when-opening-new-dired-buffer t))
 #+end_src
 ** dired-sidebar
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf dired-sidebar
+(use-package dired-sidebar
   :ensure t
   :commands dired-sidebar-toggle-sidebar
   :bind
   ("s-1" . dired-sidebar-toggle-sidebar)
   :custom
-  (dired-sidebar-use-custom-modeline . nil)
-  (dired-sidebar-use-custom-font . t))
+  (dired-sidebar-use-custom-modeline nil)
+  (dired-sidebar-use-custom-font t))
 #+end_src
 
 * theme
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf doom-themes
+(use-package doom-themes
   :ensure t
   :config
   (load-theme 'doom-dracula t)
@@ -270,25 +243,26 @@
   (set-face-foreground 'vertical-border (doom-color 'base5))
   (set-cursor-color (doom-color 'green))
   :custom
-  (doom-themes-padded-modeline . t)
-  (doom-modeline-project-name . t))
+  (doom-themes-padded-modeline t)
+  (doom-modeline-project-name t))
 #+end_src
 
 ** mode-line
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf doom-modeline
+(use-package doom-modeline
   :ensure t
-  :hook (after-init-hook)
-  :defvar doom-modeline-icon
+  :hook (after-init . doom-modeline-mode)
+  :init
+  (defvar doom-modeline-icon)
   :config
   (setq doom-modeline-icon t)
   :custom
-  (doom-modeline-project-detection . nil)
-  (doom-modeline-workspace-name . nil)
-  (doom-modeline-percent-position . nil)
-  (doom-modeline-vcs-max-length . 45) ;; default: 15
+  (doom-modeline-project-detection nil)
+  (doom-modeline-workspace-name nil)
+  (doom-modeline-percent-position nil)
+  (doom-modeline-vcs-max-length 45) ;; default: 15
   (doom-modeline-buffer-file-name-style 'truncate-nil)
-  (doom-modeline-buffer-encoding . nil))
+  (doom-modeline-buffer-encoding nil))
 #+end_src
 
 ** CUI
@@ -310,11 +284,8 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
 
 ** カーソル行ハイライト
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf hl-line
-  :tag "builtin"
-  :global-minor-mode global-hl-line-mode
-  :custom-face
-  `(hl-line . '((t (:background ,(doom-blend (doom-color 'green) (doom-color 'bg) 0.15)))))
+(use-package hl-line
+  :hook (after-init . global-hl-line-mode)
   :config
   (set-face-attribute 'hl-line nil
                       :background (doom-blend (doom-color 'green) (doom-color 'bg) 0.15)))
@@ -322,16 +293,17 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
 
 * window
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf ace-window
+(use-package ace-window
   :ensure t
   :after ivy-posframe
   :custom
-  (aw-keys . '(?j ?k ?h ?l ?a ?s ?d ?f ?g))
-  (aw-ignore-current . t)
-  (aw-minibuffer-flag . nil)
+  (aw-keys '(?j ?k ?h ?l ?a ?s ?d ?f ?g))
+  (aw-ignore-current t)
+  (aw-minibuffer-flag nil)
   :bind ("C-o" . ace-window)
-  :custom-face (aw-leading-char-face . '((t (:height 4.0 :foreground "#999999"))))
-  :global-minor-mode ace-window-posframe-mode)
+  :config
+  (set-face-attribute 'aw-leading-char-face nil :height 4.0 :foreground "#999999")
+  (ace-window-posframe-mode 1))
 #+end_src
 
 * indent:
@@ -347,40 +319,38 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
 
 ** GUIのみindent-guidesを有効化
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf highlight-indent-guides
+(use-package highlight-indent-guides
   :ensure t
   :if (window-system)
-  :blackout
-  :hook
-  ((prog-mode yaml-mode) . highlight-indent-guides-mode)
+  :blackout t
+  :hook ((prog-mode . highlight-indent-guides-mode)
+         (yaml-mode . highlight-indent-guides-mode))
   :custom
-  (highlight-indent-guides-auto-enabled . t)
-  (highlight-indent-guides-responsive . t)
+  (highlight-indent-guides-auto-enabled t)
+  (highlight-indent-guides-responsive t)
   ;; column
-  (highlight-indent-guides-method . 'character))
+  (highlight-indent-guides-method 'character))
 #+end_src
 
 * flycheck:
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf flycheck
-  :doc "On-the-fly syntax checking"
-  :emacs>= 24.3
+(use-package flycheck
+  :if (version<= "24.3" emacs-version)
   :blackout t
   :ensure t
   :bind (("M-n" . flycheck-next-error)
          ("M-p" . flycheck-previous-error))
-  :custom ((flycheck-elisp-initialize-packages . t))
-  :hook (elisp-mode-hook lisp-interaction-mode-hook)
+  :custom (flycheck-elisp-initialize-packages t)
+  :hook ((elisp-mode . flycheck-mode)
+         (lisp-interaction-mode . flycheck-mode))
   :config
-  (leaf flycheck-package
-    :doc "A Flycheck checker for elisp package authors"
+  (use-package flycheck-package
     :ensure t
     :config
     (flycheck-package-setup))
 
-  (leaf flycheck-elsa
-    :doc "Flycheck for Elsa."
-    :emacs>= 25
+  (use-package flycheck-elsa
+    :if (version<= "25" emacs-version)
     :ensure t
     :config
     (flycheck-elsa-setup)))
@@ -390,74 +360,63 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
 
 * ivy:
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf ivy
-  :doc "Incremental Vertical completYon"
-  :req "emacs-24.5"
-  :tag "matching"
-  :url "https://github.com/abo-abo/swiper"
-  :emacs>= 24.5
+(use-package ivy
+  :if (version<= "24.5" emacs-version)
   :ensure t
   :blackout t
-  :leaf-defer nil
-  :custom ((ivy-initial-inputs-alist . nil)
-           (ivy-use-selectable-prompt . t)
-           (ivy-display-style . t)
-           (ivy-height-alist . '((t lambda (_caller) (/ (frame-height) 2))))
+  :demand t
+  :custom ((ivy-initial-inputs-alist nil)
+           (ivy-use-selectable-prompt t)
+           (ivy-display-style t)
+           (ivy-height-alist '((t lambda (_caller) (/ (frame-height) 2))))
            ;; 行が長いときは折り返す
-           (ivy-truncate-lines . nil)
+           (ivy-truncate-lines nil)
            ;; 最初と最後の候補を行き来できるようにする
-           (ivy-wrap . t))
-  :global-minor-mode t
+           (ivy-wrap t))
   :config
-  (leaf swiper
-    :doc "Isearch with an overview. Oh, man!"
-    :req "emacs-24.5" "ivy-0.13.0"
-    :tag "matching" "emacs>=24.5"
-    :url "https://github.com/abo-abo/swiper"
-    :emacs>= 24.5
+  (ivy-mode 1)
+  (use-package swiper
+    :if (version<= "24.5" emacs-version)
     :ensure t
+    :commands swiper-isearch-thing-at-point
     :bind (("C-s" . swiper)
            ("M-s" . 'swiper-isearch-thing-at-point)))
 
-  (leaf counsel
-    :doc "Various completion functions using Ivy"
-    :req "emacs-24.5" "swiper-0.13.0"
-    :tag "tools" "matching" "convenience" "emacs>=24.5"
-    :url "https://github.com/abo-abo/swiper"
-    :emacs>= 24.5
+  (use-package counsel
+    :if (version<= "24.5" emacs-version)
     :ensure t
     :blackout t
     :bind (("C-S-s" . counsel-imenu)
            ("C-x C-r" . counsel-recentf))
     :custom `((counsel-yank-pop-separator . "\n----------\n")
               (counsel-find-file-ignore-regexp . ,(rx-to-string '(or "./" "../") 'no-group)))
-    :global-minor-mode t)
+    :config
+    (counsel-mode 1))
 
-  (leaf ivy-prescient
-    :doc "prescient.el + Ivy"
-    :req "emacs-25.1" "prescient-4.0" "ivy-0.11.0"
-    :tag "extensions" "emacs>=25.1"
-    :url "https://github.com/raxod502/prescient.el"
-    :emacs>= 25.1
-    :ensure t
-    :after prescient ivy
-    :custom ((ivy-prescient-retain-classic-highlighting . t))
-    :global-minor-mode t)
+(use-package ivy-prescient
+  :if (version<= "25.1" emacs-version)
+  :ensure t
+  :after prescient ivy
+  :custom (ivy-prescient-retain-classic-highlighting t)
+  :config
+  (ivy-prescient-mode 1))
 
-  (leaf ivy-rich
+  (use-package ivy-rich
     :ensure t
-    :global-minor-mode t))
+    :config
+    (ivy-rich-mode 1)))
 
 #+end_src
 ** ivy-postframe
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf ivy-posframe
-  :when window-system
+(use-package ivy-posframe
+  :if window-system
   :ensure t
-  :defvar ivy-posframe-display-functions-alist ivy-posframe-parameters
-  :setq
+  :init
+  (defvar ivy-posframe-display-functions-alist)
+  (defvar ivy-posframe-parameters)
   ;; (ivy-posframe-display-functions-alist quote ((t . ivy-posframe-display)))
-  (ivy-posframe-parameters . '((internal-border-width . 10)))
+  (setq ivy-posframe-parameters '((internal-border-width . 10)))
   :config
   (setq ivy-posframe-parameters
       '((left-fringe . 8)
@@ -467,62 +426,57 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
         (counsel-M-x				. ivy-posframe-display-at-frame-center)
         (counsel-recentf		. ivy-posframe-display-at-frame-center)
         (t									. ivy-posframe-display)))
-  :global-minor-mode ivy-posframe-mode)
+  (ivy-posframe-mode 1))
 #+end_src
 ** prescient
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf prescient
-  :doc "Better sorting and filtering"
-  :req "emacs-25.1"
-  :tag "extensions" "emacs>=25.1"
-  :url "https://github.com/raxod502/prescient.el"
-  :emacs>= 25.1
+(use-package prescient
+  :if (version<= "25.1" emacs-version)
   :ensure t
-  :custom ((prescient-aggressive-file-save . t))
-  :global-minor-mode prescient-persist-mode)
+  :commands prescient-persist-mode
+  :custom (prescient-aggressive-file-save t)
+  :config
+  (prescient-persist-mode 1))
 #+end_src
 
 * company:
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf company
-  :doc "Modular text completion framework"
-  :req "emacs-24.3"
-  :tag "matching" "convenience" "abbrev" "emacs>=24.3"
-  :url "http://company-mode.github.io/"
-  :emacs>= 24.3
+(use-package company
+  :if (version<= "24.3" emacs-version)
   :ensure t
   :blackout t
-  :leaf-defer nil
-  :bind ((company-active-map
-          ("M-n" . nil)
-          ("M-p" . nil)
-          ("C-s" . company-filter-candidates)
-          ("C-n" . company-select-next)
-          ("C-p" . company-select-previous)
-          ("<tab>" . company-complete-selection))
-         (company-search-map
-          ("C-n" . company-select-next)
-          ("C-p" . company-select-previous))
-         ("M-SPC" . company-complete))
-  :custom ((company-idle-delay . 0)
-           (company-minimum-prefix-length . 1)
-           (company-transformers . '(company-sort-by-occurrence))
+  :demand t
+  :bind (("M-SPC" . company-complete)
+         :map company-active-map
+         ("M-n" . nil)
+         ("M-p" . nil)
+         ("C-s" . company-filter-candidates)
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous)
+         ("<tab>" . company-complete-selection)
+         :map company-search-map
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous))
+  :custom ((company-idle-delay 0)
+           (company-minimum-prefix-length 1)
+           (company-transformers '(company-sort-by-occurrence))
            ;; 大文字小文字を区別して補完する
-           (company-dabbrev-downcase . nil))
-  :global-minor-mode global-company-mode)
+           (company-dabbrev-downcase nil))
+  :config
+  (global-company-mode 1))
 #+end_src
 
 * git:
 ** magit
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf magit
+(use-package magit
   :ensure t
-  :after t
   :bind
   ("C-x g" . magit-status)
-  :defvar magit-display-buffer-function
-  :defun
-  (magit-display-buffer-fullframe-status-v1 magit-disable-section-inserter)
+  :init
+  (defvar magit-display-buffer-function)
+  :preface
+  (declare-function magit-display-buffer-fullframe-status-v1 "magit")
   :config
   ;; disable "--force" option
   (transient-remove-suffix 'magit-push "-F")
@@ -537,23 +491,23 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
        (list (if (string-empty-p input) default input))))
     (magit-diff-range range))
   :custom
-  (magit-revision-insert-related-refs . nil)
-  (magit-display-buffer-function . #'magit-display-buffer-fullframe-status-v1))
+  (magit-revision-insert-related-refs nil)
+  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 #+end_src
 
 ** git-gutter
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf git-gutter
+(use-package git-gutter
   :ensure t
   :custom
-  (git-gutter:modified-sign . " ")
-  (git-gutter:added-sign    . " ")
-  (git-gutter:deleted-sign  . " ")
-  :custom-face
-  `(git-gutter:modified	. '((t (:background ,(doom-color 'yellow)))))
-  `(git-gutter:added	. '((t (:background ,(doom-color 'green)))))
-  `(git-gutter:deleted	. '((t (:background ,(doom-color 'magenta)))))
-  :global-minor-mode global-git-gutter-mode)
+  (git-gutter:modified-sign " ")
+  (git-gutter:added-sign    " ")
+  (git-gutter:deleted-sign  " ")
+  :config
+  (set-face-attribute 'git-gutter:modified nil :background (doom-color 'yellow))
+  (set-face-attribute 'git-gutter:added nil :background (doom-color 'green))
+  (set-face-attribute 'git-gutter:deleted nil :background (doom-color 'magenta))
+  (global-git-gutter-mode 1))
 
 ;; シンボリックリンクの読み込みを許可
 (setq vc-follow-symlinks t)
@@ -564,11 +518,10 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 
 ** ediff
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf ediff
-  :tag "builtin"
+(use-package ediff
   :custom
   ;; Split WINDOW-TO-SPLIT into two side-by-side windows.
-  (ediff-split-window-function . 'split-window-horizontally))
+  (ediff-split-window-function 'split-window-horizontally))
 #+end_src
 * font:
 #+begin_src emacs-lisp :lexical no :results silent
@@ -578,42 +531,39 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 
 (set-face-attribute 'default nil :family "Fira Code" :weight 'light :height 140)
 
-(leaf fira-code-mode
-  :when window-system
+(use-package fira-code-mode
+  :if window-system
   :blackout t
-  :doc "Emacs minor mode for Fira Code ligatures using prettify-symbols"
   :ensure t
   :config
   (global-fira-code-mode)
   (fira-code-mode-set-font)
   :custom
   (fira-code-mode-disabled-ligatures '("[]" "x"))
-  (fira-code-mode-enable-hex-literal . nil)
-  (fira-code-mode-disabled-ligatures . nil))
+  (fira-code-mode-enable-hex-literal nil)
+  (fira-code-mode-disabled-ligatures nil))
 #+end_src
 
 ** icons
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf all-the-icons
-  :doc "A utility package to collect various Icon Fonts and propertize them within Emacs."
+(use-package all-the-icons
   :if (display-graphic-p)
-  :require t
+  :demand t
   :ensure t
   :config
-  (leaf all-the-icons-ivy-rich
+  (use-package all-the-icons-ivy-rich
     :ensure t
     :init
     (all-the-icons-ivy-rich-mode 1)
-    :require t)
-  (leaf all-the-icons-dired
-    :doc "Adds dired support to all-the-icons"
+    :demand t)
+  (use-package all-the-icons-dired
     :ensure t
-    :hook (dired-mode-hook . all-the-icons-dired-mode)))
+    :hook (dired-mode . all-the-icons-dired-mode)))
 #+end_src
 
 * lsp
 #+begin_src emacs-lisp :lexical no :results silent
-;; (leaf eglot
+;; (use-package eglot
 ;;   :ensure t
 ;;   :commands eglot-ensure
 ;;   :hook ((swift-mode-hook . eglot-ensure))
@@ -624,24 +574,26 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 ;;     (add-to-list 'eglot-server-programs
 ;;                  '(swift-mode "/Applications/Xcode-15.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))))
 
-(leaf lsp-mode
-  :require t
+(use-package lsp-mode
+  :demand t
   :ensure t
   :hook
-  (swift-mode-hook . lsp)
-  (ruby-mode-hook . lsp)
-  (elisp-mode-hook . lsp)
-  (sh-mode-hook . lsp)
-  :defvar lsp-disabled-clients
-  :setq
-  (lsp-disabled-clients quote (rubocop-ls ruby-ls))
+  (swift-mode . lsp)
+  (ruby-mode . lsp)
+  (elisp-mode . lsp)
+  (sh-mode . lsp)
+  :init
+  (defvar lsp-disabled-clients)
+  (setq lsp-disabled-clients '(rubocop-ls ruby-ls))
   :config
-  (leaf lsp-ui
-    :require t
+  (use-package lsp-ui
+    :demand t
     :ensure t
-    :defun (lsp-ui-doc--hide-frame lsp-ui-doc-show lsp-ui-doc-mode)
-    :defvar (lsp-ui-doc-mode)
     :preface
+    (declare-function lsp-ui-doc--hide-frame "lsp-ui-doc")
+    (declare-function lsp-ui-doc-show "lsp-ui-doc")
+    (declare-function lsp-ui-doc-mode "lsp-ui-doc")
+    (defvar lsp-ui-doc-mode)
     (defun struuuuggle/toggle-lsp-ui-doc ()
       (interactive)
       (if lsp-ui-doc-mode
@@ -652,31 +604,31 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
           (lsp-ui-doc-mode 1)
           (lsp-ui-doc-show))))
     :bind
-    (:lsp-mode-map
+    (("M-s-0" . imenu-list-smart-toggle)
+     :map lsp-mode-map
      ("C-j" . struuuuggle/toggle-lsp-ui-doc)
      ("M-RET" . lsp-execute-code-action))
-    ("M-s-0" . imenu-list-smart-toggle)
     :custom
     ;; lsp-ui-doc
-    (lsp-ui-doc-enable . t)
-    (lsp-ui-doc-position . 'at-point) ;; top, bottom, or at-point
-    (lsp-ui-doc-max-width . 200) ;; Original value is 150
-    (lsp-ui-doc-max-height . 30) ;; Original value is 13
-    (lsp-ui-doc-use-childframe . t)
-    (lsp-ui-doc-use-webkit . t)
+    (lsp-ui-doc-enable t)
+    (lsp-ui-doc-position 'at-point) ;; top, bottom, or at-point
+    (lsp-ui-doc-max-width 200) ;; Original value is 150
+    (lsp-ui-doc-max-height 30) ;; Original value is 13
+    (lsp-ui-doc-use-childframe t)
+    (lsp-ui-doc-use-webkit t)
     ;; lsp-ui-flycheck
-    (lsp-ui-flycheck-enable . nil)
+    (lsp-ui-flycheck-enable nil)
     ;; lsp-ui-imenu
-    (lsp-ui-imenu-enable . nil)
-    (lsp-ui-imenu-kind-position . 'top)
+    (lsp-ui-imenu-enable nil)
+    (lsp-ui-imenu-kind-position 'top)
     ;; lsp-ui-peek
-    (lsp-ui-peek-enable . t)
-    (lsp-ui-peek-peek-height . 30)
-    (lsp-ui-peek-list-width . 8)
+    (lsp-ui-peek-enable t)
+    (lsp-ui-peek-peek-height 30)
+    (lsp-ui-peek-list-width 8)
     ;; never, on-demand, or always
-    (lsp-ui-peek-fontify . 'always))
+    (lsp-ui-peek-fontify 'always))
 
-  (leaf smart-jump
+  (use-package smart-jump
     :ensure t
     :bind
     ("s-b" . smart-jump-go)
@@ -721,27 +673,26 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 * languages:
 ** Swift
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf swift-mode
-  :require t
+(use-package swift-mode
+  :demand t
   :ensure t
-  :hook (swift-mode-hook . flycheck-swift3-setup)
+  :hook (swift-mode . flycheck-swift3-setup)
   :config
-  (leaf flycheck-swift3
+  (use-package flycheck-swift3
     :ensure t)
-  (leaf lsp-sourcekit
-    :url "https://github.com/emacs-lsp/lsp-sourcekit"
-    :require t
+  (use-package lsp-sourcekit
+    :demand t
     :ensure t
     :if
     (= 0 (call-process "which" nil nil nil "xcrun"))
-    :after eglot-mode
-    :defvar xcode-path
+    :after eglot
     :init
-    (defvar xcode-path (string-trim (shell-command-to-string "xcode-select --print-path")))
+    (defvar xcode-path)
+    (setq xcode-path (string-trim (shell-command-to-string "xcode-select --print-path")))
     :custom
     ;; configure the package to point to the sourcekit-lsp executable
     `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
-    (lsp-sourcekit-extra-args . `("-Xswiftc"
+    (lsp-sourcekit-extra-args `("-Xswiftc"
                                   "-sdk"
                                   "-Xswiftc"
                                   ,(concat xcode-path "/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneOS.sdk")
@@ -753,62 +704,65 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 
 ** json
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf json-mode
-  :doc "Major mode for editing JSON files with emacs"
+(use-package json-mode
   :ensure t
   :config
-  (leaf json-reformat
-    :doc "Reformat tool for JSON"
-    :emacs>= 23
+  (use-package json-reformat
+    :if (version<= "23" emacs-version)
     :ensure t
     :custom
-    (json-reformat:indent-width . 2)))
+    (json-reformat:indent-width 2)))
 #+end_src
 
 ** YML
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf yaml-mode
+(use-package yaml-mode
   :ensure t)
 #+end_src
 
 ** Ruby
 #+begin_src emacs-lisp :lexical no :results silent
-;; (leaf leaf-convert
-;;   :defvar lsp-solargraph-use-bundler
-;;   :hook ((ruby-mode-hook . lsp))
-;;   :require lsp-mode
-;;   :setq ((lsp-solargraph-use-bundler . t)))
-
-(leaf ruby-mode
+(use-package ruby-mode
   :mode "Fastfile$" "Gymfile$" "Dangerfile")
 #+end_src
 
 ** Kotlin
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf kotlin-mode
+(use-package kotlin-mode
   :ensure t)
 #+end_src
 
 ** Dockerfile
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf dockerfile-mode
+(use-package dockerfile-mode
   :ensure t)
 #+end_src
 ** sh
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf flymake-shellcheck
+(use-package flymake-shellcheck
   :ensure t
   :commands flymake-shellcheck-load
-  :hook ((sh-mode-hook . flymake-shellcheck-load)))
+  :hook ((sh-mode . flymake-shellcheck-load)))
 #+end_src
 
 
 * org-mode:
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org
-  :tag "builtin"
-  :defvar org-inline-image-overlays
-  :defun org-redisplay-inline-images org-todo org-get-todo-state
+(use-package org
+  :init
+  (defvar org-inline-image-overlays)
+  :preface
+  (declare-function org-redisplay-inline-images "org")
+  (declare-function org-todo "org")
+  (declare-function org-get-todo-state "org")
+  (defun show-org-buffer (file)
+    "Show an org-file FILE on the current buffer."
+    (interactive)
+    (if (get-buffer file)
+        (let ((buffer (get-buffer file)))
+          (switch-to-buffer buffer)
+          (message "%s" file))
+      (find-file (concat "~/Documents/Org/" file))))
   :hook
   ;; org-inline-image-overlays
   ;; https://github.com/xenodium/ob-swiftui#auto-refresh-results-file-image
@@ -829,36 +783,27 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                             (org-todo "DONE"))))
   :custom
   ;; スピードコマンドを有効化
-  (org-use-speed-commands . t)
+  (org-use-speed-commands t)
   ;; dでタスクをDONEにする
-  (org-speed-commands-user . '(("d" org-todo "DONE")))
+  (org-speed-commands-user '(("d" org-todo "DONE")))
   ;; org-babelに使用できる言語を追加する
-  (org-babel-load-languages . '((shell . t)
+  (org-babel-load-languages '((shell . t)
                                 (swift . t)
                                 (kotlin . t)
                                 (haskell . t)
                                 (python . t)
                                 (ruby . t)))
   ;; コードブロック実行前に確認を求めない
-  (org-confirm-babel-evaluate . nil)
+  (org-confirm-babel-evaluate nil)
   ;; 行を折り返す
-  (org-startup-truncated . nil)
+  (org-startup-truncated nil)
   ;; 画像をインラインで表示
-  (org-startup-with-inline-images . t)
+  (org-startup-with-inline-images t)
   ;; 見出しの余分な*を消す
-  (org-hide-leading-stars . t)
-  (org-todo-keywords . '((sequence "TODO" "DOING" "SOMEDAY" "|" "DONE(!)" "CLOSED")))
+  (org-hide-leading-stars t)
+  (org-todo-keywords '((sequence "TODO" "DOING" "SOMEDAY" "|" "DONE(!)" "CLOSED")))
   ;; ファイルの場所
-  (org-directory . "~/Documents/Org/")
-  :preface
-  (defun show-org-buffer (file)
-    "Show an org-file FILE on the current buffer."
-    (interactive)
-    (if (get-buffer file)
-        (let ((buffer (get-buffer file)))
-          (switch-to-buffer buffer)
-          (message "%s" file))
-      (find-file (concat "~/Documents/Org/" file))))
+  (org-directory "~/Documents/Org/")
   :bind
   ;; org-mode
   ;; (global-set-key (kbd "C-c p") 'org-preview-html-mode)
@@ -870,8 +815,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 
 ** org-capture
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-capture
-  :tag "builtin"
+(use-package org-capture
   :custom
   ;; Org-captureのテンプレート
   ;;
@@ -884,7 +828,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   ;; %U: 非アクティブなタイムスタンプ(日付と時刻)
   ;; %?: テンプレートを補完した後のカーソルの位置
   ;; %i: リージョンがアクティブな状態でcaptureが呼び出されたときに、挿入されるリージョン
-  (org-capture-templates . '(
+  (org-capture-templates '(
                              ("m"
                               "💡 Memo"
                               entry
@@ -901,125 +845,115 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 
 ** rich UI
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-superstar
-  :doc "Make org-mode stars a little more super"
-  :url "https://github.com/integral-dw/org-superstar-mode"
+(use-package org-superstar
   :ensure t
   :custom
-  (org-superstar-headline-bullets-list . '("#" "○" "●" "○" "●" "○"))
-  (org-superstar-special-todo-items . t)
+  (org-superstar-headline-bullets-list '("#" "○" "●" "○" "●" "○"))
+  (org-superstar-special-todo-items t)
+  :hook (org-mode . org-superstar-mode)
   :config
   (set-face-attribute 'org-level-3 nil :inherit 'org-level-8 :height 1.2)
   (set-face-attribute 'org-level-2 nil :inherit 'org-level-8 :height 1.4)
-  (set-face-attribute 'org-level-1 nil :inherit 'org-level-8 :height 1.4)
-  :hook (org-mode-hook . org-superstar-mode))
+  (set-face-attribute 'org-level-1 nil :inherit 'org-level-8 :height 1.4))
   #+end_src
 
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-indent
-  :tag "builtin"
+(use-package org-indent
   :custom
-  (org-startup-indented . t)
-  (org-startup-folded . 'showall))
+  (org-startup-indented t)
+  (org-startup-folded 'showall))
 
-(leaf company-org-block
-  :doc "'<' triggers company completion of org blocks."
-  :url "https://github.com/xenodium/company-org-block"
+(use-package company-org-block
   :ensure t
   :hook
-  (org-mode-hook . (lambda ()
-                     (setq-local company-backends '(company-org-block))
-                     (company-mode 1))))
+  (org-mode . (lambda ()
+                (setq-local company-backends '(company-org-block))
+                (company-mode 1))))
 #+end_src
 
 ** org-agenda
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-agenda
-  :tag "builtin"
+(use-package org-agenda
   :if (eq system-type 'gnu/linux)
   :custom
-  (org-agenda-files . '("~/Documents/Org/"))
-  (calendar-holidays . nil)
-  (org-agenda-format-date . "%+4Y/%0m/%0d (%a)")
+  (org-agenda-files '("~/Documents/Org/"))
+  (calendar-holidays nil)
+  (org-agenda-format-date "%+4Y/%0m/%0d (%a)")
   :bind
   ("C-c a" . 'org-agenda))
 
-(leaf org-super-agenda
+(use-package org-super-agenda
   :ensure t
-  :hook (org-mode-hook . org-super-agenda-mode)
+  :hook (org-mode . org-super-agenda-mode)
   :custom
   ;; https://github.com/alphapapa/org-super-agenda/blob/master/examples.org#zaen323
-  (org-agenda-time-grid quote
-                        ((daily today require-timed)
-                         "----------------------" nil))
-  (org-agenda-skip-scheduled-if-done . t)
-  (org-agenda-skip-deadline-if-done . t)
-  (org-agenda-include-deadlines . t)
-  (org-agenda-include-diary . t)
-  (org-agenda-block-separator)
-  (org-agenda-compact-blocks . t)
-  (org-agenda-start-with-log-mode . t)
-  (org-agenda-custom-commands .
-                              '(("z" "📌 struuuuggle view"
-                                 ((agenda "" ((org-agenda-span 'day)
-                                              (org-super-agenda-groups
-                                               '((:name "Today"
-                                                        :time-grid t
-                                                        :date today
-                                                        :todo "TODAY"
-                                                        :scheduled today
-                                                        :order 1)))))
-                                  (alltodo "" ((org-agenda-overriding-header "")
-                                               (org-super-agenda-groups
-                                                '((:name "Next to do"
-                                                         :todo "NEXT"
-                                                         :order 1)
-                                                  (:name "Important"
-                                                         :tag "Important"
-                                                         :priority "A"
-                                                         :order 6)
-                                                  (:name "Due Today"
-                                                         :deadline today
-                                                         :order 2)
-                                                  (:name "Due Soon"
-                                                         :deadline future
-                                                         :order 8)
-                                                  (:name "Overdue"
-                                                         :deadline past
-                                                         :order 7)
-                                                  (:name "Waiting"
-                                                         :todo "WAITING"
-                                                         :order 20))))))))))
+  (org-agenda-time-grid '((daily today require-timed)
+                            "----------------------" nil))
+  (org-agenda-skip-scheduled-if-done t)
+  (org-agenda-skip-deadline-if-done t)
+  (org-agenda-include-deadlines t)
+  (org-agenda-include-diary t)
+  (org-agenda-block-separator nil)
+  (org-agenda-compact-blocks t)
+  (org-agenda-start-with-log-mode t)
+  (org-agenda-custom-commands
+   '(("z" "📌 struuuuggle view"
+      ((agenda "" ((org-agenda-span 'day)
+                   (org-super-agenda-groups
+                    '((:name "Today"
+                             :time-grid t
+                             :date today
+                             :todo "TODAY"
+                             :scheduled today
+                             :order 1)))))
+       (alltodo "" ((org-agenda-overriding-header "")
+                    (org-super-agenda-groups
+                     '((:name "Next to do"
+                              :todo "NEXT"
+                              :order 1)
+                       (:name "Important"
+                              :priority "A"
+                              :order 6)
+                       (:name "Due Today"
+                              :deadline today
+                              :order 2)
+                       (:name "Due Soon"
+                              :deadline future
+                              :order 8)
+                       (:name "Overdue"
+                              :deadline past
+                              :order 7)
+                       (:name "Waiting"
+                              :todo "WAITING"
+                              :order 20))))))))))
 #+end_src
 ** org-journal
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-journal
-  :tag "builtin"
-  :doc "A simple org-mode based journaling mode"
+(use-package org-journal
   :ensure t
   :custom
-  (org-journal-dir . "~/Documents/Org/journal")
-  (org-journal-date-format . "%Y-%m-%d.org")
-  (org-journal-file-header . "#+OPTIONS: ^:nil\n")
-  (org-journal-time-prefix . "** TODO ")
+  (org-journal-dir "~/Documents/Org/journal")
+  (org-journal-date-format "%Y-%m-%d.org")
+  (org-journal-file-header "#+OPTIONS: ^:nil\n")
+  (org-journal-time-prefix "** TODO ")
   :bind
   ("C-c j" . 'org-journal-new-entry))
 #+end_src
 
 ** org-babel
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf ob-swift
-  :doc "org-babel functions for swift evaluation"
-  :url "https://github.com/zweifisch/ob-swift"
+(use-package ob-swift
   :after ob
   :ensure t)
 
-(leaf ob-swiftui
+(use-package ob-swiftui
   :ensure t
-  :require t
-  :doc "Evaluate SwiftUI snippets using Emacs org babel."
-  :url "https://github.com/xenodium/ob-swiftui"
-  :defvar org-edit-src-content-indentation org-babel-tangle-lang-exts org-babel-load-languages org-src-lang-modes
+  :demand t
+  :init
+  (defvar org-edit-src-content-indentation)
+  (defvar org-babel-tangle-lang-exts)
+  (defvar org-babel-load-languages)
+  (defvar org-src-lang-modes)
   :after ob-tangle
   :config
   (setq org-edit-src-content-indentation 0)
@@ -1030,56 +964,55 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   (add-to-list 'org-src-lang-modes
                '("swiftui" . swift)))
 
-(leaf ob-kotlin
+(use-package ob-kotlin
   :ensure t)
 #+end_src
 
 ** org-pomodoro
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf org-pomodoro
+(use-package org-pomodoro
   :ensure t)
 #+end_src
 ** org-modeのテーブル縦線を揃える
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf valign
-:ensure t
-:hook org-mode-hook)
+(use-package valign
+  :ensure t
+  :hook (org-mode . valign-mode))
 #+end_src
 * projectile
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf projectile
-  :doc "Project Interaction Library for Emacs"
-  :url "https://github.com/bbatsov/projectile"
+(use-package projectile
   :ensure t
   :blackout t
-  :defun projectile-project-name
+  :preface
+  (declare-function projectile-project-name "projectile")
   :custom
   (projectile-switch-project-action
-   . (lambda ()
-       (let ((tab-bar-new-tab-choice nil)) ;; 一時的に dashboard 起動を抑制
-         (tab-new))
-       (tab-bar-rename-tab (projectile-project-name))
-       (magit-status)))
-  (projectile-verbose . nil)
-  (projectile-completion-system . 'ivy)
+   (lambda ()
+     (let ((tab-bar-new-tab-choice nil)) ;; 一時的に dashboard 起動を抑制
+       (tab-new))
+     (tab-bar-rename-tab (projectile-project-name))
+     (magit-status)))
+  (projectile-verbose nil)
+  (projectile-completion-system 'ivy)
+  :init
+  (projectile-mode 1)
   :config
   (defvar projectile-project-search-path)
   (if noninteractive
       (setq projectile-project-search-path nil)
     (setq projectile-project-search-path '("~/sandbox/" ("~/ghq/" . 3))))
-  (leaf ag
+  (use-package ag
     :if (executable-find "ag")
     :ensure t
     :custom
-    (ag-reuse-buffers . t)
-    (ag-highlight-search . t))
-  (leaf projectile-rails
+    (ag-reuse-buffers t)
+    (ag-highlight-search t))
+  (use-package projectile-rails
     :ensure t)
-  :global-minor-mode projectile-mode
-  :bind
-  (projectile-mode-map
-   ("s-p" . projectile-command-map)
-   ("s-O" . projectile-find-file)))
+  :bind (:map projectile-mode-map
+              ("s-p" . projectile-command-map)
+              ("s-O" . projectile-find-file)))
 #+end_src
 
 * shell
@@ -1089,43 +1022,44 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 
 ** vterm
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf vterm
+(use-package vterm
   :ensure t
-  :defun (send-backspace vterm-send-key)
   :preface
+  (declare-function vterm-send-key "vterm")
   (defun send-backspace nil
     "Send a backspace character to vterm process."
     (interactive)
     (vterm-send-key (kbd "C-h")))
   :custom
-  (vterm-shell . "/bin/zsh")
-  (vterm-kill-buffer-on-exit . t)
-  (vterm-buffer-name-string . "vterm: %s")
-  (vterm-keymap-exceptions . '("C-'" "C-x" "C-c" "C-o" "M-x"))
+  (vterm-shell "/bin/zsh")
+  (vterm-kill-buffer-on-exit t)
+  (vterm-buffer-name-string "vterm: %s")
+  (vterm-keymap-exceptions '("C-'" "C-x" "C-c" "C-o" "M-x"))
   ;; Emacs終了時にvtermプロセスの確認を求めない
-  (confirm-kill-processes . nil)
+  (confirm-kill-processes nil)
   :config
-  (leaf vterm-toggle
+  (use-package vterm-toggle
     :ensure t
     :custom
-    (vterm-toggle-scope . 'project))
-  (add-hook 'vterm-mode-hook (lambda nil (local-set-key (kbd "C-h") #'send-backspace)))
+    (vterm-toggle-scope 'project))
+  (add-hook 'vterm-mode-hook
+            (lambda nil
+              (local-set-key (kbd "C-h") #'send-backspace)))
   ;; (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
   )
 #+end_src
 
 * yasnippet
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf yasnippet
-  :url "https://github.com/joaotavora/yasnippet"
-  :doc "A template system for Emacs"
+(use-package yasnippet
   :ensure t
-  :hook ((prog-mode-hook org-mode-hook) . yas-minor-mode))
+  :hook ((prog-mode . yas-minor-mode)
+         (org-mode . yas-minor-mode)))
 #+end_src
 
 * tramp
 #+begin_src emacs-lisp :lexical no :results silent
-(leaf tramp
+(use-package tramp
   :ensure t)
 #+end_src
 
