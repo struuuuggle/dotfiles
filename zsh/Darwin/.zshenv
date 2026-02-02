@@ -50,6 +50,8 @@ path=(
     $GOPATH/bin/(N-/)
     # Mint
     $MINT_LINK_PATH(N-/)
+    # Docker
+    $HOME/.docker/bin(N-/)
 )
 
 # 重複パスを登録しない
