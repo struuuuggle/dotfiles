@@ -29,9 +29,9 @@
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package dashboard
   :ensure t
-  :demand t
   :if (< (length command-line-args) 2)
   :mode ("\\*dashboard*\\'" . dashboard-mode)
+  :hook (after-init . dashboard-setup-startup-hook)
   :custom
   ;; Value can be
   ;; 'official: which displays the official emacs logo
@@ -47,9 +47,7 @@
                        (projects . 5)
                        (recents . 5)))
   (initial-buffer-choice (lambda nil
-                             (get-buffer "*dashboard*")))
-  :config
-  (dashboard-setup-startup-hook))
+                             (get-buffer "*dashboard*"))))
 #+end_src
 
 *** which-key
