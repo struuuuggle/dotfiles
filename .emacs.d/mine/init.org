@@ -440,7 +440,7 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
   :if (version<= "24.3" emacs-version)
   :ensure t
   :blackout t
-  :demand t
+  :hook (after-init . global-company-mode)
   :bind (("M-SPC" . company-complete)
          :map company-active-map
          ("M-n" . nil)
@@ -456,9 +456,7 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
            (company-minimum-prefix-length 1)
            (company-transformers '(company-sort-by-occurrence))
            ;; 大文字小文字を区別して補完する
-           (company-dabbrev-downcase nil))
-  :config
-  (global-company-mode 1))
+           (company-dabbrev-downcase nil)))
 #+end_src
 
 * git:
