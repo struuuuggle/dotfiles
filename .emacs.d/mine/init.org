@@ -568,20 +568,20 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 ;;                  '(swift-mode "/Applications/Xcode-15.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))))
 
 (use-package lsp-mode
-  :demand t
   :ensure t
+  :commands (lsp lsp-deferred)
   :hook
-  (swift-mode . lsp)
-  (ruby-mode . lsp)
-  (elisp-mode . lsp)
-  (sh-mode . lsp)
+  (swift-mode . lsp-deferred)
+  (ruby-mode . lsp-deferred)
+  (elisp-mode . lsp-deferred)
+  (sh-mode . lsp-deferred)
   :init
   (defvar lsp-disabled-clients)
   (setq lsp-disabled-clients '(rubocop-ls ruby-ls))
   :config
   (use-package lsp-ui
-    :demand t
     :ensure t
+    :hook (lsp-mode . lsp-ui-mode)
     :preface
     (declare-function lsp-ui-doc--hide-frame "lsp-ui-doc")
     (declare-function lsp-ui-doc-show "lsp-ui-doc")
