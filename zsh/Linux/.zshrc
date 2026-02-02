@@ -254,4 +254,6 @@ estart() {
 estart
 
 # codex
-eval "$(codex completion zsh)"
+if command -v codex 1>/dev/null 2>&1; then
+  eval "$(codex completion zsh)"
+fi
