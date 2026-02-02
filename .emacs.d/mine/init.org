@@ -362,7 +362,7 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
   :if (version<= "24.5" emacs-version)
   :ensure t
   :blackout t
-  :demand t
+  :hook (after-init . ivy-mode)
   :custom ((ivy-initial-inputs-alist nil)
            (ivy-use-selectable-prompt t)
            (ivy-display-style t)
@@ -372,7 +372,6 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
            ;; 最初と最後の候補を行き来できるようにする
            (ivy-wrap t))
   :config
-  (ivy-mode 1)
   (use-package swiper
     :if (version<= "24.5" emacs-version)
     :ensure t
@@ -384,25 +383,22 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
     :if (version<= "24.5" emacs-version)
     :ensure t
     :blackout t
+    :hook (ivy-mode . counsel-mode)
     :bind (("C-S-s" . counsel-imenu)
            ("C-x C-r" . counsel-recentf))
     :custom `((counsel-yank-pop-separator . "\n----------\n")
-              (counsel-find-file-ignore-regexp . ,(rx-to-string '(or "./" "../") 'no-group)))
-    :config
-    (counsel-mode 1))
+              (counsel-find-file-ignore-regexp . ,(rx-to-string '(or "./" "../") 'no-group))))
 
-(use-package ivy-prescient
-  :if (version<= "25.1" emacs-version)
-  :ensure t
-  :after prescient ivy
-  :custom (ivy-prescient-retain-classic-highlighting t)
-  :config
-  (ivy-prescient-mode 1))
+  (use-package ivy-prescient
+    :if (version<= "25.1" emacs-version)
+    :ensure t
+    :after prescient ivy
+    :hook (ivy-mode . ivy-prescient-mode)
+    :custom (ivy-prescient-retain-classic-highlighting t))
 
   (use-package ivy-rich
     :ensure t
-    :config
-    (ivy-rich-mode 1)))
+    :hook (ivy-mode . ivy-rich-mode)))
 
 #+end_src
 ** ivy-postframe
@@ -410,6 +406,7 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
 (use-package ivy-posframe
   :if window-system
   :ensure t
+  :hook (ivy-mode . ivy-posframe-mode)
   :init
   (defvar ivy-posframe-display-functions-alist)
   (defvar ivy-posframe-parameters)
@@ -424,7 +421,7 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
         (counsel-M-x				. ivy-posframe-display-at-frame-center)
         (counsel-recentf		. ivy-posframe-display-at-frame-center)
         (t									. ivy-posframe-display)))
-  (ivy-posframe-mode 1))
+  )
 #+end_src
 ** prescient
 #+begin_src emacs-lisp :lexical no :results silent
