@@ -256,12 +256,33 @@ estart() {
 }
 
 ghq-list() {
-  REPOSITORY_PATH="$(ghq list | fzf +m -e --reverse --preview 'bat --style=-numbers --color=always $(ghq root)/{}/README*')"
-  if [ -z $REPOSITORY_PATH ]; then
+  local preview_cmd repo_path
+  preview_cmd="$(cat <<-'EOF'
+	dir="$(ghq root)/"{}
+	readme="$(find "$dir" -maxdepth 1 -type f -name 'README*' -print 2>/dev/null | head -n 1)"
+	if [[ -n "$readme" ]]; then
+	  if command -v bat >/dev/null 2>&1; then
+	    bat --style=-numbers --color=always "$readme"
+	  else
+	    cat "$readme"
+	  fi
+	else
+	  ls -1 --color=always "$dir"
+	fi
+	EOF
+	)"
+  repo_path="$(
+  ghq list \
+  | fzf --no-multi --exact --reverse \
+        --preview "$preview_cmd" \
+        --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+        --footer 'Press CTRL-/ to toggle preview window'
+  )"
+  if [ -z "$repo_path" ]; then
     zle send-break
   fi
 
-  BUFFER="cd $(ghq root)/$REPOSITORY_PATH"
+  BUFFER="cd $(ghq root)/$repo_path"
   zle accept-line
 }
 zle -N ghq-list
