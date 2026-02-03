@@ -6,5 +6,5 @@ export PS1="[\h@\w]\\$ "
 [[ -e ~/.bash_profile.local ]] && . ~/.bash_profile.local
 
 if command -v rbenv 1>/dev/null 2>&1; then
-    eval "$(rbenv init -)"
+  eval "$(rbenv init -)"
 fi
