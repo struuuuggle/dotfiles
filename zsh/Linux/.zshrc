@@ -223,12 +223,28 @@ gb() {
 }
 
 ghq-list() {
-  REPOSITORY_PATH="$(ghq list | fzf +m --reverse -e)"
-  if [ -z $REPOSITORY_PATH ]; then
+  local preview_cmd
+  preview_cmd=$(cat <<'EOF'
+dir="$(ghq root)/"{}
+readme="$(find "$dir" -maxdepth 1 -type f -name 'README*' -print 2>/dev/null | head -n 1)"
+if [ -n "$readme" ]; then
+  if command -v bat >/dev/null 2>&1; then
+    bat --style=-numbers --color=always "$readme"
+  else
+    sed -n "1,200p" "$readme"
+  fi
+else
+  ls -la "$dir"
+fi
+EOF
+)
+  local repo_path
+  repo_path="$(ghq list | fzf +m --reverse -e --preview "$preview_cmd")"
+  if [ -z "$repo_path" ]; then
     zle send-break
   fi
 
-  BUFFER="cd $(ghq root)/$REPOSITORY_PATH"
+  BUFFER="cd $(ghq root)/$repo_path"
   zle accept-line
 }
 zle -N ghq-list
