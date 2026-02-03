@@ -4,7 +4,7 @@
 
 # Compile .zshrc automatically
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
-    zcompile ~/.zshrc
+  zcompile ~/.zshrc
 fi
 
 # 環境変数
@@ -27,14 +27,14 @@ SAVEHIST=100000
 setopt no_global_rcs
 
 path=(
-    # 雑用スクリプト
-    $HOME/bin(N-/)
-    # /etc/paths に書いてあるもの
-    /usr/local/bin(N-/)
-    /usr/bin(N-/)
-    /bin(N-/)
-    /usr/sbin(N-/)
-    /sbin(N-/)
+  # 雑用スクリプト
+  $HOME/bin(N-/)
+  # /etc/paths に書いてあるもの
+  /usr/local/bin(N-/)
+  /usr/bin(N-/)
+  /bin(N-/)
+  /usr/sbin(N-/)
+  /sbin(N-/)
 )
 
 # 重複パスを登録しない

@@ -5,7 +5,7 @@
 
 # Compile .zshrc automatically
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
-    zcompile ~/.zshrc
+  zcompile ~/.zshrc
 fi
 
 # 色を使用出来るようにする
@@ -50,14 +50,14 @@ export BAT_THEME="Dracula"
 
 # delta: use side-by-side when terminal is wide enough
 _set_delta_features_by_width() {
-    local min_columns=160
-    local -a feature_list
-    feature_list=(${=DELTA_FEATURES})
-    feature_list=(${feature_list:#side-by-side})
-    if [[ -n ${COLUMNS-} && $COLUMNS -ge $min_columns ]]; then
-        feature_list+=(side-by-side)
-    fi
-    export DELTA_FEATURES="${(j: :)feature_list}"
+  local min_columns=160
+  local -a feature_list
+  feature_list=(${=DELTA_FEATURES})
+  feature_list=(${feature_list:#side-by-side})
+  if [[ -n ${COLUMNS-} && $COLUMNS -ge $min_columns ]]; then
+    feature_list+=(side-by-side)
+  fi
+  export DELTA_FEATURES="${(j: :)feature_list}"
 }
 _set_delta_features_by_width
 TRAPWINCH() { _set_delta_features_by_width }
@@ -296,17 +296,17 @@ gb() {
   fi
 
   git branch -a --sort=-authordate \
-      | cut -c 3- \
-      | grep -v origin \
-      | fzf --height=50% \
-      | xargs git switch
+    | cut -c 3- \
+    | grep -v origin \
+    | fzf --height=50% \
+    | xargs git switch
 }
 
 ghpr() {
-    GH_FORCE_TTY=100% gh pr list \
-        | fzf +m --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window up --header-lines 3 \
-        | awk '{print $1}' \
-        | xargs gh pr checkout
+  GH_FORCE_TTY=100% gh pr list \
+    | fzf +m --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window up --header-lines 3 \
+    | awk '{print $1}' \
+    | xargs gh pr checkout
 }
 
 #############################################
@@ -319,8 +319,8 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # Emacs - vterm
 # https://github.com/akermu/emacs-libvterm?tab=readme-ov-file#shell-side-configuration-files
 if [[ "$INSIDE_EMACS" = 'vterm' ]] \
-    && [[ -n ${EMACS_VTERM_PATH} ]] \
-    && [[ -f ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
+     && [[ -n ${EMACS_VTERM_PATH} ]] \
+     && [[ -f ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh ]]; then
 	source ${EMACS_VTERM_PATH}/etc/emacs-vterm-zsh.sh
 fi
 
@@ -332,16 +332,16 @@ chpwd () { ls -a; print -Pn "\e]2;%2~\a" }
 
 # gwq
 if command -v gwq 1>/dev/null 2>&1; then
-    source <(gwq completion zsh)
+  source <(gwq completion zsh)
 fi
 
 # fzf
 # https://github.com/junegunn/fzf?tab=readme-ov-file#setting-up-shell-integration
 if command -v fzf 1>/dev/null 2>&1; then
-    source <(fzf --zsh)
+  source <(fzf --zsh)
 fi
 
 # codex
 if command -v codex 1>/dev/null 2>&1; then
-    eval "$(codex completion zsh)"
+  eval "$(codex completion zsh)"
 fi

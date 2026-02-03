@@ -21,37 +21,37 @@ export MINT_LINK_PATH="$MINT_PATH/bin"
 export GOPATH="$HOME/go"
 
 path=(
-    # X11
-    /usr/X11/bin(N-/)
-    # GNU
-    /usr/local/opt/coreutils/libexec/gnubin(N-/)
-    # pyenv
-    # $HOME/.pyenv/shims(N-/)
-    # stack(Haskell)
-    $HOME/.local/bin(N-/)
-    # Rust
-    $HOME/.cargo/bin(N-/)
-    # 雑用スクリプト
-    $HOME/.local/bin(N-/)
-    # Homebrew's sbin
-    /usr/local/sbin(N-/)
-    # Homebrew(M1)
-    /opt/homebrew/bin(N-/)
-    /opt/homebrew/sbin(N-/)
-    # /etc/paths に書いてあるもの
-    /usr/local/bin(N-/)
-    /usr/bin(N-/)
-    /bin(N-/)
-    /usr/sbin(N-/)
-    /sbin(N-/)
-    # Java
-    $JAVA_HOME/bin(N-/)
-    # Go
-    $GOPATH/bin/(N-/)
-    # Mint
-    $MINT_LINK_PATH(N-/)
-    # Docker
-    $HOME/.docker/bin(N-/)
+  # X11
+  /usr/X11/bin(N-/)
+  # GNU
+  /usr/local/opt/coreutils/libexec/gnubin(N-/)
+  # pyenv
+  # $HOME/.pyenv/shims(N-/)
+  # stack(Haskell)
+  $HOME/.local/bin(N-/)
+  # Rust
+  $HOME/.cargo/bin(N-/)
+  # 雑用スクリプト
+  $HOME/.local/bin(N-/)
+  # Homebrew's sbin
+  /usr/local/sbin(N-/)
+  # Homebrew(M1)
+  /opt/homebrew/bin(N-/)
+  /opt/homebrew/sbin(N-/)
+  # /etc/paths に書いてあるもの
+  /usr/local/bin(N-/)
+  /usr/bin(N-/)
+  /bin(N-/)
+  /usr/sbin(N-/)
+  /sbin(N-/)
+  # Java
+  $JAVA_HOME/bin(N-/)
+  # Go
+  $GOPATH/bin/(N-/)
+  # Mint
+  $MINT_LINK_PATH(N-/)
+  # Docker
+  $HOME/.docker/bin(N-/)
 )
 
 # 重複パスを登録しない

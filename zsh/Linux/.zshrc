@@ -7,7 +7,7 @@
 
 # Compile .zshrc automatically
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
-    zcompile ~/.zshrc
+  zcompile ~/.zshrc
 fi
 
 # 色を使用出来るようにする
@@ -35,14 +35,14 @@ $p_mark '
 
 # delta: use side-by-side when terminal is wide enough
 _set_delta_features_by_width() {
-    local min_columns=160
-    local -a feature_list
-    feature_list=(${=DELTA_FEATURES})
-    feature_list=(${feature_list:#side-by-side})
-    if [[ -n ${COLUMNS-} && $COLUMNS -ge $min_columns ]]; then
-        feature_list+=(side-by-side)
-    fi
-    export DELTA_FEATURES="${(j: :)feature_list}"
+  local min_columns=160
+  local -a feature_list
+  feature_list=(${=DELTA_FEATURES})
+  feature_list=(${feature_list:#side-by-side})
+  if [[ -n ${COLUMNS-} && $COLUMNS -ge $min_columns ]]; then
+    feature_list+=(side-by-side)
+  fi
+  export DELTA_FEATURES="${(j: :)feature_list}"
 }
 _set_delta_features_by_width
 TRAPWINCH() { _set_delta_features_by_width }
@@ -84,7 +84,7 @@ zstyle ':completion:*' ignore-parents parent pwd ..
 
 # sudo の後ろでコマンド名を補完する
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
-                   /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+       /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
 
 # ps コマンドのプロセス名補完
 zstyle ':completion:*:processes' command 'ps x -o pid,s,args'
@@ -196,14 +196,14 @@ alias r='bin/rails'
 chpwd() { ls -a }
 
 select-history() {
-    # historyを番号なし、逆順、最初から表示。
-    # 順番を保持して重複を削除。
-    # カーソルの左側の文字列をクエリにしてfzfを起動
-    # \nを改行に変換
-    BUFFER="$(history -nr 1 | awk '!a[$0]++' | fzf +m --reverse -e --query "$LBUFFER" | sed 's/\\n/\n/')"
-    CURSOR=$#BUFFER             # カーソルを文末に移動
-    # zle -R -c                   # refresh
-    zsh -R
+  # historyを番号なし、逆順、最初から表示。
+  # 順番を保持して重複を削除。
+  # カーソルの左側の文字列をクエリにしてfzfを起動
+  # \nを改行に変換
+  BUFFER="$(history -nr 1 | awk '!a[$0]++' | fzf +m --reverse -e --query "$LBUFFER" | sed 's/\\n/\n/')"
+  CURSOR=$#BUFFER             # カーソルを文末に移動
+  # zle -R -c                   # refresh
+  zsh -R
 }
 zle -N select-history
 bindkey '^R' select-history
@@ -216,10 +216,10 @@ gb() {
   fi
 
   git branch -a --sort=-authordate \
-      | cut -c 3- \
-      | grep -v origin \
-      | fzf \
-      | xargs git switch
+    | cut -c 3- \
+    | grep -v origin \
+    | fzf \
+    | xargs git switch
 }
 
 ghq-list() {
@@ -237,7 +237,7 @@ else
   ls -la "$dir"
 fi
 EOF
-)
+             )
   local repo_path
   repo_path="$(ghq list | fzf +m --reverse -e --preview "$preview_cmd")"
   if [ -z "$repo_path" ]; then
@@ -251,10 +251,10 @@ zle -N ghq-list
 bindkey '^]' ghq-list
 
 ghpr() {
-    GH_FORCE_TTY=100% gh pr list \
-        | fzf +m --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window up --header-lines 3 \
-        | awk '{print $1}' \
-        | xargs gh pr checkout
+  GH_FORCE_TTY=100% gh pr list \
+    | fzf +m --ansi --preview 'GH_FORCE_TTY=100% gh pr view {1}' --preview-window up --header-lines 3 \
+    | awk '{print $1}' \
+    | xargs gh pr checkout
 }
 
 # emacs daemonが起動していなければ、ホームディレクトリで`emacs --daemon`を実行する
