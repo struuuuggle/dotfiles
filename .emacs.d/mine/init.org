@@ -677,7 +677,14 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 #+end_src
 
-* languages:
+* Languages:
+** General
+*** Enable Editorconfig mode
+[[https://github.com/editorconfig/editorconfig-emacs/tree/master?tab=readme-ov-file#getting-started][Since EditorConfig is bundled directly with Emacs]], all we have to do is:
+#+begin_src emacs-lisp :lexical no :results silent
+(editorconfig-mode 1)
+#+end_src
+
 ** Swift
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package swift-mode
