@@ -1,6 +1,7 @@
-;;; early-init.el --- This file is loaded before the package system and GUI is initialized
+;;; early-init.el --- The Early Init File -*- lexical-binding: t -*-
 
 ;;; Commentary:
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Early-Init-File.html
 ;; https://emacs-jp.github.io/tips/startup-optimization
 
 ;;; Code:
@@ -40,6 +41,8 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(ns-transparent-titlebar . t) default-frame-alist)
 (push '(vertical-scroll-bars . nil) default-frame-alist)
+(setq-default mode-line-format nil)
+(setq-default header-line-format nil)
 
 ;; 直接編集画面へ遷移する
 (setq inhibit-splash-screen t)
