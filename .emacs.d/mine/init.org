@@ -154,7 +154,35 @@
   (setq auto-save-draft nil)
   (setq show-trailing-whitespace t)
   (setq process-adaptive-read-buffering t))
+#+end_src
 
+** clipboard
+Ensure macOS clipboard sync works for terminal frames created by emacsclient.
+#+begin_src emacs-lisp :lexical no :results silent
+(defun my/pbcopy (text &optional _push)
+  (let ((process-connection-type nil))
+    (let ((proc (start-process "pbcopy" nil "pbcopy")))
+      (process-send-string proc text)
+      (process-send-eof proc))))
+
+(defun my/pbpaste ()
+  (shell-command-to-string "pbpaste"))
+
+(defun my/setup-clipboard-for-terminal (frame)
+  (when (and (eq system-type 'darwin)
+             (not (display-graphic-p frame)))
+    (setq select-enable-clipboard t
+          select-enable-primary t
+          save-interprogram-paste-before-kill t
+          interprogram-cut-function #'my/pbcopy
+          interprogram-paste-function #'my/pbpaste)))
+
+(when (eq system-type 'darwin)
+  (add-hook 'after-make-frame-functions #'my/setup-clipboard-for-terminal)
+  (my/setup-clipboard-for-terminal (selected-frame)))
+#+end_src
+
+#+begin_src emacs-lisp :lexical no :results silent
 (use-package files
   :hook (before-save-hook . delete-trailing-whitespace)
   :custom
@@ -198,7 +226,7 @@
 
 (use-package eldoc
   :blackout t)
- #+end_src
+#+end_src
 ** dired
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package dired
