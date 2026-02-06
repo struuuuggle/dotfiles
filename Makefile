@@ -53,9 +53,14 @@ zsh-autosuggestions: ## Set up zsh-autosuggestions
 		git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions; \
 	fi
 
-compile-emacs: ## Compile init.el(s)
+tangle-emacs: ## Tangle .emacs.d/init.org into .emacs.d/init.el
+	@emacs -Q --batch \
+		--eval "(require 'org)" \
+		--eval "(org-babel-tangle-file \".emacs.d/init.org\" \"init.el\" \"emacs-lisp\")"
+
+compile-emacs: tangle-emacs ## Compile init.el(s)
 	@emacs --batch -l .emacs.d/init.el
-	@emacs --batch -f batch-byte-compile-if-not-done .emacs.d/early-init.el .emacs.d/init.el .emacs.d/mine/init.el
+	@emacs --batch -f batch-byte-compile-if-not-done .emacs.d/early-init.el .emacs.d/init.el
 
 reinstall-emacs: ## Reinstall emacs via homebrew-emacs-plus
 	@brew list --formula emacs-plus >/dev/null 2>&1 && brew uninstall emacs-plus || true

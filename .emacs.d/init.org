@@ -574,21 +574,20 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 ** icons
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package all-the-icons
-  :if (display-graphic-p)
   :defer t
+  :ensure t)
+
+(use-package all-the-icons-ivy-rich
   :ensure t
-  :config
-  (use-package all-the-icons-ivy-rich
-    :ensure t
-    :init (all-the-icons-ivy-rich-mode 1))
+  :init (all-the-icons-ivy-rich-mode 1))
 
-  (use-package ivy-rich
-    :ensure t
-    :init (ivy-rich-mode 1))
+(use-package ivy-rich
+  :ensure t
+  :init (ivy-rich-mode 1))
 
-  (use-package all-the-icons-dired
-    :ensure t
-    :hook (dired-mode . all-the-icons-dired-mode)))
+(use-package all-the-icons-dired
+  :ensure t
+  :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
 
 * lsp

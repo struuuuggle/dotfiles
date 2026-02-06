@@ -3,7 +3,7 @@
 *.local
 
 # .emacs.d
-.emacs.d/mine/init.el
+.emacs.d/init.el
 org-persist/
 *.cache
 *.elc
