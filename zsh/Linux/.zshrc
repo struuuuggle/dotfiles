@@ -223,7 +223,8 @@ gb() {
 }
 
 ghq-list() {
-  local preview_cmd
+  local preview_cmd repo_path key ghq_root
+  local -a fzf_out
   preview_cmd=$(cat <<'EOF'
 dir="$(ghq root)/"{}
 readme="$(find "$dir" -maxdepth 1 -type f -name 'README*' -print 2>/dev/null | head -n 1)"
@@ -238,13 +239,25 @@ else
 fi
 EOF
              )
-  local repo_path
-  repo_path="$(ghq list | fzf +m --reverse -e --preview "$preview_cmd")"
+  fzf_out=("${(@f)$(ghq list \
+    | fzf +m --reverse -e --preview "$preview_cmd" --expect=ctrl-y \
+          --footer 'CTRL-/: preview  CTRL-Y: insert path'
+  )}")
+  key="${fzf_out[1]}"
+  repo_path="${fzf_out[2]}"
   if [ -z "$repo_path" ]; then
     zle send-break
+    return
   fi
 
-  BUFFER="cd $(ghq root)/$repo_path"
+  ghq_root="$(ghq root)"
+  if [ "$key" = "ctrl-y" ]; then
+    LBUFFER+="${ghq_root}/${repo_path}"
+    zle redisplay
+    return
+  fi
+
+  BUFFER="cd ${ghq_root}/${repo_path}"
   zle accept-line
 }
 zle -N ghq-list

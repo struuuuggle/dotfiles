@@ -256,7 +256,8 @@ estart() {
 }
 
 ghq-list() {
-  local preview_cmd repo_path
+  local preview_cmd repo_path key ghq_root
+  local -a fzf_out
   preview_cmd="$(cat <<-'EOF'
 	dir="$(ghq root)/"{}
 	readme="$(find "$dir" -maxdepth 1 -type f -name 'README*' -print 2>/dev/null | head -n 1)"
@@ -271,18 +272,28 @@ ghq-list() {
 	fi
 	EOF
 	)"
-  repo_path="$(
-  ghq list \
-  | fzf --no-multi --exact --reverse \
-        --preview "$preview_cmd" \
-        --bind 'ctrl-/:change-preview-window(down|hidden|)' \
-        --footer 'Press CTRL-/ to toggle preview window'
-  )"
+  fzf_out=("${(@f)$(ghq list \
+    | fzf --no-multi --exact --reverse \
+          --preview "$preview_cmd" \
+          --bind 'ctrl-/:change-preview-window(down|hidden|)' \
+          --footer 'CTRL-/: preview  CTRL-Y: insert path' \
+          --expect=ctrl-y
+  )}")
+  key="${fzf_out[1]}"
+  repo_path="${fzf_out[2]}"
   if [ -z "$repo_path" ]; then
     zle send-break
+    return
   fi
 
-  BUFFER="cd $(ghq root)/$repo_path"
+  ghq_root="$(ghq root)"
+  if [ "$key" = "ctrl-y" ]; then
+    LBUFFER+="${ghq_root}/${repo_path}"
+    zle redisplay
+    return
+  fi
+
+  BUFFER="cd ${ghq_root}/${repo_path}"
   zle accept-line
 }
 zle -N ghq-list
