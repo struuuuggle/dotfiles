@@ -263,6 +263,8 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   :config
   (load-theme 'doom-dracula t)
   (doom-themes-org-config)
+  (doom-themes-visual-bell-config)
+  (doom-themes-treemacs-config)
   (custom-set-faces
    `(default				((t :background ,(doom-color 'base1))))
    `(dired-directory			((t :foreground ,(doom-color 'cyan))))
@@ -407,8 +409,6 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
            (ivy-use-selectable-prompt t)
            (ivy-display-style t)
            (ivy-height-alist '((t lambda (_caller) (/ (frame-height) 2))))
-           ;; 行が長いときは折り返す
-           (ivy-truncate-lines nil)
            ;; 最初と最後の候補を行き来できるようにする
            (ivy-wrap t))
   :config
@@ -434,12 +434,7 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
     :ensure t
     :after prescient ivy
     :hook (ivy-mode . ivy-prescient-mode)
-    :custom (ivy-prescient-retain-classic-highlighting t))
-
-  (use-package ivy-rich
-    :ensure t
-    :hook (ivy-mode . ivy-rich-mode)))
-
+    :custom (ivy-prescient-retain-classic-highlighting t)))
 #+end_src
 ** ivy-postframe
 #+begin_src emacs-lisp :lexical no :results silent
@@ -582,18 +577,18 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :if (display-graphic-p)
   :defer t
   :ensure t
-  )
+  :config
+  (use-package all-the-icons-ivy-rich
+    :ensure t
+    :init (all-the-icons-ivy-rich-mode 1))
 
-(use-package all-the-icons-ivy-rich
-  :if (display-graphic-p)
-  :ensure t
-  :after (ivy all-the-icons)
-  :hook (ivy-mode . all-the-icons-ivy-rich-mode))
+  (use-package ivy-rich
+    :ensure t
+    :init (ivy-rich-mode 1))
 
-(use-package all-the-icons-dired
-  :if (display-graphic-p)
-  :ensure t
-  :hook (dired-mode . all-the-icons-dired-mode))
+  (use-package all-the-icons-dired
+    :ensure t
+    :hook (dired-mode . all-the-icons-dired-mode)))
 #+end_src
 
 * lsp
@@ -829,12 +824,13 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   ;; dでタスクをDONEにする
   (org-speed-commands-user '(("d" org-todo "DONE")))
   ;; org-babelに使用できる言語を追加する
-  (org-babel-load-languages '((shell . t)
-                                (swift . t)
-                                (kotlin . t)
-                                (haskell . t)
-                                (python . t)
-                                (ruby . t)))
+  (org-babel-load-languages '((emacs-lisp . t)
+                              (shell . t)
+                              (swift . t)
+                              (kotlin . t)
+                              (haskell . t)
+                              (python . t)
+                              (ruby . t)))
   ;; コードブロック実行前に確認を求めない
   (org-confirm-babel-evaluate nil)
   ;; 行を折り返す
@@ -1113,7 +1109,6 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-/") 'comment-line)
 (global-set-key "\M-;" 'comment-line)
 (global-set-key "\C-c\C-x" 'eval-buffer)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "s-{") (lambda () (interactive) (other-window -1)))
 (global-set-key (kbd "s-}") (lambda () (interactive) (other-window 1)))
 (global-set-key (kbd "s-t") 'vterm-toggle)
