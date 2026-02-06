@@ -3,6 +3,7 @@
 *.local
 
 # .emacs.d
+.emacs.d/early-init.el
 .emacs.d/init.el
 org-persist/
 *.cache

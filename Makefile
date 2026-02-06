@@ -53,12 +53,10 @@ zsh-autosuggestions: ## Set up zsh-autosuggestions
 		git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions; \
 	fi
 
-tangle-emacs: ## Tangle .emacs.d/init.org into .emacs.d/init.el
+compile-emacs: ## Tangle and compile .emacs.d/{early-init,init}.el
 	@emacs -Q --batch \
-		--eval "(require 'org)" \
-		--eval "(org-babel-tangle-file \".emacs.d/init.org\" \"init.el\" \"emacs-lisp\")"
-
-compile-emacs: tangle-emacs ## Compile init.el(s)
+		--eval "(require 'ob-tangle)" \
+		--eval "(org-babel-tangle-file \".emacs.d/init.org\")"
 	@emacs --batch -l .emacs.d/init.el
 	@emacs --batch -f batch-byte-compile-if-not-done .emacs.d/early-init.el .emacs.d/init.el
 
