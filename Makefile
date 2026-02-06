@@ -53,12 +53,11 @@ zsh-autosuggestions: ## Set up zsh-autosuggestions
 		git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions; \
 	fi
 
-compile-emacs: ## Tangle and compile .emacs.d/{early-init,init}.el
+compile-emacs: ## Tangle init.org and byte-compile .emacs.d recursively
 	@emacs -Q --batch \
 		--eval "(require 'ob-tangle)" \
 		--eval "(org-babel-tangle-file \".emacs.d/init.org\")"
-	@emacs --batch -l .emacs.d/init.el
-	@emacs --batch -f batch-byte-compile-if-not-done .emacs.d/early-init.el .emacs.d/init.el
+	@emacs --batch --eval "(byte-recompile-directory \".emacs.d\" 0)"
 
 reinstall-emacs: ## Reinstall emacs via homebrew-emacs-plus
 	@brew list --formula emacs-plus >/dev/null 2>&1 && brew uninstall emacs-plus || true
