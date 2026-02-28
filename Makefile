@@ -40,7 +40,7 @@ symlink: ## Create symbolic links(git, zsh, bash, vim, emacs)
 		ln -sf $(realpath ghostty/config) "$$HOME/Library/Application Support/com.mitchellh.ghostty/config"; \
 	fi
 
-macos: ## Set up HomeBrew
+macos: ## Set up macOS
 	@if [[ `uname` == "Darwin" ]]; then \
 		@if ! which brew >/dev/null 2>&1 ; then \
 			/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
@@ -48,7 +48,7 @@ macos: ## Set up HomeBrew
 		brew bundle --file Brewfile; \
 	fi
 
-debian: ## Install minimum tools for zsh on Debian
+debian: ## Install minimum tools on Debian
 	@if [[ `uname` != "Linux" ]]; then \
 		echo "This target is for Debian-based Linux."; \
 		exit 0; \

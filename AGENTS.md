@@ -9,8 +9,8 @@
 ## Build, Test, and Development Commands
 - `make` shows available targets.
 - `make symlink` creates symlinks into `$HOME` (e.g., `~/.zshrc`, `~/.vimrc`) and sets git config entries.
-- `make macos` installs Homebrew (if needed) and packages from `Brewfile` (macOS only).
-- `make debian` installs minimum zsh-related tools via Debian packages (Linux only).
+- `make macos` runs macOS setup tasks (macOS only).
+- `make debian` installs minimum tools via Debian packages (Linux only).
 - `make zsh-autosuggestions` installs the plugin into `~/.zsh/`.
 - `make compile-emacs` byte-compiles Emacs configs.
 - `make reinstall-emacs` reinstalls `emacs-plus` (macOS only).
