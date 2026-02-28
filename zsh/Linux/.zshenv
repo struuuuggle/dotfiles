@@ -39,3 +39,6 @@ path=(
 
 # 重複パスを登録しない
 typeset -U path cdpath fpath manpath
+
+# Load local environment settings
+[ -f ~/.zshenv.local ] && source ~/.zshenv.local

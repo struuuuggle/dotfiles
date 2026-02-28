@@ -3,8 +3,6 @@
 ########################################
 # General
 
-[[ -e ~/.zshenv.local ]] && . ~/.zshenv.local
-
 # Compile .zshrc automatically
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
   zcompile ~/.zshrc
@@ -300,3 +298,6 @@ estart
 if command -v codex 1>/dev/null 2>&1; then
   eval "$(codex completion zsh)"
 fi
+
+# Load local shell settings
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
