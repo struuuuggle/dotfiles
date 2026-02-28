@@ -57,16 +57,16 @@ debian: ## Install minimum tools on Debian
 		echo "apt-get not found. This target supports Debian/Ubuntu."; \
 		exit 1; \
 	fi
-	@packages="fzf git ghq gh emacs-nox"; \
-	missing_packages=""; \
-	for pkg in $$packages; do \
+	@packages=(fzf git ghq gh emacs-nox); \
+	missing_packages=(); \
+	for pkg in $${packages[@]}; do \
 		if ! dpkg -s "$$pkg" >/dev/null 2>&1; then \
-			missing_packages="$$missing_packages $$pkg"; \
+			missing_packages+=("$$pkg"); \
 		fi; \
 	done; \
-	if [ -n "$$missing_packages" ]; then \
+	if (( $${#missing_packages[@]} > 0 )); then \
 		sudo apt-get update; \
-		sudo apt-get install -y --no-install-recommends $$missing_packages; \
+		sudo apt-get install -y --no-install-recommends $${missing_packages[@]}; \
 	else \
 		echo "Required packages are already installed."; \
 	fi
