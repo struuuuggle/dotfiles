@@ -40,12 +40,35 @@ symlink: ## Create symbolic links(git, zsh, bash, vim, emacs)
 		ln -sf $(realpath ghostty/config) "$$HOME/Library/Application Support/com.mitchellh.ghostty/config"; \
 	fi
 
-brew: ## Set up HomeBrew
+macos: ## Set up HomeBrew
 	@if [[ `uname` == "Darwin" ]]; then \
 		@if ! which brew >/dev/null 2>&1 ; then \
 			/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 		fi; \
 		brew bundle --file Brewfile; \
+	fi
+
+debian: ## Install minimum tools for zsh on Debian
+	@if [[ `uname` != "Linux" ]]; then \
+		echo "This target is for Debian-based Linux."; \
+		exit 0; \
+	fi
+	@if ! command -v apt-get >/dev/null 2>&1; then \
+		echo "apt-get not found. This target supports Debian/Ubuntu."; \
+		exit 1; \
+	fi
+	@packages="fzf git ghq gh emacs-nox"; \
+	missing_packages=""; \
+	for pkg in $$packages; do \
+		if ! dpkg -s "$$pkg" >/dev/null 2>&1; then \
+			missing_packages="$$missing_packages $$pkg"; \
+		fi; \
+	done; \
+	if [ -n "$$missing_packages" ]; then \
+		sudo apt-get update; \
+		sudo apt-get install -y --no-install-recommends $$missing_packages; \
+	else \
+		echo "Required packages are already installed."; \
 	fi
 
 zsh-autosuggestions: ## Set up zsh-autosuggestions
