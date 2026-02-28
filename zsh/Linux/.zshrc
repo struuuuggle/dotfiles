@@ -25,8 +25,22 @@ bindkey -e
 # %~          : カレントディクトリ(ホームディレクトリ以下全て表示)
 # %n          : ユーザー名
 # %m          : ホスト名
-local p_dir="%F{cyan}[%n@%~]%f"
-local p_mark="%B%(?,%F{green},%F{red})%(!,#,$)%f%b"
+local p_prompt_color="cyan"
+local p_mark_color='%(?,%F{green},%F{red})'
+local p_vcs_color="green"
+local p_vcs_staged_color="yellow"
+local p_vcs_unstaged_color="red"
+
+if [[ -n "${SSH_CONNECTION}${SSH_CLIENT}${SSH_TTY}" ]]; then
+  p_prompt_color="yellow"
+  p_mark_color="%F{yellow}"
+  p_vcs_color="yellow"
+  p_vcs_staged_color="yellow"
+  p_vcs_unstaged_color="yellow"
+fi
+
+local p_dir="%F{$p_prompt_color}[%n@%~]%f"
+local p_mark="%B${p_mark_color}%(!,#,$)%f%b"
 # 1行表示
 #PROMPT="$p_dir $p_mark "
 # 2行表示
@@ -62,9 +76,9 @@ autoload -Uz vcs_info
 setopt prompt_subst
 
 zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr "%F{yellow}!"
-zstyle ':vcs_info:git:*' unstagedstr "%F{red}+"
-zstyle ':vcs_info:*' formats "%F{green}%c%u(%b)%f"
+zstyle ':vcs_info:git:*' stagedstr "%F{$p_vcs_staged_color}!"
+zstyle ':vcs_info:git:*' unstagedstr "%F{$p_vcs_unstaged_color}+"
+zstyle ':vcs_info:*' formats "%F{$p_vcs_color}%c%u(%b)%f"
 zstyle ':vcs_info:*' actionformats '(%b|%a)'
 
 precmd () { vcs_info }
