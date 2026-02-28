@@ -7,7 +7,7 @@
 	preloadIndex = true
 	# Windows and macOS only
 	fsmonitor = true
-	pager = delta
+	pager = f() (command -v delta >/dev/null 2>&1 && exec delta || exec less -R) && f
 [color]
 	ui = true
 [pager]
@@ -29,7 +29,7 @@
 [pager]
 	difftool = true
 [interactive]
-	diffFilter = delta --color-only
+	diffFilter = f() (command -v delta >/dev/null 2>&1 && exec delta --color-only || exec cat) && f
 [delta]
 	line-numbers = true
 	navigate = true
