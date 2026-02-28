@@ -16,6 +16,8 @@ auto-save-list
 bookmarks
 custom.el
 elpa/
+el-get/
+package-quickstart.el
 history
 games
 network-security.data
