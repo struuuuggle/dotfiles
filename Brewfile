@@ -23,6 +23,7 @@ brew "glib", link: false
 brew "cairo"
 brew "gmp"
 brew "coreutils"
+brew "stow"
 brew "unbound"
 brew "gnutls"
 brew "emacs", link: false

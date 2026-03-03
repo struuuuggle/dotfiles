@@ -1,8 +1,8 @@
 # dotfiles
 
 ## installation
-```
-make
+```sh
+make stow
 ```
 
 ## システム環境設定にて
