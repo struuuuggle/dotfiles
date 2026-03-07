@@ -57,7 +57,7 @@ debian: ## Install minimum tools on Debian
 		echo "apt-get not found. This target supports Debian/Ubuntu."; \
 		exit 1; \
 	fi
-	@packages=(fzf git ghq gh emacs-nox); \
+	@packages=(fzf git gh emacs-nox); \
 	missing_packages=(); \
 	for pkg in $${packages[@]}; do \
 		if ! dpkg -s "$$pkg" >/dev/null 2>&1; then \
