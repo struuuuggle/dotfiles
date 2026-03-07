@@ -83,7 +83,6 @@ compile-emacs: ## Tangle init.org and byte-compile .emacs.d recursively
 	@emacs --batch --eval "(byte-recompile-directory \".emacs.d\" 0)"
 
 reinstall-emacs: ## Reinstall emacs via homebrew-emacs-plus
-	@brew list --formula emacs-plus >/dev/null 2>&1 && brew uninstall emacs-plus || true
 	@if [[ -e /Applications/Emacs.app ]]; then rm -rf /Applications/Emacs.app; fi
 	@if [[ -e /Applications/Emacs\ Client.app ]]; then rm -rf /Applications/Emacs\ Client.app; fi
-	brew install --cask emacs-plus-app
+	@brew uninstall --cask emacs-plus-app && brew install --cask emacs-plus-app
