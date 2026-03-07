@@ -1203,6 +1203,28 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
   :ensure t)
 #+end_src
 
+** Agents
+[[https://github.com/xenodium/agent-shell][agent-shell]]: A native Emacs buffer to interact with LLM agents powered by ACP
+#+begin_src emacs-lisp :lexical no :results silent
+(use-package agent-shell
+    :if (and (eq system-type 'darwin)
+             (fboundp 'use-package-ensure-system-package-exists?))
+    :ensure t
+    :ensure-system-package
+    ;; Add agent installation configs here
+    ((codex . "brew install codex")
+     (codex-acp . "npm install -g @zed-industries/codex-acp")
+     (claude . "brew install claude-code")
+     (claude-agent-acp . "npm install -g @zed-industries/claude-agent-acp")
+     (gemini . "brew install gemini-cli")))
+
+(use-package agent-shell
+  :if (and (eq system-type 'darwin)
+           (not (fboundp 'use-package-ensure-system-package-exists?)))
+  :ensure t)
+#+end_src
+
+
 ** keybind
 #+begin_src emacs-lisp :lexical no :results silent
 (global-set-key "\C-h" 'delete-backward-char)
