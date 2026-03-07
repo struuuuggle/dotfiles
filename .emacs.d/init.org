@@ -1151,6 +1151,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
     :ensure t)
   :bind (:map projectile-mode-map
               ("s-p" . projectile-command-map)
+              ("C-c p" . projectile-command-map)
               ("s-O" . projectile-find-file)))
 #+end_src
 
@@ -1212,7 +1213,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key "\C-c\C-x" 'eval-buffer)
 (global-set-key (kbd "s-{") (lambda () (interactive) (other-window -1)))
 (global-set-key (kbd "s-}") (lambda () (interactive) (other-window 1)))
-(global-set-key (kbd "s-t") 'vterm-toggle)
+(global-set-key (kbd "C-c v") 'vterm-toggle)
 (global-set-key (kbd "s-w") 'kill-current-buffer)
 (global-set-key (kbd "s-z") 'undo)
 (global-set-key (kbd "s-Z") 'undo-redo)
