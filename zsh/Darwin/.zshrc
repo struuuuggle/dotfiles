@@ -45,7 +45,6 @@ local p_vcs_unstaged_color="red"
 
 if [[ -n "${SSH_CONNECTION}${SSH_CLIENT}${SSH_TTY}" ]]; then
   p_prompt_color="yellow"
-  p_mark_color="%F{yellow}"
   p_vcs_color="yellow"
   p_vcs_staged_color="yellow"
   p_vcs_unstaged_color="yellow"
