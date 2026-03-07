@@ -45,7 +45,12 @@ macos: ## Set up macOS
 		@if ! which brew >/dev/null 2>&1 ; then \
 			/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 		fi; \
-		brew bundle --file Brewfile; \
+		sudo brew bundle --file Brewfile; \
+	fi
+
+dump: ## Dump configurations
+	@if [[ `uname` == "Darwin" ]]; then \
+		brew bundle dump --no-vscode --no-go --file Brewfile -f; \
 	fi
 
 debian: ## Install minimum tools on Debian
