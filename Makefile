@@ -1,4 +1,4 @@
-SHELL := /bin/zsh
+SHELL := /bin/bash
 
 .SHELLFLAGS := -euo pipefail -c
 .DEFAULT_GOAL := help
@@ -62,6 +62,10 @@ debian: ## Install minimum tools on Debian
 		echo "apt-get not found. This target supports Debian/Ubuntu."; \
 		exit 1; \
 	fi
+	@if ! dpkg -s zsh >/dev/null 2>&1; then \
+		sudo apt-get update; \
+		sudo apt-get install -y --no-install-recommends zsh; \
+	fi
 	@packages=(fzf git gh emacs-nox); \
 	missing_packages=(); \
 	for pkg in $${packages[@]}; do \
@@ -74,6 +78,16 @@ debian: ## Install minimum tools on Debian
 		sudo apt-get install -y --no-install-recommends $${missing_packages[@]}; \
 	else \
 		echo "Required packages are already installed."; \
+	fi; \
+	target_user="$${SUDO_USER:-$$(id -un)}"; \
+	zsh_path="$$(command -v zsh)"; \
+	current_shell="$$(getent passwd "$$target_user" | cut -d: -f7)"; \
+	if [[ -n "$$zsh_path" && "$$current_shell" != "$$zsh_path" ]]; then \
+		if [[ "$$(id -u)" -eq 0 ]]; then \
+			chsh -s "$$zsh_path" "$$target_user"; \
+		else \
+			chsh -s "$$zsh_path"; \
+		fi; \
 	fi
 
 zsh-autosuggestions: ## Set up zsh-autosuggestions
