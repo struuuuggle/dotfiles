@@ -25,3 +25,4 @@ keybind = cmd+6=unbind
 keybind = cmd+7=unbind
 keybind = cmd+8=unbind
 keybind = cmd+9=unbind
+keybind = shift+enter=text:\x1b\r
