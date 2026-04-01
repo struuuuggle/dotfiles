@@ -42,3 +42,5 @@
 	path = ~/.gitconfig.local
 [fetch]
 	auto = true
+[credential]
+	helper = /usr/local/share/gcm-core/git-credential-manager
