@@ -10,6 +10,8 @@ split-divider-color = gray
 macos-option-as-alt = true
 macos-titlebar-style = tabs
 
+keybind = cmd+e=equalize_splits
+
 # Emacs -nw: map Cmd+P to Super+P (s-p) via C-x @ s.
 keybind = super+p=text:\x18@sp
 # Emacs -nw: map Cmd+Shift+[ or ] to Super+[ / Super+] via C-x @ s.
@@ -26,3 +28,5 @@ keybind = cmd+7=unbind
 keybind = cmd+8=unbind
 keybind = cmd+9=unbind
 keybind = shift+enter=text:\x1b\r
+# Emacs -nw: send traditional Tab (0x09) for Ctrl-i instead of CSI u sequence.
+keybind = ctrl+i=text:\x09
