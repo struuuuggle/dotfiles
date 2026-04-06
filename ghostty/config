@@ -7,8 +7,11 @@ cursor-color = green
 
 split-divider-color = gray
 
+tab-inherit-working-directory = false
+
 macos-option-as-alt = true
 macos-titlebar-style = tabs
+macos-window-buttons = hidden
 
 keybind = cmd+e=equalize_splits
 
