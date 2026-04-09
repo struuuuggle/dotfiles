@@ -30,6 +30,10 @@
 - PRs (if used) should include: a short summary, affected paths, and how you verified the change
   (e.g., `make symlink`, “opened Ghostty to confirm theme”).
 
+## Emacs Configuration
+- `.emacs.d/init.el` は `.emacs.d/init.org` から生成される（org-babel tangle）。
+- Emacs の設定変更は必ず `init.org` を編集すること。`init.el` を直接編集してはならない。
+
 ## Configuration & Symlinks
 - This repo is designed to be symlinked into `$HOME`. Prefer adding new configs here
   and extending `make symlink` to wire them up (example: `ghostty/config`).
