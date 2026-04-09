@@ -846,6 +846,8 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package json-mode
   :ensure t
+  :custom
+  (js-indent-level 2)
   :config
   (use-package json-reformat
     :if (version<= "23" emacs-version)
