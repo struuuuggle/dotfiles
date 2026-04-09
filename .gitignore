@@ -2,34 +2,17 @@
 .DS_Store
 *.local
 
-# .emacs.d
-.emacs.d/early-init.el
-.emacs.d/init.el
-org-persist/
+# .codex
+.codex/skills
+
+# .emacs.d (whitelist: track only snippets/ and init.org)
+.emacs.d/*
+!.emacs.d/snippets/
+!.emacs.d/init.org
 *.cache
 *.elc
 *~
 .lsp-session-v1
-.persistent-scratch
-amx-items
-auto-save-list
-bookmarks
-custom.el
-elpa/
-el-get/
-package-quickstart.el
-history
-games
-network-security.data
-projectile-bookmarks.eld
-projects
-eln-cache/
-recentf
-tramp
-transient/
-var/
-request/
-.yas-compiled-snippets.el
 
 # karabiner
 automatic_backups/
