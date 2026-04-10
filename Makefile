@@ -48,7 +48,7 @@ macos: ## Set up macOS
 		sudo brew bundle --file Brewfile; \
 	fi
 
-dump: ## Dump configurations
+brewfile: ## Dump configurations
 	@if [[ `uname` == "Darwin" ]]; then \
 		brew bundle dump --no-vscode --no-go --file Brewfile -f; \
 	fi
