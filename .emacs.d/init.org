@@ -436,6 +436,21 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
   (set-display-table-slot standard-display-table 'vertical-border ?\u2502))
 #+end_src
 
+Force box-drawing and block-element characters to single-width so that
+TUI applications (e.g. Claude Code) render continuous borders inside
+vterm.
+
+The range U+2500–U+259F covers two Unicode blocks:
+- U+2500–U+257F  Box Drawing        (─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼ …)
+- U+2580–U+259F  Block Elements     (▀ ▄ █ ▌ ▐ ░ ▒ ▓ …)
+
+Emacs may calculate a different display width for these glyphs than
+what the font actually renders, causing visible gaps in horizontal and
+vertical rules.  Pinning them to width 1 resolves the mismatch.
+#+begin_src emacs-lisp :lexical no :results silent
+(set-char-table-range char-width-table '(#x2500 . #x259F) 1)
+#+end_src
+
 *** toggle opacity
 #+begin_src emacs-lisp :lexical no :results silent
 (defun struuuuggle/toggle-opacity ()
