@@ -108,6 +108,17 @@
 (setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
+** Files
+#+begin_src emacs-lisp :lexical no :results silent
+;; Redirect auto-save files (#file#) to a dedicated directory
+(setq auto-save-file-name-transforms
+      `((".*" ,(expand-file-name "auto-saves/" user-emacs-directory) t)))
+
+;; Redirect backup files (file~) to a dedicated directory
+(setq backup-directory-alist
+      `((".*" . ,(expand-file-name "backups/" user-emacs-directory))))
+#+end_src
+
 ** use-package
 #+begin_src emacs-lisp :lexical no :results silent
 (eval-and-compile
