@@ -341,6 +341,14 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
 
 (use-package eldoc
   :blackout t)
+
+(use-package savehist
+  :hook (after-init . savehist-mode)
+  :custom
+  (savehist-additional-variables '(search-ring regexp-search-ring)))
+
+(use-package saveplace
+  :hook (after-init . save-place-mode))
 #+end_src
 *** dired
 #+begin_src emacs-lisp :lexical no :results silent
@@ -1026,7 +1034,6 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 *** org-agenda
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org-agenda
-  :if (eq system-type 'gnu/linux)
   :custom
   (org-agenda-files '("~/Documents/Org/"))
   (calendar-holidays nil)
@@ -1246,8 +1253,6 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-/") 'comment-line)
 (global-set-key "\M-;" 'comment-line)
 (global-set-key "\C-c\C-x" 'eval-buffer)
-(global-set-key (kbd "s-{") (lambda () (interactive) (other-window -1)))
-(global-set-key (kbd "s-}") (lambda () (interactive) (other-window 1)))
 (global-set-key (kbd "C-c v") 'vterm-toggle)
 (global-set-key (kbd "s-w") 'kill-current-buffer)
 (global-set-key (kbd "s-z") 'undo)
