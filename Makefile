@@ -6,9 +6,9 @@ SHELL := /bin/bash
 .PHONY: help
 
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-20s\033[0m %s\n", $$1, $$2}'
 
-symlink: ## Create symbolic links(git, zsh, bash, vim, emacs)
+symlink: ## Link dotfiles into $HOME
 
 	ln -sf $(realpath git/.gitconfig) ~
 	@if [ -f git/.gitconfig.local ]; then \
@@ -95,13 +95,16 @@ zsh-autosuggestions: ## Set up zsh-autosuggestions
 		git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions; \
 	fi
 
-compile-emacs: ## Tangle init.org and byte-compile .emacs.d recursively
+emacs-compile: ## Build Emacs config from init.org
 	@emacs -Q --batch \
 		--eval "(require 'ob-tangle)" \
 		--eval "(org-babel-tangle-file \".emacs.d/init.org\")"
 	@emacs --batch --eval "(byte-recompile-directory \".emacs.d\" 0)"
 
-reinstall-emacs: ## Reinstall emacs via homebrew-emacs-plus
+emacs-restart: emacs-compile ## Restart Emacs daemon with the latest config
+	@emacsclient -e "(restart-emacs)" 2>/dev/null || emacs --daemon
+
+emacs-reinstall: ## Reinstall emacs via homebrew-emacs-plus
 	@if [[ -e /Applications/Emacs.app ]]; then rm -rf /Applications/Emacs.app; fi
 	@if [[ -e /Applications/Emacs\ Client.app ]]; then rm -rf /Applications/Emacs\ Client.app; fi
 	@brew uninstall --cask emacs-plus-app && brew install --cask emacs-plus-app
