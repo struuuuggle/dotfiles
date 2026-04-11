@@ -184,9 +184,6 @@ setopt hist_reduce_blanks
 # 高機能なワイルドカード展開を使用する
 setopt extended_glob
 
-# Disable Loading Global Profiles
-setopt no_global_rcs
-
 # ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
 setopt auto_param_slash
 

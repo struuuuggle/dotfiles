@@ -2,6 +2,9 @@
 
 ########################################
 
+# Disable global zsh configuration files (/etc/zshrc, /etc/zprofile, etc.)
+setopt no_global_rcs
+
 # Locale and environment
 export LANG=ja_JP.UTF-8
 export EDITOR='emacsclient -nw'

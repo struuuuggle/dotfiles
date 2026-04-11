@@ -23,6 +23,9 @@ symlink: ## Link dotfiles into $HOME
 	@if [ -f zsh/$(shell uname)/.zshrc ]; then \
 		ln -sf $(realpath zsh/$(shell uname)/.zshrc) ~; \
 	fi
+	@if [ -f zsh/$(shell uname)/.zprofile ]; then \
+		ln -sf $(realpath zsh/$(shell uname)/.zprofile) ~; \
+	fi
 
 	@if [ -f bash/$(shell uname)/.bashrc ]; then \
 		ln -sf $(realpath bash/$(shell uname)/.bashrc) ~; \
