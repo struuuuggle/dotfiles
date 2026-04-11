@@ -2,16 +2,9 @@
 
 ########################################
 
-# 環境変数
+# Locale and environment
 export LANG=ja_JP.UTF-8
-export LC_ALL=$LANG
-export TERM="xterm-256color"
 export EDITOR='emacsclient -nw'
-
-# ヒストリの設定
-HISTFILE=~/.zsh_history
-HISTSIZE=100000
-SAVEHIST=100000
 
 ########################################
 # PATH
@@ -23,22 +16,18 @@ export GOPATH="$HOME/go"
 path=(
   # X11
   /usr/X11/bin(N-/)
-  # GNU
+  # GNU coreutils
   /usr/local/opt/coreutils/libexec/gnubin(N-/)
-  # pyenv
-  # $HOME/.pyenv/shims(N-/)
-  # stack(Haskell)
+  # Local binaries (stack, scripts, etc.)
   $HOME/.local/bin(N-/)
   # Rust
   $HOME/.cargo/bin(N-/)
-  # 雑用スクリプト
-  $HOME/.local/bin(N-/)
-  # Homebrew's sbin
+  # Homebrew sbin
   /usr/local/sbin(N-/)
-  # Homebrew(M1)
+  # Homebrew (Apple Silicon)
   /opt/homebrew/bin(N-/)
   /opt/homebrew/sbin(N-/)
-  # /etc/paths に書いてあるもの
+  # Standard system paths (from /etc/paths)
   /usr/local/bin(N-/)
   /usr/bin(N-/)
   /bin(N-/)
@@ -47,7 +36,7 @@ path=(
   # Java
   $JAVA_HOME/bin(N-/)
   # Go
-  $GOPATH/bin/(N-/)
+  $GOPATH/bin(N-/)
   # Mint
   $MINT_LINK_PATH(N-/)
   # Docker
@@ -60,7 +49,7 @@ fpath=(
   $fpath
 )
 
-# 重複パスを登録しない
+# Deduplicate path arrays
 typeset -U path cdpath fpath manpath
 
 #############################################
