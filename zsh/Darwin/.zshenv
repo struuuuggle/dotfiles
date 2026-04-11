@@ -54,6 +54,12 @@ path=(
   $HOME/.docker/bin(N-/)
 )
 
+# Homebrew completions
+fpath=(
+  /opt/homebrew/share/zsh/site-functions(N-/)
+  $fpath
+)
+
 # 重複パスを登録しない
 typeset -U path cdpath fpath manpath
 
