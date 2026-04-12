@@ -1,70 +1,106 @@
-SHELL := /bin/bash
+SHELL              := /bin/bash
+.SHELLFLAGS        := -euo pipefail -c
+.DEFAULT_GOAL      := help
 
-.SHELLFLAGS := -euo pipefail -c
-.DEFAULT_GOAL := help
+GREEN              := \033[32m
+RED                := \033[31m
+RESET              := \033[0m
 
-.PHONY: help
+OS                 := $(shell uname)
+MACOS              := $(if $(filter Darwin,$(OS)),1)
+DEBIAN             := $(if $(filter Linux,$(OS)),1)
 
+GHOSTTY_CONFIG_DIR := $(HOME)/Library/Application Support/com.mitchellh.ghostty
+EMACS_APP          := /Applications/Emacs.app
+EMACSCLIENT_APP    := /Applications/Emacs Client.app
+
+.PHONY: help symlink git zsh bash vim .emacs.d ghostty \
+        zsh-autosuggestions emacs-compile emacs-restart \
+        macos brewfile emacs-reinstall debian
+
+
+##################################################
+# common
+
+
+# Show this help (only targets with ## comments are listed)
 help:
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-20s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-20s$(RESET) %s\n", $$1, $$2}'
 
-symlink: ## Link dotfiles into $HOME
+symlink: git zsh bash vim .emacs.d ghostty ## Link dotfiles into $HOME
 
+git:
 	ln -sf $(realpath git/.gitconfig) ~
 	@if [ -f git/.gitconfig.local ]; then \
 		ln -sf $(realpath git/.gitconfig.local) ~; \
 	fi
-	git config --file ~/.gitconfig.local core.excludesfile $(realpath git/.gitignore_global)
-	git config --file ~/.gitconfig.local commit.template $(realpath git/.commit_template)
+	git config --file \
+    ~/.gitconfig.local core.excludesfile \
+    $(realpath git/.gitignore_global)
+	git config --file ~/.gitconfig.local \
+    commit.template \
+    $(realpath git/.commit_template)
 
-	@if [ -f zsh/$(shell uname)/.zshenv ]; then \
-		ln -sf $(realpath zsh/$(shell uname)/.zshenv) ~; \
-	fi
-	@if [ -f zsh/$(shell uname)/.zshrc ]; then \
-		ln -sf $(realpath zsh/$(shell uname)/.zshrc) ~; \
-	fi
-	@if [ -f zsh/$(shell uname)/.zprofile ]; then \
-		ln -sf $(realpath zsh/$(shell uname)/.zprofile) ~; \
-	fi
+zsh:
+	ln -sf $(realpath zsh/$(OS))/.zshenv   ~
+	ln -sf $(realpath zsh/$(OS))/.zshrc    ~
+	ln -sf $(realpath zsh/$(OS))/.zprofile ~
+	[ -d ~/.zsh/zsh-autosuggestions ] \
+		|| git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
-	@if [ -f bash/$(shell uname)/.bashrc ]; then \
-		ln -sf $(realpath bash/$(shell uname)/.bashrc) ~; \
-	fi
-	@if [ -f bash/$(shell uname)/.bash_profile ]; then \
-		ln -sf $(realpath bash/$(shell uname)/.bash_profile) ~; \
-	fi
+bash:
+	ln -sf $(realpath bash/$(OS))/.bashrc       ~
+	ln -sf $(realpath bash/$(OS))/.bash_profile ~
 
+vim:
 	ln -sf $(realpath vim/.vimrc) ~
 
+.emacs.d:
 	ln -sf $(realpath .emacs.d) ~
 
-	@if [[ `uname` == "Darwin" ]]; then \
-		mkdir -p "$$HOME/Library/Application Support/com.mitchellh.ghostty"; \
-		ln -sf $(realpath ghostty/config) "$$HOME/Library/Application Support/com.mitchellh.ghostty/config"; \
-	fi
+ghostty: guard-MACOS
+	mkdir -p "$(GHOSTTY_CONFIG_DIR)"
+	ln -sf \
+    $(realpath ghostty/config) \
+    "$(GHOSTTY_CONFIG_DIR)/config"
 
-macos: ## Set up macOS
-	@if [[ `uname` == "Darwin" ]]; then \
-		@if ! which brew >/dev/null 2>&1 ; then \
-			/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
-		fi; \
-		sudo brew bundle --file Brewfile; \
-	fi
+emacs-compile: .emacs.d/init.el ## Build Emacs config from init.org
 
-brewfile: ## Dump configurations
-	@if [[ `uname` == "Darwin" ]]; then \
-		brew bundle dump --no-vscode --no-go --file Brewfile -f; \
-	fi
+emacs-restart: .emacs.d/init.el ## Restart Emacs daemon with the latest config
+	emacsclient -e "(restart-emacs)" 2>/dev/null || emacs --daemon
 
-debian: ## Install minimum tools on Debian
-	@if [[ `uname` != "Linux" ]]; then \
-		echo "This target is for Debian-based Linux."; \
-		exit 0; \
+.emacs.d/init.el: .emacs.d/init.org
+	emacs -Q --batch \
+		--eval "(require 'ob-tangle)" \
+		--eval "(org-babel-tangle-file \".emacs.d/init.org\")"
+	emacs --batch \
+		--eval "(byte-recompile-directory \".emacs.d\" 0)"
+
+
+##################################################
+# macOS
+
+
+macos: guard-MACOS ## Set up macOS
+	@if ! command -v brew >/dev/null 2>&1; then \
+		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 	fi
-	@if ! command -v apt-get >/dev/null 2>&1; then \
-		echo "apt-get not found. This target supports Debian/Ubuntu."; \
-		exit 1; \
-	fi
+	brew bundle --file Brewfile
+
+brewfile: guard-MACOS ## Dump Brewfile
+	brew bundle dump --no-vscode --no-go --file Brewfile -f
+
+emacs-reinstall: guard-MACOS ## Reinstall Emacs via homebrew-emacs-plus
+	@rm -rf "$(EMACS_APP)" "$(EMACSCLIENT_APP)"
+	@brew uninstall --cask emacs-plus-app && brew install --cask emacs-plus-app
+
+
+##################################################
+# Debian
+
+
+debian: guard-DEBIAN ## Install minimum tools on Debian
 	@if ! dpkg -s zsh >/dev/null 2>&1; then \
 		sudo apt-get update; \
 		sudo apt-get install -y --no-install-recommends zsh; \
@@ -93,21 +129,23 @@ debian: ## Install minimum tools on Debian
 		fi; \
 	fi
 
-zsh-autosuggestions: ## Set up zsh-autosuggestions
-	@if [ ! -d ~/.zsh/zsh-autosuggestions ]; then \
-		git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions; \
+##################################################
+# misc
+
+export GUARD_ERROR_MACOS
+define GUARD_ERROR_MACOS
+  $(RED)This target requires macOS.$(RESET)
+  Current OS: $(OS)
+endef
+
+export GUARD_ERROR_DEBIAN
+define GUARD_ERROR_DEBIAN
+  $(RED)This target is for Debian-based Linux.$(RESET)
+  Current OS: $(OS)
+endef
+
+guard-%:
+	@if [ -z "$($(*))" ]; then \
+		echo -e "$$GUARD_ERROR_$*" >&2; \
+		exit 1; \
 	fi
-
-emacs-compile: ## Build Emacs config from init.org
-	@emacs -Q --batch \
-		--eval "(require 'ob-tangle)" \
-		--eval "(org-babel-tangle-file \".emacs.d/init.org\")"
-	@emacs --batch --eval "(byte-recompile-directory \".emacs.d\" 0)"
-
-emacs-restart: emacs-compile ## Restart Emacs daemon with the latest config
-	@emacsclient -e "(restart-emacs)" 2>/dev/null || emacs --daemon
-
-emacs-reinstall: ## Reinstall emacs via homebrew-emacs-plus
-	@if [[ -e /Applications/Emacs.app ]]; then rm -rf /Applications/Emacs.app; fi
-	@if [[ -e /Applications/Emacs\ Client.app ]]; then rm -rf /Applications/Emacs\ Client.app; fi
-	@brew uninstall --cask emacs-plus-app && brew install --cask emacs-plus-app
