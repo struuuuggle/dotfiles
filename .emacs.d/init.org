@@ -395,8 +395,6 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
    `(org-block-begin-line		((t :background ,(doom-color 'base2) :foreground ,(doom-color 'doc-comments))))
    `(org-block			((t :background ,(doom-color 'base2) :foreground ,(doom-color 'fg-alt))))
    `(org-block-end-line		((t :background ,(doom-color 'base2))))
-   `(ivy-posframe			((t :background ,(doom-color 'base2))))
-   `(ivy-posframe-border		((t :background ,(doom-color 'green))))
    `(tab-bar-tab			((t :background ,(doom-color 'base6) :foreground ,(doom-color 'bg-alt) :weight bold))) ;; active tab
    `(tab-bar-tab-inactive		((t :background ,(doom-color 'base1)))))
   (set-face-foreground 'vertical-border (doom-color 'base5))
@@ -469,15 +467,13 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package ace-window
   :ensure t
-  :after ivy-posframe
   :custom
   (aw-keys '(?j ?k ?h ?l ?a ?s ?d ?f ?g))
   (aw-ignore-current t)
   (aw-minibuffer-flag nil)
   :bind ("C-o" . ace-window)
   :config
-  (set-face-attribute 'aw-leading-char-face nil :height 4.0 :foreground "#999999")
-  (ace-window-posframe-mode 1))
+  (set-face-attribute 'aw-leading-char-face nil :height 4.0 :foreground "#999999"))
 #+end_src
 
 *** indent:
@@ -528,100 +524,52 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 
 #+end_src
 
-*** ivy:
+*** completion:
 #+begin_src emacs-lisp :lexical no :results silent
-(use-package ivy
-  :if (version<= "24.5" emacs-version)
+(use-package vertico
   :ensure t
-  :blackout t
-  :hook (after-init . ivy-mode)
-  :custom ((ivy-initial-inputs-alist nil)
-           (ivy-use-selectable-prompt t)
-           (ivy-display-style t)
-           (ivy-height-alist '((t lambda (_caller) (/ (frame-height) 2))))
-           ;; 最初と最後の候補を行き来できるようにする
-           (ivy-wrap t))
-  :config
-  (use-package swiper
-    :if (version<= "24.5" emacs-version)
-    :ensure t
-    :commands swiper-isearch-thing-at-point
-    :bind (("C-s" . swiper)
-           ("M-s" . 'swiper-isearch-thing-at-point)))
+  :hook (after-init . vertico-mode)
+  :custom
+  (vertico-count 20)
+  (vertico-cycle t))
 
-  (use-package counsel
-    :if (version<= "24.5" emacs-version)
-    :ensure t
-    :blackout t
-    :hook (ivy-mode . counsel-mode)
-    :bind (("C-S-s" . counsel-imenu)
-           ("C-x C-r" . counsel-recentf))
-    :custom `((counsel-yank-pop-separator . "\n----------\n")
-              (counsel-find-file-ignore-regexp . ,(rx-to-string '(or "./" "../") 'no-group))))
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles partial-completion)))))
 
-  (use-package ivy-prescient
-    :if (version<= "25.1" emacs-version)
-    :ensure t
-    :after prescient ivy
-    :hook (ivy-mode . ivy-prescient-mode)
-    :custom (ivy-prescient-retain-classic-highlighting t)))
+(use-package marginalia
+  :ensure t
+  :hook (after-init . marginalia-mode))
+
+(use-package consult
+  :ensure t
+  :bind (("C-s" . consult-line)
+         ("C-S-s" . consult-imenu)
+         ("C-x C-r" . consult-recent-file)
+         ("C-x b" . consult-buffer)
+         ("M-g g" . consult-goto-line)
+         ("M-s" . consult-line-multi)))
 #+end_src
-**** ivy-postframe
+
+*** corfu:
 #+begin_src emacs-lisp :lexical no :results silent
-(use-package ivy-posframe
-  :if window-system
+(use-package corfu
   :ensure t
-  :hook (ivy-mode . ivy-posframe-mode)
+  :hook (after-init . global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-delay 0.2)
+  (corfu-auto-prefix 2)
+  (corfu-cycle t)
+  (corfu-preselect 'prompt))
+
+(use-package cape
+  :ensure t
   :init
-  (defvar ivy-posframe-display-functions-alist)
-  (defvar ivy-posframe-parameters)
-  ;; (ivy-posframe-display-functions-alist quote ((t . ivy-posframe-display)))
-  (setq ivy-posframe-parameters '((internal-border-width . 10)))
-  :config
-  (setq ivy-posframe-parameters
-      '((left-fringe . 8)
-        (right-fringe . 8)))
-  (setq ivy-posframe-display-functions-alist
-      '((swiper							. ivy-display-function-fallback)
-        (counsel-M-x				. ivy-posframe-display-at-frame-center)
-        (counsel-recentf		. ivy-posframe-display-at-frame-center)
-        (t									. ivy-posframe-display)))
-  )
-#+end_src
-**** prescient
-#+begin_src emacs-lisp :lexical no :results silent
-(use-package prescient
-  :if (version<= "25.1" emacs-version)
-  :ensure t
-  :commands prescient-persist-mode
-  :custom (prescient-aggressive-file-save t)
-  :config
-  (prescient-persist-mode 1))
-#+end_src
-
-*** company:
-#+begin_src emacs-lisp :lexical no :results silent
-(use-package company
-  :if (version<= "24.3" emacs-version)
-  :ensure t
-  :blackout t
-  :hook (after-init . global-company-mode)
-  :bind (("M-SPC" . company-complete)
-         :map company-active-map
-         ("M-n" . nil)
-         ("M-p" . nil)
-         ("C-s" . company-filter-candidates)
-         ("C-n" . company-select-next)
-         ("C-p" . company-select-previous)
-         ("<tab>" . company-complete-selection)
-         :map company-search-map
-         ("C-n" . company-select-next)
-         ("C-p" . company-select-previous))
-  :custom ((company-idle-delay 0)
-           (company-minimum-prefix-length 1)
-           (company-transformers '(company-sort-by-occurrence))
-           ;; 大文字小文字を区別して補完する
-           (company-dabbrev-downcase nil)))
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file))
 #+end_src
 
 *** git:
@@ -702,21 +650,12 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 
 **** icons
 #+begin_src emacs-lisp :lexical no :results silent
-(use-package all-the-icons
-  :defer t
+(use-package nerd-icons
   :ensure t)
 
-(use-package all-the-icons-ivy-rich
+(use-package nerd-icons-dired
   :ensure t
-  :init (all-the-icons-ivy-rich-mode 1))
-
-(use-package ivy-rich
-  :ensure t
-  :init (ivy-rich-mode 1))
-
-(use-package all-the-icons-dired
-  :ensure t
-  :hook (dired-mode . all-the-icons-dired-mode))
+  :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
 *** lsp
@@ -1018,12 +957,6 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   (org-startup-indented t)
   (org-startup-folded 'showall))
 
-(use-package company-org-block
-  :ensure t
-  :hook
-  (org-mode . (lambda ()
-                (setq-local company-backends '(company-org-block))
-                (company-mode 1))))
 #+end_src
 
 **** org-agenda
@@ -1148,19 +1081,16 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
      (tab-bar-rename-tab (projectile-project-name))
      (magit-status)))
   (projectile-verbose nil)
-  (projectile-completion-system 'ivy)
+  (projectile-completion-system 'default)
   :hook (after-init . projectile-mode)
   :config
   (defvar projectile-project-search-path)
   (if noninteractive
       (setq projectile-project-search-path nil)
     (setq projectile-project-search-path '("~/sandbox/" ("~/ghq/" . 3))))
-  (use-package ag
-    :if (executable-find "ag")
-    :ensure t
-    :custom
-    (ag-reuse-buffers t)
-    (ag-highlight-search t))
+  (use-package rg
+    :if (executable-find "rg")
+    :ensure t)
   (use-package projectile-rails
     :ensure t)
   :bind (:map projectile-mode-map
