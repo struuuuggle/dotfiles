@@ -1,0 +1,32 @@
+#+TITLE: Emacs Configuration
+
+* Overview
+
+This directory contains Emacs configuration managed via [[https://orgmode.org/][Org mode]] and [[https://orgmode.org/manual/Extracting-Source-Code.html][org-babel-tangle]].
+
+All configuration is written in =init.org=.
+=init.el= and =early-init.el= are *auto-generated* from =init.org= — do not edit them directly.
+
+* How It Works
+
+=init.org= uses =#+PROPERTY: header-args:emacs-lisp :tangle init.el= at the top to set the default tangle target.
+Each source block is tangled to either =init.el= or =early-init.el= (via =:tangle early-init.el= header arg).
+
+To regenerate the Elisp files, run one of the following:
+
+- In Emacs: =M-x org-babel-tangle= (=C-c C-v t=) while visiting =init.org=
+- From the shell:
+
+  #+begin_src sh
+  # Run from the repository root
+  make compile-emacs
+  #+end_src
+
+* File Roles
+
+| File            | Role                                              |
+|-----------------+---------------------------------------------------|
+| =init.org=      | Source of truth — edit this file                  |
+| =init.el=       | Generated from =init.org= (do not edit, gitignored) |
+| =early-init.el= | Generated from =init.org= (do not edit, gitignored) |
+| =custom.el=     | Emacs Custom settings (managed by Emacs itself)   |

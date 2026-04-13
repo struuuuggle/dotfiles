@@ -9,6 +9,7 @@
 .emacs.d/*
 !.emacs.d/snippets/
 !.emacs.d/init.org
+!.emacs.d/README.org
 *.cache
 *.elc
 *~
