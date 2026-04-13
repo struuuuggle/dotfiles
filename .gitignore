@@ -2,8 +2,9 @@
 .DS_Store
 *.local
 
-# .codex
+# Agent
 .codex/skills
+.claude/
 
 # .emacs.d (whitelist: track only snippets/ and init.org)
 .emacs.d/*
