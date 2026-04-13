@@ -64,7 +64,6 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (push '(ns-transparent-titlebar . t) default-frame-alist)
 (push '(vertical-scroll-bars . nil) default-frame-alist)
 (setq-default mode-line-format nil)
-(setq-default header-line-format nil)
 #+end_src
 
 *** Startup Screen
@@ -116,9 +115,6 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (setq auto-save-file-name-transforms
       `((".*" ,(expand-file-name "auto-saves/" user-emacs-directory) t)))
 
-;; Redirect backup files (file~) to a dedicated directory
-(setq backup-directory-alist
-      `((".*" . ,(expand-file-name "backups/" user-emacs-directory))))
 #+end_src
 
 *** use-package
@@ -147,7 +143,6 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (use-package dashboard
   :ensure t
   :if (< (length command-line-args) 2)
-  :mode ("\\*dashboard*\\'" . dashboard-mode)
   :hook (after-init . dashboard-setup-startup-hook)
   :custom
   ;; Value can be
@@ -264,7 +259,6 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
   (defvar auto-save-draft)
   (defvar show-trailing-whitespace)
   (setq select-enable-clipboard t)
-  (setq indent-tabs-mode nil)
   (setq scroll-bar-mode nil)
   (setq truncate-lines t)
   (setq create-lockfiles nil)
@@ -487,10 +481,6 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 #+end_src
 
 *** indent:
-**** タブ幅をスペース2つ分にする
-#+begin_src emacs-lisp :lexical no :results silent
-(setq-default tab-width 2)
-#+end_src
 **** タブ文字ではなくスペースを使う
 #+begin_src emacs-lisp :lexical no :results silent
 (setq-default tab-width 2)
@@ -707,8 +697,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
          (after-init . fira-code-mode-set-font))
   :custom
   (fira-code-mode-disabled-ligatures '("[]" "x"))
-  (fira-code-mode-enable-hex-literal nil)
-  (fira-code-mode-disabled-ligatures nil))
+  (fira-code-mode-enable-hex-literal nil))
 #+end_src
 
 **** icons
@@ -901,7 +890,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 **** Ruby
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package ruby-mode
-  :mode "Fastfile$" "Gymfile$" "Dangerfile")
+  :mode ("Fastfile\\'" "Gymfile\\'" "Dangerfile\\'"))
 #+end_src
 
 **** Kotlin
