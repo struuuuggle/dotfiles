@@ -1143,8 +1143,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 
 *** tramp
 #+begin_src emacs-lisp :lexical no :results silent
-(use-package tramp
-  :ensure t)
+(use-package tramp)
 #+end_src
 
 *** Agents
