@@ -657,6 +657,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package git-gutter
   :ensure t
+  :hook (after-init . global-git-gutter-mode)
   :custom
   (git-gutter:modified-sign " ")
   (git-gutter:added-sign    " ")
@@ -664,8 +665,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :config
   (set-face-attribute 'git-gutter:modified nil :background (doom-color 'yellow))
   (set-face-attribute 'git-gutter:added nil :background (doom-color 'green))
-  (set-face-attribute 'git-gutter:deleted nil :background (doom-color 'magenta))
-  (global-git-gutter-mode 1))
+  (set-face-attribute 'git-gutter:deleted nil :background (doom-color 'magenta)))
 
 ;; シンボリックリンクの読み込みを許可
 (setq vc-follow-symlinks t)
@@ -1144,8 +1144,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
      (magit-status)))
   (projectile-verbose nil)
   (projectile-completion-system 'ivy)
-  :init
-  (projectile-mode 1)
+  :hook (after-init . projectile-mode)
   :config
   (defvar projectile-project-search-path)
   (if noninteractive
