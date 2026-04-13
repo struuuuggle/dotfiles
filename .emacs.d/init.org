@@ -943,8 +943,13 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                               (haskell . t)
                               (python . t)
                               (ruby . t)))
-  ;; コードブロック実行前に確認を求めない
-  (org-confirm-babel-evaluate nil)
+  ;; Skip babel confirmation only for files in trusted directories
+  (org-confirm-babel-evaluate
+   (lambda (lang _body)
+     (let ((dominated (and buffer-file-name
+                        (or (string-prefix-p (expand-file-name org-directory) (expand-file-name buffer-file-name))
+                            (string-prefix-p (expand-file-name user-emacs-directory) (expand-file-name buffer-file-name))))))
+       (not dominated))))
   ;; 行を折り返す
   (org-startup-truncated nil)
   ;; 画像をインラインで表示
