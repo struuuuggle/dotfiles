@@ -1,10 +1,10 @@
 #+TITLE: init.org
 Source of truth for Emacs configuration — =init.el= and =early-init.el= are auto-generated from this file via org-babel-tangle.
-#+PROPERTY: header-args:emacs-lisp :tangle init.el
-#+PROPERTY: header-args:elisp :tangle init.el
+#+PROPERTY: header-args:emacs-lisp :tangle init.el :results silent
+#+PROPERTY: header-args:elisp :tangle init.el :results silent
 
-** early-init.el
-*** Header
+* early-init.el
+** Header
 #+begin_src emacs-lisp :tangle early-init.el
 ;;; early-init.el --- The Early Init File -*- lexical-binding: t -*-
 
@@ -17,7 +17,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 ;;; Code:
 #+end_src
 
-*** Exec PATH
+** Exec PATH
 #+begin_src emacs-lisp :tangle early-init.el
 ;; workaround:
 ;; https://github.com/d12frosted/homebrew-emacs-plus/issues/733
@@ -41,14 +41,14 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
     (setq exec-path (split-string shell-path path-separator))))
 #+end_src
 
-*** GC
+** GC
 #+begin_src emacs-lisp :tangle early-init.el
 ;; 起動処理中にGCを走らせない
 ;; init.elの最後でもとに戻す必要がある
 (setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
-*** Package Startup
+** Package Startup
 #+begin_src emacs-lisp :tangle early-init.el
 ;; Emacsの起動時にパッケージを自動的に読み込まない
 (setq package-enable-at-startup nil)
@@ -57,7 +57,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (setq package-quickstart t)
 #+end_src
 
-*** Frame Defaults
+** Frame Defaults
 #+begin_src emacs-lisp :tangle early-init.el
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(tool-bar-lines . 0) default-frame-alist)
@@ -66,34 +66,34 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (setq-default mode-line-format nil)
 #+end_src
 
-*** Startup Screen
+** Startup Screen
 #+begin_src emacs-lisp :tangle early-init.el
 ;; 直接編集画面へ遷移する
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 #+end_src
 
-*** Frame Resize
+** Frame Resize
 #+begin_src emacs-lisp :tangle early-init.el
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Implied-Frame-Resizing.html
 (setq frame-inhibit-implied-resize t)
 #+end_src
 
-*** LSP Performance
+** LSP Performance
 #+begin_src emacs-lisp :tangle early-init.el
 ;; Use plists for deserialization
 ;; https://emacs-lsp.github.io/lsp-mode/page/performance/#use-plists-for-deserialization
 (setenv "LSP_USE_PLISTS" "true")
 #+end_src
 
-*** Footer
+** Footer
 #+begin_src emacs-lisp :tangle early-init.el
 (provide 'early-init)
 ;;; early-init.el ends here
 #+end_src
 
-** init.el
-*** Header
+* init.el
+** Header
 #+begin_src emacs-lisp :lexical no :results silent
 ;;; init.el --- The Init File -*- lexical-binding: t -*-
 
@@ -104,12 +104,12 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 ;;; Code:
 #+end_src
 
-*** Startup
+** Startup
 #+begin_src emacs-lisp :lexical no :results silent
 (setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
-*** Files
+** Files
 #+begin_src emacs-lisp :lexical no :results silent
 ;; Redirect auto-save files (#file#) to a dedicated directory
 (setq auto-save-file-name-transforms
@@ -117,7 +117,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 
 #+end_src
 
-*** use-package
+** use-package
 #+begin_src emacs-lisp :lexical no :results silent
 (eval-and-compile
   (customize-set-variable
@@ -137,8 +137,8 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
   :ensure t)
 #+end_src
 
-*** faces:
-**** dashboard
+** faces:
+*** dashboard
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package dashboard
   :ensure t
@@ -163,7 +163,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
                                (get-buffer-create "*scratch*")))))
 #+end_src
 
-***** which-key
+**** which-key
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package which-key
     :ensure t
@@ -177,7 +177,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
     (which-key-idle-delay 0.3))
 #+end_src
 
-**** line-number
+*** line-number
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package display-line-numbers
   :blackout t
@@ -192,7 +192,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
                 (display-line-numbers-mode -1)))))
 #+end_src
 
-**** so-long
+*** so-long
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package so-long
   :hook (after-init . global-so-long-mode)
@@ -203,15 +203,15 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
               (hl-line-mode -1))))
 #+end_src
 
-**** tab-bar-mode
+*** tab-bar-mode
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package tab-bar
   :hook (after-init . tab-bar-mode)
   :custom
   (tab-bar-new-tab-choice "*dashboard*"))
 #+end_src
-*** config:
-**** Not to report warnings and errors from asynchronous native compilation.
+** config:
+*** Not to report warnings and errors from asynchronous native compilation.
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package comp
   :init
@@ -219,33 +219,33 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
   (setq native-comp-async-report-warnings-errors 'silent))
 #+end_src
 
-**** clickable URL
+*** clickable URL
 #+begin_src elisp :lexical no :results silent
 (global-goto-address-mode 1)
 #+end_src
 
-**** 音を鳴らさない
+*** 音を鳴らさない
 #+begin_src emacs-lisp :lexical no :results silent
 (setq ring-bell-function 'ignore)
 #+end_src
 
-****  "y" or "n" instead of "yes" or "no"
+***  "y" or "n" instead of "yes" or "no"
 #+begin_src emacs-lisp :lexical no :results silent
 (setq use-short-answers t)
 #+end_src
 
-**** Do not delete files actually
+*** Do not delete files actually
 #+begin_src emacs-lisp :lexical no :results silent
 (setq delete-by-moving-to-trash t)
 #+end_src
 
-**** history関連
+*** history関連
 #+begin_src emacs-lisp :lexical no :results silent
 (setq history-delete-duplicates t)
 (setq history-length 1000)
 #+end_src
 
-**** スムーズにスクロールする
+*** スムーズにスクロールする
 #+begin_src emacs-lisp :lexical no :results silent
 (setq scroll-conservatively 1)
 (setq mouse-wheel-scroll-amount '(1 ((control) 5)))
@@ -267,7 +267,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
   (setq process-adaptive-read-buffering t))
 #+end_src
 
-**** clipboard
+*** clipboard
 Ensure macOS clipboard sync works for terminal frames created by emacsclient.
 #+begin_src emacs-lisp :lexical no :results silent
 (defun my/pbcopy (text &optional _push)
@@ -346,7 +346,7 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
 (use-package saveplace
   :hook (after-init . save-place-mode))
 #+end_src
-**** dired
+*** dired
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package dired
   :preface
@@ -363,7 +363,7 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   ;; Make dired always use the same buffer
   (dired-kill-when-opening-new-dired-buffer t))
 #+end_src
-**** dired-sidebar
+*** dired-sidebar
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package dired-sidebar
   :ensure t
@@ -375,7 +375,7 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   (dired-sidebar-use-custom-font t))
 #+end_src
 
-*** theme
+** theme
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package doom-themes
   :ensure t
@@ -404,7 +404,7 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   (doom-modeline-project-name t))
 #+end_src
 
-**** mode-line
+*** mode-line
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package doom-modeline
   :ensure t
@@ -422,7 +422,7 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   (doom-modeline-buffer-encoding nil))
 #+end_src
 
-**** CUI
+*** CUI
 Use a box-drawing glyph for vertical splits in terminal Emacs.
 #+begin_src emacs-lisp :lexical no :results silent
 (when (not (display-graphic-p))
@@ -445,7 +445,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 (set-char-table-range char-width-table '(#x2500 . #x259F) 1)
 #+end_src
 
-**** toggle opacity
+*** toggle opacity
 #+begin_src emacs-lisp :lexical no :results silent
 (defun struuuuggle/toggle-opacity ()
   "Toggle the opacity of the entire window."
@@ -454,7 +454,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 (global-set-key (kbd "s-u") 'struuuuggle/toggle-opacity)
 #+end_src
 
-**** カーソル行ハイライト
+*** カーソル行ハイライト
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package hl-line
   :hook (after-init . global-hl-line-mode)
@@ -463,7 +463,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
                       :background (doom-blend (doom-color 'green) (doom-color 'bg) 0.15)))
 #+end_src
 
-*** window
+** window
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package ace-window
   :ensure t
@@ -476,14 +476,14 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   (set-face-attribute 'aw-leading-char-face nil :height 4.0 :foreground "#999999"))
 #+end_src
 
-*** indent:
-**** タブ文字ではなくスペースを使う
+** indent:
+*** タブ文字ではなくスペースを使う
 #+begin_src emacs-lisp :lexical no :results silent
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 #+end_src
 
-**** GUIのみindent-guidesを有効化
+*** GUIのみindent-guidesを有効化
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package highlight-indent-guides
   :ensure t
@@ -498,7 +498,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   (highlight-indent-guides-method 'character))
 #+end_src
 
-*** flycheck:
+** flycheck:
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package flycheck
   :if (version<= "24.3" emacs-version)
@@ -524,7 +524,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 
 #+end_src
 
-*** completion:
+** completion:
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package vertico
   :ensure t
@@ -553,7 +553,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
          ("M-s" . consult-line-multi)))
 #+end_src
 
-*** corfu:
+** corfu:
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package corfu
   :ensure t
@@ -572,8 +572,8 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   (add-hook 'completion-at-point-functions #'cape-file))
 #+end_src
 
-*** git:
-**** magit
+** git:
+*** magit
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package magit
   :ensure t
@@ -601,7 +601,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 #+end_src
 
-**** git-gutter
+*** git-gutter
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package git-gutter
   :ensure t
@@ -622,14 +622,14 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 ;; (setq auto-revert-check-vc-info t)
 #+end_src
 
-**** ediff
+*** ediff
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package ediff
   :custom
   ;; Split WINDOW-TO-SPLIT into two side-by-side windows.
   (ediff-split-window-function 'split-window-horizontally))
 #+end_src
-*** font:
+** font:
 #+begin_src emacs-lisp :lexical no :results silent
 ;; 表示確認用:
 ;; 0123456789012345678901234567890123456789
@@ -648,7 +648,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   (fira-code-mode-enable-hex-literal nil))
 #+end_src
 
-**** icons
+*** icons
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package nerd-icons
   :ensure t)
@@ -658,7 +658,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
-*** lsp
+** lsp
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package lsp-mode
   :ensure t
@@ -720,7 +720,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
     ("M-," . smart-jump-back)))
 #+end_src
 
-**** emacs-lsp-booster
+*** emacs-lsp-booster
 https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-mode
 #+begin_src emacs-lisp :lexical no :results silent
 (defun lsp-booster--advice-json-parse (old-fn &rest args)
@@ -755,15 +755,15 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
 #+end_src
 
-*** Languages:
-**** General
-***** Enable Editorconfig mode
+** Languages:
+*** General
+**** Enable Editorconfig mode
 [[https://github.com/editorconfig/editorconfig-emacs/tree/master?tab=readme-ov-file#getting-started][Since EditorConfig is bundled directly with Emacs]], all we have to do is:
 #+begin_src emacs-lisp :lexical no :results silent
 (editorconfig-mode 1)
 #+end_src
 
-**** Swift
+*** Swift
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package swift-mode
   :demand t
@@ -790,7 +790,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                                 "-simulator")))))
 #+end_src
 
-**** json
+*** json
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package json-mode
   :ensure t
@@ -804,37 +804,37 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
     (json-reformat:indent-width 2)))
 #+end_src
 
-**** YML
+*** YML
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package yaml-mode
   :ensure t)
 #+end_src
 
-**** Ruby
+*** Ruby
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package ruby-mode
   :mode ("Fastfile\\'" "Gymfile\\'" "Dangerfile\\'"))
 #+end_src
 
-**** Kotlin
+*** Kotlin
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package kotlin-mode
   :ensure t)
 #+end_src
 
-**** Dockerfile
+*** Dockerfile
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package dockerfile-mode
   :ensure t)
 #+end_src
-**** sh
+*** sh
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package flymake-shellcheck
   :ensure t
   :commands flymake-shellcheck-load
   :hook ((sh-mode . flymake-shellcheck-load)))
 #+end_src
-*** org-mode:
+** org-mode:
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org
   :init
@@ -907,7 +907,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                (show-org-buffer "memo.org"))))
 #+end_src
 
-**** org-capture
+*** org-capture
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org-capture
   :custom
@@ -937,7 +937,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   ("C-c c" . 'org-capture))
 #+end_src
 
-**** rich UI
+*** rich UI
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org-superstar
   :ensure t
@@ -959,7 +959,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 
 #+end_src
 
-**** org-agenda
+*** org-agenda
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org-agenda
   :custom
@@ -1014,7 +1014,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                               :todo "WAITING"
                               :order 20))))))))))
 #+end_src
-**** org-journal
+*** org-journal
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org-journal
   :ensure t
@@ -1027,7 +1027,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   ("C-c j" . 'org-journal-new-entry))
 #+end_src
 
-**** org-babel
+*** org-babel
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package ob-swift
   :after ob
@@ -1055,18 +1055,18 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   :ensure t)
 #+end_src
 
-**** org-pomodoro
+*** org-pomodoro
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org-pomodoro
   :ensure t)
 #+end_src
-**** org-modeのテーブル縦線を揃える
+*** org-modeのテーブル縦線を揃える
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package valign
   :ensure t
   :hook (org-mode . valign-mode))
 #+end_src
-*** projectile
+** projectile
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package projectile
   :ensure t
@@ -1099,12 +1099,12 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
               ("s-O" . projectile-find-file)))
 #+end_src
 
-*** shell
-**** PATH
+** shell
+*** PATH
 We don't have to use [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] anymore.
 See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#injected-path][homebrew-emacs-plus#README]].
 
-**** vterm
+*** vterm
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package vterm
   :ensure t
@@ -1133,7 +1133,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
   )
 #+end_src
 
-*** yasnippet
+** yasnippet
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package yasnippet
   :ensure t
@@ -1141,12 +1141,12 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
          (org-mode . yas-minor-mode)))
 #+end_src
 
-*** tramp
+** tramp
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package tramp)
 #+end_src
 
-*** Agents
+** Agents
 [[https://github.com/xenodium/agent-shell][agent-shell]]: A native Emacs buffer to interact with LLM agents powered by ACP
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package agent-shell
@@ -1168,7 +1168,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 #+end_src
 
 
-*** keybind
+** keybind
 #+begin_src emacs-lisp :lexical no :results silent
 (global-set-key "\C-h" 'delete-backward-char)
 ;; alias of "M-g M-g"
@@ -1186,7 +1186,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-}") 'tab-bar-switch-to-next-tab)
 #+end_src
 
-*** deinit
+** deinit
 #+begin_src emacs-lisp :lexical no :results silent
 (defun my/reset-gc-threshold ()
   "Restore GC settings after startup."
@@ -1196,7 +1196,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (add-hook 'emacs-startup-hook #'my/reset-gc-threshold)
 #+end_src
 
-*** Footer
+** Footer
 #+begin_src emacs-lisp :lexical no :results silent
 ;;; init.el ends here
 #+end_src
