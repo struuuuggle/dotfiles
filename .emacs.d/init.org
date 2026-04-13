@@ -721,24 +721,12 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 
 *** lsp
 #+begin_src emacs-lisp :lexical no :results silent
-;; (use-package eglot
-;;   :ensure t
-;;   :commands eglot-ensure
-;;   :hook ((swift-mode-hook . eglot-ensure))
-;;   :config
-;;   (with-eval-after-load 'eglot
-;;     (message "warning: `jsonrpc--log-event' is ignored.")
-;;     (fset #'jsonrpc--log-event #'ignore)
-;;     (add-to-list 'eglot-server-programs
-;;                  '(swift-mode "/Applications/Xcode-15.2.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))))
-
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-deferred)
   :hook
   (swift-mode . lsp-deferred)
   (ruby-mode . lsp-deferred)
-  (elisp-mode . lsp-deferred)
   (sh-mode . lsp-deferred)
   :init
   (defvar lsp-disabled-clients)
@@ -850,21 +838,17 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
     :ensure t
     :if
     (= 0 (call-process "which" nil nil nil "xcrun"))
-    :after eglot
-    :init
-    (defvar xcode-path)
-    (setq xcode-path (string-trim (shell-command-to-string "xcode-select --print-path")))
-    :custom
+    :after lsp-mode
+    :config
     ;; configure the package to point to the sourcekit-lsp executable
-    `(lsp-sourcekit-executable . ,(string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
-    (lsp-sourcekit-extra-args `("-Xswiftc"
-                                  "-sdk"
-                                  "-Xswiftc"
-                                  ,(concat xcode-path "/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneOS.sdk")
-                                  "-Xswiftc"
-                                  "-target"
-                                  "-Xswiftc"
-                                  "arm64-apple-ios18.2-simulator"))))
+    (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "xcrun --find sourcekit-lsp")))
+    (setq lsp-sourcekit-extra-args
+          `("-Xswiftc" "-sdk"
+            "-Xswiftc" ,(string-trim (shell-command-to-string "xcrun --sdk iphonesimulator --show-sdk-path"))
+            "-Xswiftc" "-target"
+            "-Xswiftc" ,(concat "arm64-apple-ios"
+                                (string-trim (shell-command-to-string "xcrun --sdk iphonesimulator --show-sdk-version"))
+                                "-simulator")))))
 #+end_src
 
 **** json
