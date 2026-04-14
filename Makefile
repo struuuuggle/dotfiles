@@ -68,7 +68,7 @@ ghostty: guard-MACOS
 emacs-compile: .emacs.d/init.el ## Build Emacs config from init.org
 
 emacs-restart: .emacs.d/init.el ## Restart Emacs daemon with the latest config
-	emacsclient -e "(restart-emacs)" 2>/dev/null || emacs --daemon
+	emacsclient -e "(kill-emacs)" 2>/dev/null; emacs --daemon
 
 .emacs.d/init.el: .emacs.d/init.org
 	emacs -Q --batch \
