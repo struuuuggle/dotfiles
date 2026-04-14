@@ -43,14 +43,14 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 
 ** GC
 #+begin_src emacs-lisp :tangle early-init.el
-;; 起動処理中にGCを走らせない
-;; init.elの最後でもとに戻す必要がある
+;; Do not run GC during startup process
+;; Must be restored to original at the end of init.el
 (setq gc-cons-threshold most-positive-fixnum)
 #+end_src
 
 ** Package Startup
 #+begin_src emacs-lisp :tangle early-init.el
-;; Emacsの起動時にパッケージを自動的に読み込まない
+;; Do not automatically load packages when Emacs starts
 (setq package-enable-at-startup nil)
 ;; Prefer quickstart cache when available.
 (defvar package-quickstart)
@@ -68,7 +68,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 
 ** Startup Screen
 #+begin_src emacs-lisp :tangle early-init.el
-;; 直接編集画面へ遷移する
+;; Jump directly to editor, skip splash screen
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
 #+end_src
@@ -225,7 +225,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (global-goto-address-mode 1)
 #+end_src
 
-*** 音を鳴らさない
+*** Disable bell sound
 #+begin_src emacs-lisp :lexical no :results silent
 (setq ring-bell-function 'ignore)
 #+end_src
@@ -240,13 +240,13 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (setq delete-by-moving-to-trash t)
 #+end_src
 
-*** history関連
+*** History configuration
 #+begin_src emacs-lisp :lexical no :results silent
 (setq history-delete-duplicates t)
 (setq history-length 1000)
 #+end_src
 
-*** スムーズにスクロールする
+*** Smooth scrolling
 #+begin_src emacs-lisp :lexical no :results silent
 (setq scroll-conservatively 1)
 (setq mouse-wheel-scroll-amount '(1 ((control) 5)))
@@ -455,7 +455,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 (global-set-key (kbd "s-u") 'struuuuggle/toggle-opacity)
 #+end_src
 
-*** カーソル行ハイライト
+*** Highlight current line
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package hl-line
   :hook (after-init . global-hl-line-mode)
@@ -478,13 +478,13 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 #+end_src
 
 ** indent:
-*** タブ文字ではなくスペースを使う
+*** Use spaces instead of tab characters
 #+begin_src emacs-lisp :lexical no :results silent
 (setq-default tab-width 2)
 (setq-default indent-tabs-mode nil)
 #+end_src
 
-*** GUIのみindent-guidesを有効化
+*** Enable indent-guides in GUI only
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package highlight-indent-guides
   :ensure t
@@ -616,10 +616,10 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   (set-face-attribute 'git-gutter:added nil :background (doom-color 'green))
   (set-face-attribute 'git-gutter:deleted nil :background (doom-color 'magenta)))
 
-;; シンボリックリンクの読み込みを許可
+;; Allow loading symbolic links
 (setq vc-follow-symlinks t)
 
-;; シンボリックリンク先のVCS内で更新が入った場合にバッファを自動更新
+;; Auto-revert buffer when changes are made in VCS of symlink target
 ;; (setq auto-revert-check-vc-info t)
 #+end_src
 
@@ -632,7 +632,7 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 #+end_src
 ** font:
 #+begin_src emacs-lisp :lexical no :results silent
-;; 表示確認用:
+;; Font width confirmation:
 ;; 0123456789012345678901234567890123456789
 ;; 一二三四五六一二三四五六一二三四五六一二三四五六
 
@@ -859,23 +859,23 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                                     (when org-inline-image-overlays
                                       (org-redisplay-inline-images))))
   (org-clock-in-hook . (lambda nil
-                         "Clock in したときにステータスをDOINGに変更"
+                         "Change status to DOING when clocking in"
                          (when (equal
                                 (org-get-todo-state)
                                 "TODO")
                            (org-todo "DOING"))))
   (org-clock-out-hook . (lambda nil
-                          "Clock out したときにステータスをDONEに変更"
+                          "Change status to DONE when clocking out"
                           (when (equal
                                  (org-get-todo-state)
                                  "DOING")
                             (org-todo "DONE"))))
   :custom
-  ;; スピードコマンドを有効化
+  ;; Enable speed commands
   (org-use-speed-commands t)
-  ;; dでタスクをDONEにする
+  ;; Press 'd' to mark task as DONE
   (org-speed-commands-user '(("d" org-todo "DONE")))
-  ;; org-babelに使用できる言語を追加する
+  ;; Add languages available to org-babel
   (org-babel-load-languages '((emacs-lisp . t)
                               (shell . t)
                               (swift . t)
@@ -890,19 +890,19 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                         (or (string-prefix-p (expand-file-name org-directory) (expand-file-name buffer-file-name))
                             (string-prefix-p (expand-file-name user-emacs-directory) (expand-file-name buffer-file-name))))))
        (not dominated))))
-  ;; 行を折り返す
+  ;; Wrap long lines
   (org-startup-truncated nil)
-  ;; 画像をインラインで表示
+  ;; Display images inline
   (org-startup-with-inline-images t)
-  ;; 見出しの余分な*を消す
+  ;; Remove extra asterisks from headings
   (org-hide-leading-stars t)
   (org-todo-keywords '((sequence "TODO" "DOING" "SOMEDAY" "|" "DONE(!)" "CLOSED")))
-  ;; ファイルの場所
+  ;; File location for org directory
   (org-directory "~/Documents/Org/")
   :bind
   ;; org-mode
   ;; (global-set-key (kbd "C-c p") 'org-preview-html-mode)
-  ;; memo.orgを開く
+  ;; Open memo.org
   ("C-c m" . (lambda ()
                (interactive)
                (show-org-buffer "memo.org"))))
@@ -912,17 +912,17 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package org-capture
   :custom
-  ;; Org-captureのテンプレート
+  ;; Org-capture templates
   ;;
   ;; Template expansion
   ;; https://orgmode.org/manual/Template-expansion.html#Template-expansion
   ;;
-  ;; %t: タイムスタンプ(日付のみ)
-  ;; %T: タイムスタンプ(日付と時刻)
-  ;; %u: 非アクティブなタイムスタンプ(日付のみ) 非アクティブなタイムスタンプはagendaに影響しない
-  ;; %U: 非アクティブなタイムスタンプ(日付と時刻)
-  ;; %?: テンプレートを補完した後のカーソルの位置
-  ;; %i: リージョンがアクティブな状態でcaptureが呼び出されたときに、挿入されるリージョン
+  ;; %t: timestamp (date only)
+  ;; %T: timestamp (date and time)
+  ;; %u: inactive timestamp (date only) - inactive timestamps do not affect agenda
+  ;; %U: inactive timestamp (date and time)
+  ;; %?: cursor position after template completion
+  ;; %i: the selected region when capture is invoked with region active
   (org-capture-templates '(
                              ("m"
                               "💡 Memo"
@@ -1061,7 +1061,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 (use-package org-pomodoro
   :ensure t)
 #+end_src
-*** org-modeのテーブル縦線を揃える
+*** Align table columns in org-mode
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package valign
   :ensure t
@@ -1077,7 +1077,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   :custom
   (projectile-switch-project-action
    (lambda ()
-     (let ((tab-bar-new-tab-choice nil)) ;; 一時的に dashboard 起動を抑制
+     (let ((tab-bar-new-tab-choice nil)) ;; Temporarily suppress dashboard startup
        (tab-new))
      (tab-bar-rename-tab (projectile-project-name))
      (magit-status)))
@@ -1120,7 +1120,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
   (vterm-kill-buffer-on-exit t)
   (vterm-buffer-name-string "vterm: %s")
   (vterm-keymap-exceptions '("C-'" "C-x" "C-c" "C-o" "M-x"))
-  ;; Emacs終了時にvtermプロセスの確認を求めない
+  ;; Do not prompt to confirm vterm processes when exiting Emacs
   (confirm-kill-processes nil)
   :config
   (use-package vterm-toggle
