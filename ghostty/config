@@ -8,6 +8,7 @@ cursor-color = green
 split-divider-color = gray
 
 tab-inherit-working-directory = false
+shell-integration-features = no-title
 
 macos-option-as-alt = true
 macos-titlebar-style = tabs

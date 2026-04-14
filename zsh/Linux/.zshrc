@@ -78,7 +78,7 @@ zstyle ':vcs_info:git:*' unstagedstr "%F{$p_vcs_unstaged_color}+"
 zstyle ':vcs_info:*' formats "%F{$p_vcs_color}%c%u(%b)%f"
 zstyle ':vcs_info:*' actionformats '(%b|%a)'
 
-precmd () { vcs_info }
+precmd () { vcs_info; print -Pn "\e]2;%2~\a" }
 
 ##############nn##########################
 # 補完
@@ -204,7 +204,7 @@ alias r='bin/rails'
 # function
 
 # cdの後にlsを実行
-chpwd() { ls -a }
+chpwd() { ls -a; print -Pn "\e]2;%2~\a" }
 
 select-history() {
   # historyを番号なし、逆順、最初から表示。
