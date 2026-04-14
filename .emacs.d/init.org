@@ -158,6 +158,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
   (dashboard-items '((agenda . 10)
                        (projects . 5)
                        (recents . 5)))
+  (dashboard-projects-switch-function #'magit-status)
   (initial-buffer-choice (lambda ()
                            (or (get-buffer "*dashboard*")
                                (get-buffer-create "*scratch*")))))
