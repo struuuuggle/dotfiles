@@ -1211,6 +1211,7 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-/") 'comment-line)
 (global-set-key "\M-;" 'comment-line)
 (global-set-key "\C-c\C-x" 'eval-buffer)
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
 (global-set-key (kbd "s-w") 'kill-current-buffer)
 (global-set-key (kbd "s-z") 'undo)
 (global-set-key (kbd "s-Z") 'undo-redo)
