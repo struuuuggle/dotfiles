@@ -545,7 +545,17 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   :hook (after-init . vertico-mode)
   :custom
   (vertico-count 20)
-  (vertico-cycle t))
+  (vertico-cycle t)
+  :config
+  ;; In find-file, "/" inserts the candidate directory (like TAB)
+  (define-key vertico-map (kbd "/")
+              (lambda ()
+                (interactive)
+                (if (and minibuffer-completing-file-name
+                         (vertico--candidate)
+                         (string-suffix-p "/" (vertico--candidate)))
+                    (vertico-insert)
+                  (insert "/")))))
 
 (use-package orderless
   :ensure t
@@ -555,7 +565,15 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 
 (use-package marginalia
   :ensure t
-  :hook (after-init . marginalia-mode))
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
+
+(use-package nerd-icons-completion
+  :ensure t
+  :after marginalia
+  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup))
 
 (use-package consult
   :ensure t
@@ -563,7 +581,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
          ("C-S-s" . consult-imenu)
          ("C-x C-r" . consult-recent-file)
          ("C-x b" . consult-buffer)
-         ("M-g g" . consult-goto-line)
+         ("M-g" . consult-goto-line)
          ("M-s" . consult-line-multi)))
 #+end_src
 
