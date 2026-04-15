@@ -610,7 +610,9 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 (use-package magit
   :ensure t
   :bind
-  ("C-x g" . magit-status)
+  (("C-x g" . magit-status)
+   :map magit-status-mode-map
+   ("w" . magit-worktree))
   :init
   (defvar magit-display-buffer-function)
   :preface
