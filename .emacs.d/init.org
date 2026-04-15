@@ -393,8 +393,6 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
    `(dired-directory			((t :foreground ,(doom-color 'cyan))))
    `(line-number			((t :height 0.7 :foreground ,(doom-color 'grey))))
    `(line-number-current-line 	((t :height 0.7 :foreground ,(doom-color 'green))))
-   `(mode-line			((t :background ,(doom-blend (doom-color 'green) (doom-color 'bg) 0.3) :foreground ,(doom-color 'fg))))
-   ;; `(mode-line-inactive		((t :background ,(doom-color 'base))))
    `(font-lock-comment-face		((t :foreground ,(doom-color 'doc-comments))))
    `(org-block-begin-line		((t :background ,(doom-color 'base2) :foreground ,(doom-color 'doc-comments))))
    `(org-block			((t :background ,(doom-color 'base2) :foreground ,(doom-color 'fg-alt))))
