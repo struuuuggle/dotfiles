@@ -1115,11 +1115,28 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (use-package vterm
   :ensure t
   :preface
+  (define-prefix-command 'vterm-prefix-map)
   (declare-function vterm-send-key "vterm")
   (defun send-backspace nil
     "Send a backspace character to vterm process."
     (interactive)
     (vterm-send-key (kbd "C-h")))
+  (defun vterm-new ()
+    "Create a new vterm buffer with a unique name."
+    (interactive)
+    (vterm t))
+  (defun vterm-split-below ()
+    "Split window below and open a new vterm."
+    (interactive)
+    (split-window-below)
+    (other-window 1)
+    (vterm t))
+  (defun vterm-split-right ()
+    "Split window right and open a new vterm."
+    (interactive)
+    (split-window-right)
+    (other-window 1)
+    (vterm t))
   :custom
   (vterm-shell "/bin/zsh")
   (vterm-kill-buffer-on-exit t)
@@ -1136,7 +1153,12 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
             (lambda nil
               (local-set-key (kbd "C-h") #'send-backspace)))
   ;; (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
-  )
+  :bind-keymap ("C-c v" . vterm-prefix-map)
+  :bind (:map vterm-prefix-map
+              ("v" . vterm-toggle)
+              ("n" . vterm-new)
+              ("|" . vterm-split-right)
+              ("-" . vterm-split-below)))
 #+end_src
 
 ** yasnippet
@@ -1182,7 +1204,6 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-/") 'comment-line)
 (global-set-key "\M-;" 'comment-line)
 (global-set-key "\C-c\C-x" 'eval-buffer)
-(global-set-key (kbd "C-c v") 'vterm-toggle)
 (global-set-key (kbd "s-w") 'kill-current-buffer)
 (global-set-key (kbd "s-z") 'undo)
 (global-set-key (kbd "s-Z") 'undo-redo)
