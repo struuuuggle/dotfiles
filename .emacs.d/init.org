@@ -645,8 +645,10 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :if window-system
   :blackout t
   :ensure t
-  :hook ((after-init . global-fira-code-mode)
-         (after-init . fira-code-mode-set-font))
+  :hook (prog-mode . fira-code-mode)
+  :init
+  (when window-system
+    (fira-code-mode-set-font))
   :custom
   (fira-code-mode-disabled-ligatures '("[]" "x"))
   (fira-code-mode-enable-hex-literal nil))
@@ -975,7 +977,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 
 (use-package org-super-agenda
   :ensure t
-  :hook (org-mode . org-super-agenda-mode)
+  :hook (org-agenda-mode . org-super-agenda-mode)
   :custom
   ;; https://github.com/alphapapa/org-super-agenda/blob/master/examples.org#zaen323
   (org-agenda-time-grid '((daily today require-timed)
