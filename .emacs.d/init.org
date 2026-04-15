@@ -471,7 +471,12 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package auto-dim-other-buffers
   :ensure t
-  :hook (after-init . auto-dim-other-buffers-mode))
+  :hook (after-init . auto-dim-other-buffers-mode)
+  :config
+  ;; Darken inactive buffers slightly instead of tinting with color
+  (set-face-attribute 'auto-dim-other-buffers-face nil
+                      :background (doom-darken (doom-color 'bg) 0.05)
+                      :foreground (doom-darken (doom-color 'fg) 0.3)))
 #+end_src
 
 ** window
