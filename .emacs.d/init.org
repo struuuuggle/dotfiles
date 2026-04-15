@@ -17,6 +17,12 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 ;;; Code:
 #+end_src
 
+** Profiler
+#+begin_src emacs-lisp :tangle early-init.el
+;; (require 'profiler)
+;; (profiler-start 'cpu)
+#+end_src
+
 ** Exec PATH
 #+begin_src emacs-lisp :tangle early-init.el
 ;; workaround:
@@ -1252,6 +1258,12 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
         gc-cons-percentage 0.1)
   (garbage-collect))
 (add-hook 'emacs-startup-hook #'my/reset-gc-threshold)
+#+end_src
+
+** Profiler report
+#+begin_src emacs-lisp
+;; (profiler-report)
+;; (profiler-stop)
 #+end_src
 
 ** Footer
