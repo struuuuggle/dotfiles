@@ -475,8 +475,8 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   :config
   ;; Darken inactive buffers slightly instead of tinting with color
   (set-face-attribute 'auto-dim-other-buffers-face nil
-                      :background (doom-darken (doom-color 'bg) 0.05)
-                      :foreground (doom-darken (doom-color 'fg) 0.3)))
+                      :background (doom-darken (doom-color 'bg) 0.15)
+                      :foreground (doom-darken (doom-color 'fg) 0.5)))
 #+end_src
 
 ** window
