@@ -231,7 +231,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 
 *** clickable URL
 #+begin_src elisp :lexical no :results silent
-(global-goto-address-mode 1)
+(add-hook 'after-init-hook #'global-goto-address-mode)
 #+end_src
 
 *** Disable bell sound
@@ -346,7 +346,8 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   (column-number-mode nil))
 
 (use-package eldoc
-  :blackout t)
+  :blackout t
+  :defer t)
 
 (use-package savehist
   :hook (after-init . savehist-mode)
@@ -393,7 +394,7 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   (load-theme 'doom-dracula t)
   (doom-themes-org-config)
   (doom-themes-visual-bell-config)
-  (doom-themes-treemacs-config)
+  (with-eval-after-load 'treemacs (doom-themes-treemacs-config))
   (custom-set-faces
    `(default				((t :background ,(doom-color 'base1))))
    `(dired-directory			((t :foreground ,(doom-color 'cyan))))
@@ -524,11 +525,12 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   :if (version<= "24.3" emacs-version)
   :blackout t
   :ensure t
-  :bind (("M-n" . flycheck-next-error)
-         ("M-p" . flycheck-previous-error))
   :custom (flycheck-elisp-initialize-packages t)
   :hook ((elisp-mode . flycheck-mode)
          (lisp-interaction-mode . flycheck-mode))
+  :bind (:map flycheck-mode-map
+         ("M-n" . flycheck-next-error)
+         ("M-p" . flycheck-previous-error))
   :config
   (use-package flycheck-package
     :ensure t
@@ -565,6 +567,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 
 (use-package orderless
   :ensure t
+  :defer t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles partial-completion)))))
@@ -573,8 +576,7 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   :ensure t
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
-  :init
-  (marginalia-mode))
+  :hook (after-init . marginalia-mode))
 
 (use-package nerd-icons-completion
   :ensure t
@@ -605,9 +607,10 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 
 (use-package cape
   :ensure t
-  :init
-  (add-hook 'completion-at-point-functions #'cape-dabbrev)
-  (add-hook 'completion-at-point-functions #'cape-file))
+  :defer t
+  :hook (corfu-mode . (lambda ()
+                        (add-hook 'completion-at-point-functions #'cape-dabbrev nil t)
+                        (add-hook 'completion-at-point-functions #'cape-file nil t))))
 #+end_src
 
 ** git:
@@ -773,8 +776,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
        (when (byte-code-function-p bytecode)
          (funcall bytecode))))
    (apply old-fn args)))
-(advice-add (if (progn (require 'json)
-                       (fboundp 'json-parse-buffer))
+(advice-add (if (fboundp 'json-parse-buffer)
                 'json-parse-buffer
               'json-read)
             :around
@@ -1081,7 +1083,6 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 
 (use-package ob-swiftui
   :ensure t
-  :demand t
   :init
   (defvar org-edit-src-content-indentation)
   (defvar org-babel-tangle-lang-exts)
