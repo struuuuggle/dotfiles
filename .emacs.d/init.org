@@ -467,6 +467,13 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
                       :background (doom-blend (doom-color 'green) (doom-color 'bg) 0.15)))
 #+end_src
 
+*** Dim inactive buffers
+#+begin_src emacs-lisp :lexical no :results silent
+(use-package auto-dim-other-buffers
+  :ensure t
+  :hook (after-init . auto-dim-other-buffers-mode))
+#+end_src
+
 ** window
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package ace-window
