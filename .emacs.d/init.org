@@ -112,8 +112,11 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 ** Files
 #+begin_src emacs-lisp :lexical no :results silent
 ;; Redirect auto-save files (#file#) to a dedicated directory
-(setq auto-save-file-name-transforms
-      `((".*" ,(expand-file-name "auto-saves/" user-emacs-directory) t)))
+(let ((auto-save-dir (expand-file-name "auto-saves/" user-emacs-directory)))
+  (unless (file-exists-p auto-save-dir)
+    (make-directory auto-save-dir t))
+  (setq auto-save-file-name-transforms
+        `((".*" ,auto-save-dir t))))
 
 #+end_src
 
