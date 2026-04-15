@@ -140,7 +140,8 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
   (require 'use-package))
 
 (use-package hydra
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package blackout
   :ensure t)
@@ -152,7 +153,8 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
 (use-package dashboard
   :ensure t
   :if (< (length command-line-args) 2)
-  :hook (after-init . dashboard-setup-startup-hook)
+  :init
+  (dashboard-setup-startup-hook)
   :custom
   ;; Value can be
   ;; 'official: which displays the official emacs logo
@@ -168,9 +170,7 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
                        (projects . 5)
                        (recents . 5)))
   (dashboard-projects-switch-function #'magit-status)
-  (initial-buffer-choice (lambda ()
-                           (or (get-buffer "*dashboard*")
-                               (get-buffer-create "*scratch*")))))
+  (initial-buffer-choice #'dashboard-open))
 #+end_src
 
 **** which-key
@@ -682,9 +682,8 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :blackout t
   :ensure t
   :hook (prog-mode . fira-code-mode)
-  :init
-  (when window-system
-    (fira-code-mode-set-font))
+  :config
+  (add-hook 'emacs-startup-hook #'fira-code-mode-set-font)
   :custom
   (fira-code-mode-disabled-ligatures '("[]" "x"))
   (fira-code-mode-enable-hex-literal nil))
@@ -693,7 +692,8 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
 *** icons
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package nerd-icons
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package nerd-icons-dired
   :ensure t
@@ -802,20 +802,20 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 **** Enable Editorconfig mode
 [[https://github.com/editorconfig/editorconfig-emacs/tree/master?tab=readme-ov-file#getting-started][Since EditorConfig is bundled directly with Emacs]], all we have to do is:
 #+begin_src emacs-lisp :lexical no :results silent
-(editorconfig-mode 1)
+(use-package editorconfig
+  :hook (after-init . editorconfig-mode))
 #+end_src
 
 *** Swift
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package swift-mode
-  :demand t
   :ensure t
+  :mode "\\.swift\\'"
   :hook (swift-mode . flycheck-swift3-setup)
   :config
   (use-package flycheck-swift3
     :ensure t)
   (use-package lsp-sourcekit
-    :demand t
     :ensure t
     :if
     (= 0 (call-process "which" nil nil nil "xcrun"))
@@ -836,6 +836,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package json-mode
   :ensure t
+  :defer t
   :custom
   (js-indent-level 2)
   :config
@@ -849,7 +850,8 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 *** YML
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 
 *** Ruby
@@ -861,13 +863,15 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 *** Kotlin
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package kotlin-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 
 *** Dockerfile
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package dockerfile-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 *** sh
 #+begin_src emacs-lisp :lexical no :results silent
@@ -1094,7 +1098,8 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
                '("swiftui" . swift)))
 
 (use-package ob-kotlin
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 
 *** org-pomodoro
