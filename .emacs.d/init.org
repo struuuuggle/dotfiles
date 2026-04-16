@@ -553,6 +553,9 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
 (use-package vertico
   :ensure t
   :hook (after-init . vertico-mode)
+  :preface
+  (declare-function vertico--candidate "vertico")
+  (declare-function vertico-insert "vertico")
   :custom
   (vertico-count 20)
   (vertico-cycle t)
@@ -955,13 +958,14 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
     '((shell . t) (swift . t) (kotlin . t)
       (haskell . t) (python . t) (ruby . t)))
   (defvar my/org-babel-extra-loaded nil)
+  (declare-function org-babel-execute-src-block@lazy-load-languages "init")
   (define-advice org-babel-execute-src-block (:before (&rest _) lazy-load-languages)
     (unless my/org-babel-extra-loaded
       (org-babel-do-load-languages
        'org-babel-load-languages
        (append org-babel-load-languages my/org-babel-extra-languages))
       (setq my/org-babel-extra-loaded t)
-      (advice-remove 'org-babel-execute-src-block 'org-babel-execute-src-block@lazy-load-languages))))
+      (advice-remove 'org-babel-execute-src-block #'org-babel-execute-src-block@lazy-load-languages))))
 #+end_src
 
 *** org-capture
