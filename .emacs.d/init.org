@@ -393,7 +393,6 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   :config
   (load-theme 'doom-dracula t)
   (doom-themes-org-config)
-  (doom-themes-visual-bell-config)
   (with-eval-after-load 'treemacs (doom-themes-treemacs-config))
   (custom-set-faces
    `(default				((t :background ,(doom-color 'base1))))
@@ -534,14 +533,18 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   :config
   (use-package flycheck-package
     :ensure t
-    :config
-    (flycheck-package-setup))
+    :defer t
+    :init
+    (add-hook 'emacs-lisp-mode-hook
+              (lambda () (flycheck-package-setup)) nil t))
 
   (use-package flycheck-elsa
     :if (version<= "25" emacs-version)
     :ensure t
-    :config
-    (flycheck-elsa-setup)))
+    :defer t
+    :init
+    (add-hook 'emacs-lisp-mode-hook
+              (lambda () (flycheck-elsa-setup)) nil t)))
 
 
 #+end_src
@@ -922,14 +925,10 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   (org-use-speed-commands t)
   ;; Press 'd' to mark task as DONE
   (org-speed-commands-user '(("d" org-todo "DONE")))
-  ;; Add languages available to org-babel
-  (org-babel-load-languages '((emacs-lisp . t)
-                              (shell . t)
-                              (swift . t)
-                              (kotlin . t)
-                              (haskell . t)
-                              (python . t)
-                              (ruby . t)))
+  ;; Defer org-babel language loading to avoid requiring all
+  ;; language packages at startup (was 8% of startup time).
+  ;; Languages are loaded on first org-babel-execute via advice.
+  (org-babel-load-languages '((emacs-lisp . t)))
   ;; Skip babel confirmation only for files in trusted directories
   (org-confirm-babel-evaluate
    (lambda (lang _body)
@@ -952,7 +951,20 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
   ;; Open memo.org
   ("C-c m" . (lambda ()
                (interactive)
-               (show-org-buffer "memo.org"))))
+               (show-org-buffer "memo.org")))
+  :config
+  ;; Lazily load additional babel languages on first execute
+  (defvar my/org-babel-extra-languages
+    '((shell . t) (swift . t) (kotlin . t)
+      (haskell . t) (python . t) (ruby . t)))
+  (defvar my/org-babel-extra-loaded nil)
+  (define-advice org-babel-execute-src-block (:before (&rest _) lazy-load-languages)
+    (unless my/org-babel-extra-loaded
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       (append org-babel-load-languages my/org-babel-extra-languages))
+      (setq my/org-babel-extra-loaded t)
+      (advice-remove 'org-babel-execute-src-block 'org-babel-execute-src-block@lazy-load-languages))))
 #+end_src
 
 *** org-capture
