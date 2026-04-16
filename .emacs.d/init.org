@@ -687,8 +687,6 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
   :blackout t
   :ensure t
   :hook (prog-mode . fira-code-mode)
-  :config
-  (add-hook 'emacs-startup-hook #'fira-code-mode-set-font)
   :custom
   (fira-code-mode-disabled-ligatures '("[]" "x"))
   (fira-code-mode-enable-hex-literal nil))
