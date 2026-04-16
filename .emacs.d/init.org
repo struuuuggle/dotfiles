@@ -1267,6 +1267,16 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
 (global-set-key (kbd "s-}") 'tab-bar-switch-to-next-tab)
 #+end_src
 
+** Package quickstart
+Regenerate =package-quickstart.el= after any package operation so that
+the next startup can skip the expensive =package-activate-all= scan.
+#+begin_src emacs-lisp :lexical no :results silent
+(advice-add 'package-install   :after (lambda (&rest _) (package-quickstart-refresh)))
+(advice-add 'package-delete    :after (lambda (&rest _) (package-quickstart-refresh)))
+(advice-add 'package-upgrade   :after (lambda (&rest _) (package-quickstart-refresh)))
+(advice-add 'package-upgrade-all :after (lambda (&rest _) (package-quickstart-refresh)))
+#+end_src
+
 ** deinit
 #+begin_src emacs-lisp :lexical no :results silent
 (defun my/reset-gc-threshold ()
