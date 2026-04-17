@@ -1117,6 +1117,7 @@ https://github.com/blahgeek/emacs-lsp-booster?tab=readme-ov-file#configure-lsp-m
 #+begin_src emacs-lisp :lexical no :results silent
 (use-package valign
   :ensure t
+  :if (window-system)
   :hook (org-mode . valign-mode))
 #+end_src
 ** projectile
