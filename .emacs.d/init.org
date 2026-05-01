@@ -632,6 +632,14 @@ vertical rules.  Pinning them to width 1 resolves the mismatch.
   (defvar magit-display-buffer-function)
   :preface
   (declare-function magit-display-buffer-fullframe-status-v1 "magit")
+  (declare-function magit-anything-staged-p "magit")
+  (declare-function magit-commit-create "magit")
+  (declare-function magit-git-output "magit")
+  (declare-function magit-toplevel "magit")
+  (declare-function spinner-start "spinner")
+  (declare-function my/magit-ai-build-prompt "init")
+  (declare-function my/magit-ai-insert-message "init")
+  (declare-function my/magit-ai-sentinel "init")
   :config
   ;; disable "--force" option
   (transient-remove-suffix 'magit-push "-F")
@@ -645,6 +653,127 @@ If RANGE is not provided, defaults to `origin/main...HEAD`."
             (input (read-string (format "Diff range (%s): " default))))
        (list (if (string-empty-p input) default input))))
     (magit-diff-range range))
+
+  ;; --- AI commit message generation (c C) ---
+
+  (use-package spinner
+    :ensure t)
+
+  (defvar my/magit-ai-command
+    ;; --bare strips OAuth/keychain auth (only ANTHROPIC_API_KEY works),
+    ;; so disable skills and tools individually instead.
+    '("claude" "-p" "--model" "haiku"
+      "--disable-slash-commands"
+      "--tools" "")
+    "Command and args used to invoke the AI CLI for commit-message generation.
+The command must read the prompt from stdin and write the generated message
+to stdout.  Swap this list to use a different CLI (e.g. codex).")
+
+  (defvar my/magit-ai-pending-message nil
+    "Temporarily holds the AI-generated commit message.")
+
+  (defun my/magit-ai-build-prompt (diff)
+    "Build the prompt text sent to the AI CLI for commit message generation."
+    (concat
+     "Generate a concise git commit message for the following staged diff.\n"
+     "Write in English. Output only the commit message -- no markdown fences, no commentary.\n"
+     "Subject line must be under 72 characters. For non-trivial changes, add a blank line then bullets.\n\n"
+     "=== Commit message convention ===\n"
+     "Use conventional commit prefix: feat, fix, docs, perf, refactor, style, test, build, ci, chore.\n\n"
+     "=== Staged diff ===\n"
+     diff))
+
+  (defun my/magit-ai-insert-message ()
+    "Insert the AI-generated commit message into the commit buffer.
+One-shot hook for `git-commit-setup-hook'; removes itself after firing."
+    (when my/magit-ai-pending-message
+      (goto-char (point-min))
+      (insert my/magit-ai-pending-message)
+      (goto-char (point-min))
+      (setq my/magit-ai-pending-message nil)
+      (remove-hook 'git-commit-setup-hook #'my/magit-ai-insert-message)))
+
+  (defun my/magit-ai-sentinel (process event)
+    "Handle completion of the AI commit-message process."
+    (let* ((stdout-buf (process-buffer process))
+           (stderr-buf (process-get process 'stderr-buffer))
+           (toplevel (process-get process 'toplevel))
+           (stop-spinner (process-get process 'stop-spinner))
+           (output (when (buffer-live-p stdout-buf)
+                     (string-trim
+                      (with-current-buffer stdout-buf (buffer-string)))))
+           (err (when (buffer-live-p stderr-buf)
+                  (string-trim
+                   (with-current-buffer stderr-buf (buffer-string))))))
+      (unwind-protect
+          (cond
+           ((string-match-p "finished" event)
+            (cond
+             ((or (null output) (string-empty-p output))
+              (message "[magit-ai] AI returned empty output%s"
+                       (if (and err (not (string-empty-p err)))
+                           (format " (stderr: %s)" err) "")))
+             (t
+              (when (and err (not (string-empty-p err)))
+                (message "[magit-ai] stderr: %s" err))
+              (setq my/magit-ai-pending-message output)
+              (message "[magit-ai] generated (%d chars), opening commit buffer"
+                       (length output))
+              (add-hook 'git-commit-setup-hook
+                        #'my/magit-ai-insert-message)
+              ;; Restore default-directory so magit sees the staged repo state.
+              (let ((default-directory (or toplevel default-directory)))
+                (magit-commit-create)))))
+           ((string-match-p "\\(exited\\|failed\\|signal\\)" event)
+            (message "[magit-ai] AI process exited: %s%s"
+                     (string-trim event)
+                     (if (and err (not (string-empty-p err)))
+                         (format " (stderr: %s)" err) ""))))
+        (when (functionp stop-spinner) (funcall stop-spinner))
+        (when (buffer-live-p stdout-buf) (kill-buffer stdout-buf))
+        (when (buffer-live-p stderr-buf) (kill-buffer stderr-buf)))))
+
+  (defun my/magit-commit-with-ai ()
+    "Generate a commit message with an AI CLI and open the commit buffer.
+Requires staged changes.  Invokes `my/magit-ai-command' asynchronously
+and feeds the staged diff via stdin, then opens the standard Magit
+commit buffer with the generated message pre-filled for review."
+    (interactive)
+    (unless (magit-anything-staged-p)
+      (user-error "Nothing staged.  Stage changes before requesting an AI commit message"))
+    (let* ((default-directory (magit-toplevel))
+           (diff (magit-git-output "diff" "--cached")))
+      (when (string-empty-p (string-trim diff))
+        (user-error "Staged diff is empty"))
+      (let* ((prompt (my/magit-ai-build-prompt diff))
+             (stdout-buf (generate-new-buffer " *ai-commit-stdout*"))
+             (stderr-buf (generate-new-buffer " *ai-commit-stderr*"))
+             ;; `spinner-start' returns a closure that stops the spinner.
+             (stop-spinner (spinner-start 'progress-bar-filled)))
+        (message "[magit-ai] generating commit message...")
+        (condition-case e
+            (let ((proc (make-process
+                         :name "ai-commit"
+                         :buffer stdout-buf
+                         :stderr stderr-buf
+                         :command my/magit-ai-command
+                         :connection-type 'pipe
+                         :sentinel #'my/magit-ai-sentinel)))
+              (process-put proc 'stderr-buffer stderr-buf)
+              (process-put proc 'toplevel default-directory)
+              (process-put proc 'stop-spinner stop-spinner)
+              (process-send-string proc prompt)
+              (process-send-eof proc))
+          (error
+           (when (functionp stop-spinner) (funcall stop-spinner))
+           (when (buffer-live-p stdout-buf) (kill-buffer stdout-buf))
+           (when (buffer-live-p stderr-buf) (kill-buffer stderr-buf))
+           (message "[magit-ai] could not start AI CLI: %s"
+                    (error-message-string e)))))))
+
+  (transient-append-suffix 'magit-commit "c"
+    '("C" "Commit with AI" my/magit-commit-with-ai))
+
   :custom
   (magit-revision-insert-related-refs nil)
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
