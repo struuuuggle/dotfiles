@@ -425,7 +425,8 @@ Ensure macOS clipboard sync works for terminal frames created by emacsclient.
   (doom-modeline-workspace-name nil)
   (doom-modeline-percent-position nil)
   (doom-modeline-vcs-max-length 45) ;; default: 15
-  (doom-modeline-buffer-file-name-style 'truncate-nil)
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
+  (doom-modeline-project-detection 'projectile)
   (doom-modeline-buffer-encoding nil))
 #+end_src
 
