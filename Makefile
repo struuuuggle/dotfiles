@@ -28,7 +28,7 @@ help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 		| awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-20s$(RESET) %s\n", $$1, $$2}'
 
-symlink: git zsh bash vim .emacs.d ghostty ## Link dotfiles into $HOME
+symlink: git zsh bash vim .emacs.d $(if $(MACOS),ghostty) ## Link dotfiles into $HOME
 
 git:
 	ln -sf $(realpath git/.gitconfig) ~
