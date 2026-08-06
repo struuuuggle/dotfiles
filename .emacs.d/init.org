@@ -1331,6 +1331,9 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
             (lambda nil
               (local-set-key (kbd "C-h") #'send-backspace)))
   ;; (add-to-list 'vterm-eval-cmds '("update-pwd" (lambda (path) (setq default-directory path))))
+  :hook
+  (vterm-mode . (lambda ()
+                  (with-editor-export-git-editor)))
   :bind-keymap ("C-c v" . vterm-prefix-map)
   :bind (:map vterm-prefix-map
               ("v" . vterm-toggle)
