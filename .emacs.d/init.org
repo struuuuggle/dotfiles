@@ -195,7 +195,8 @@ Source of truth for Emacs configuration — =init.el= and =early-init.el= are au
   (dolist (mode '(dired-mode-hook
                   dired-sidebar-mode-hook
                   magit-mode-hook
-                  vterm-mode-hook))
+                  vterm-mode-hook
+                  ghostel-mode-hook))
     (add-hook mode
               (lambda nil
                 (display-line-numbers-mode -1)))))
@@ -440,7 +441,7 @@ Use a box-drawing glyph for vertical splits in terminal Emacs.
 
 Force box-drawing and block-element characters to single-width so that
 TUI applications (e.g. Claude Code) render continuous borders inside
-vterm.
+terminal buffers such as vterm and ghostel.
 
 The range U+2500–U+259F covers two Unicode blocks:
 - U+2500–U+257F  Box Drawing        (─ │ ┌ ┐ └ ┘ ├ ┤ ┬ ┴ ┼ …)
@@ -1340,6 +1341,57 @@ See also [[https://github.com/d12frosted/homebrew-emacs-plus?tab=readme-ov-file#
               ("n" . vterm-new)
               ("|" . vterm-split-right)
               ("-" . vterm-split-below)))
+#+end_src
+
+*** ghostel
+Mirror the vterm setup above so ghostel buffers behave the same way.
+#+begin_src emacs-lisp :lexical no :results silent
+(use-package ghostel
+  :ensure t
+  :preface
+  (define-prefix-command 'ghostel-prefix-map)
+  (defun ghostel-new ()
+    "Create a new ghostel buffer with a unique name."
+    (interactive)
+    (ghostel t))
+  (defun ghostel-split-below ()
+    "Split window below and open a new ghostel."
+    (interactive)
+    (split-window-below)
+    (other-window 1)
+    (ghostel t))
+  (defun ghostel-split-right ()
+    "Split window right and open a new ghostel."
+    (interactive)
+    (split-window-right)
+    (other-window 1)
+    (ghostel t))
+  (defvar with-editor--envvar)
+  (declare-function with-editor--setup "with-editor")
+  (defun my/ghostel-export-git-editor ()
+    "Point GIT_EDITOR at this Emacs for the ghostel process about to spawn.
+`with-editor-export-git-editor' only supports comint, term, eshell
+and vterm buffers, so push the variable onto `process-environment'
+from `ghostel-pre-spawn-hook' instead."
+    (require 'with-editor)
+    (let ((with-editor--envvar "GIT_EDITOR"))
+      (with-editor--setup)))
+  :custom
+  (ghostel-shell "/bin/zsh")
+  (ghostel-kill-buffer-on-exit t)
+  ;; Do not prompt to confirm ghostel processes when exiting Emacs
+  (ghostel-query-before-killing nil)
+  (ghostel-buffer-name-function #'ghostel-buffer-name-by-title)
+  ;; Keep C-h out of the exceptions so it reaches the terminal as backspace
+  (ghostel-keymap-exceptions '("C-'" "C-x" "C-c" "C-o" "M-x"))
+  :hook
+  (ghostel-pre-spawn . my/ghostel-export-git-editor)
+  :bind-keymap ("C-c g" . ghostel-prefix-map)
+  :bind (:map ghostel-prefix-map
+              ("g" . ghostel-project)
+              ("n" . ghostel-new)
+              ("|" . ghostel-split-right)
+              ("-" . ghostel-split-below)))
 #+end_src
 
 ** yasnippet
