@@ -2,6 +2,8 @@
 
 ## installation
 ```
+git clone https://github.com/struuuuggle/dotfiles.git
+cd dotfiles
 make install
 ```
 
