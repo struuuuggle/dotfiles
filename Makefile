@@ -16,7 +16,7 @@ EMACSCLIENT_APP    := /Applications/Emacs Client.app
 
 .PHONY: help symlink git zsh bash vim .emacs.d ghostty \
         zsh-autosuggestions emacs-compile emacs-restart \
-        macos brewfile emacs-reinstall debian
+        macos defaults brewfile emacs-reinstall debian
 
 
 ##################################################
@@ -87,6 +87,25 @@ macos: guard-MACOS ## Set up macOS
 		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 	fi
 	brew bundle --file Brewfile
+
+defaults: guard-MACOS ## Apply macOS System Settings via defaults
+	# Language & Region: start the week on Monday
+	defaults write NSGlobalDomain AppleFirstWeekday -dict gregorian 2
+	# Trackpad: tap to click
+	defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+	defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+	defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+	# Trackpad: three finger drag (Accessibility)
+	defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+	defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
+	# Trackpad: fastest tracking speed
+	defaults write NSGlobalDomain com.apple.trackpad.scaling -float 3
+	# Mouse: fastest tracking speed
+	defaults write NSGlobalDomain com.apple.mouse.scaling -float 3
+	# Mouse: secondary click on the left side
+	defaults write com.apple.AppleMultitouchMouse MouseButtonMode -string TwoButtonSwapped
+	defaults write com.apple.driver.AppleBluetoothMultitouch.mouse MouseButtonMode -string TwoButtonSwapped
+	@echo "Log out and back in (or restart) to apply all settings."
 
 brewfile: guard-MACOS ## Dump Brewfile
 	brew bundle dump --no-vscode --no-go --file Brewfile -f

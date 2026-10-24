@@ -16,6 +16,7 @@
 - `make .emacs.d` links Emacs config directory.
 - `make ghostty` links Ghostty config (macOS only).
 - `make macos` runs macOS setup tasks including `brew bundle` (macOS only).
+- `make defaults` applies macOS System Settings via `defaults` commands (macOS only).
 - `make debian` installs minimum tools via Debian packages (Linux only).
 - `make emacs-compile` builds `init.el` from `init.org` via org-babel tangle.
 - `make emacs-restart` restarts Emacs daemon with latest config.
