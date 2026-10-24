@@ -2,18 +2,12 @@
 
 ## installation
 ```
-make
+make install
 ```
 
 ## システム環境設定にて
 
 GUIでの操作が必要な設定のみ記載。`defaults` コマンドで自動化できるものは `make defaults` に移動済み。
-
-- 一般
-デフォルトのWebブラウザ: Google Chrome
-
-- 通知
-Xcodeとシステム環境設定以外切る
 
 - ディスプレイ
   - 解像度 > 変更 > スペースを拡大
@@ -34,19 +28,11 @@ Xcodeとシステム環境設定以外切る
 基本的にすべてにチェックを入れる。
 Mission ControlとアプリケーションExposeはチェックを入れない。
 
-- ユーザとログイン項目
-常駐系アプリを追加しておく。
-
 - アクセシビリティ
 ポインタコントロール > マウスとトラックパッド > マウスオプション > スクロールの速さ: 最速に設定
 ディスプレイ > カーソル > カーソルのサイズ: 1.5メモリ分大きくする
 
 ### 設定ファイルをインポートするアプリケーション
-- Alfred
-
-起動後、環境設定 > General > Preferences > "Load preferences from a custom folder or URL"にチェックを入れる。
-`~/dotfiles/Library/Preferences/`を選択。
-
 - karabiner-elements
 
 - Rectangle
